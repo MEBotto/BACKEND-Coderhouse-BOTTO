@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Peluche Pochita",
+    "description": "Peluche de pochita, personaje del manga Chainsaw Man",
+    "price": 8900,
+    "thumbnail": "https://cdn.shopify.com/s/files/1/0267/6234/6595/products/pochita_1800x.jpg?v=1668719018",
+    "code": "P001",
+    "stock": 5,
+    "id": 1
+  },
+  {
+    "title": "Chainsaw Man - Tomo 1",
+    "description": "Primer tomo de la serie de manga Chainsaw Man",
+    "price": 5000,
+    "thumbnail": "https://lesinstantsvolesalavie.files.wordpress.com/2020/02/chainswanman.jpg?w=430",
+    "code": "P002",
+    "stock": 10,
+    "id": 2
+  },
+  {
+    "title": "Violet Evergarden - Tomo 1",
+    "description": "Primer tomo de la serie de novelas Violet Evergarden",
+    "price": 7000,
+    "thumbnail": "https://1.bp.blogspot.com/-RY3LDGKfE5g/WgFOjvHT8CI/AAAAAAAAAPY/ngXwC8yX-44WdBE9pIxbCixDErN_m3H2gCLcBGAs/s640/portada.jpg",
+    "code": "P003",
+    "stock": 5,
+    "id": 3
+  },
+  {
+    "title": "Chainsaw Man - Tomo 2",
+    "description": "Segundo tomo de la serie de manga Chainsaw Man",
+    "price": 5000,
+    "thumbnail": "https://www.mangaforever.net/wp-content/uploads/2021/02/61qID2ZnZsL.jpg",
+    "code": "P004",
+    "stock": 5,
+    "id": 4
+  },
+  {
+    "title": "Chainsaw Man - Tomo 3",
+    "description": "Tercer tomo de la serie de manga Chainsaw Man",
+    "price": 5000,
+    "thumbnail": "https://th.bing.com/th/id/OIP.kTEQ8JKFJycOHY-ssj3JhQHaLH?pid=ImgDet&rs=1",
+    "code": "P005",
+    "stock": 5,
+    "id": 5
+  },
+  {
+    "title": "Peluche Rei Ayanami",
+    "description": "Peluche de Rei Chiquita",
+    "price": 3000,
+    "thumbnail": "https://http2.mlstatic.com/D_NQ_NP_647791-MLM49155776583_022022-F.jpg",
+    "code": "P006",
+    "stock": 5,
+    "id": 6
+  },
+  {
+    "title": "Chainsaw Man - Tomo 4",
+    "description": "Cuarto tomo de la serie de manga Chainsaw Man",
+    "price": 5000,
+    "thumbnail": "https://www.normaeditorial.com/upload/media/albumes/0001/17/e07b1175e6e9be4b07b71eb9a75866184e0efe34.jpeg",
+    "code": "P007",
+    "stock": 5,
+    "id": 7
+  },
+  {
+    "title": "Chainsaw Man - Tomo 5",
+    "description": "Quinto tomo de la serie de manga Chainsaw Man",
+    "price": 5000,
+    "thumbnail": "https://th.bing.com/th/id/R.5fdfa3a60c27bac0978b04aa6b96d0ce?rik=rbn%2bQmlpJ9iaeA&pid=ImgRaw&r=0",
+    "code": "P008",
+    "stock": 5,
+    "id": 8
+  },
+  {
+    "title": "Chainsaw Man - Tomo 6",
+    "description": "Sexto tomo de la serie de manga Chainsaw Man",
+    "price": 5000,
+    "thumbnail": "https://m.media-amazon.com/images/I/51C2Nugfo9S._SY445_SX342_.jpg",
+    "code": "P009",
+    "stock": 5,
+    "id": 9
+  },
+  {
+    "title": "Chainsaw Man - Tomo 7",
+    "description": "Septimo tomo de la serie de manga Chainsaw Man",
+    "price": 5000,
+    "thumbnail": "https://m.media-amazon.com/images/I/81eUtjgc65S._SL1500_.jpg",
+    "code": "P010",
+    "stock": 5,
+    "id": 10
+  }
+]
