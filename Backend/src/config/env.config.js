@@ -31,7 +31,8 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET,
   githubClientID: process.env.GITHUB_CLIENT_ID,
   githubSecret: process.env.GITHUB_SECRET,
-  githubCallbackURL: process.env.GITHUB_CALLBACK_URL
+  githubCallbackURL: process.env.GITHUB_CALLBACK_URL,
+  environment: environment
 };
 
 process.on("exit", (code) => {
