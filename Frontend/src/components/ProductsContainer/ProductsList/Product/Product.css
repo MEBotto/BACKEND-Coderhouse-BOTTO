@@ -1,0 +1,114 @@
+.main-container .box{
+  background: #fff;
+  text-align: center;
+  transition: .3s ease-in-out;
+}
+.main-container .box:hover{
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  transform: scale(1.05);
+}
+.main-container .card{
+  padding: 15px 15px 0;
+  background-color: #181818;
+}
+.card .image{
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  background: #181818;
+  margin: 10px auto ;
+  position: relative;
+}
+.card .image img{
+  height: 410px;
+  transition: .3s ease-in-out;
+}
+.card .image:hover img{
+  transform: scale(1.1);
+}
+.card .desc{
+  width: 80%;
+  margin: auto;
+  margin-bottom: 20px;
+}
+.card .desc h1{
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+.card .desc p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+.card span{
+  font-size: 20px;
+  color: var(--text-color);
+}
+.btn{
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: none;
+  outline: none;
+  color: var(--text-color-light);
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.btn-info{
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 10px;
+  border: none;
+  outline: none;
+  color: var(--text-color-light);
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.box .btn,
+.box .card .image::before,
+.box .btn-info{
+  background-color: var(--main-color);
+}
+
+@media screen and (max-width: 998px) {
+  .card .image{
+    width: 90%;
+  }
+}
+@media screen and (max-width: 500px) {
+  .card .desc{
+    width: 90%;
+  }
+}
+
+.light .btn-info,
+.light .btn {
+  background-color: var(--main-color-light);
+  color: var(--text-color);
+}
+.light .card span{
+  color: var(--text-color-light);
+}
+.light .card .desc h1{
+  color: var(--text-color-light);
+}
+.main-container.light .card{
+  padding: 15px 15px 0;
+  background-color: #e0e0e0;
+}
+.light .card .image{
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  background: #e0e0e0;
+  margin: 10px auto ;
+  position: relative;
+}

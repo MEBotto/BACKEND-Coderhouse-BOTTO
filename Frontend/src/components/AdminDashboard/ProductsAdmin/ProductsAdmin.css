@@ -1,0 +1,48 @@
+.products-main-container {
+  background: var(--bg-color);
+  height: 100%;
+  width: calc(100vw - 90px);
+  position: absolute;
+  left: 90px;
+  top: 0;
+  padding: 20px;
+  overflow-x: auto; /* Agregamos overflow-x al contenedor principal para la barra de desplazamiento horizontal */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 15px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #181818;
+  color: white;
+}
+
+button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+  th, td {
+    text-align: center;
+  }
+}
+
+.modal-overlay{
+  height: 500px;
+  width: 500px;
+  background: green;
+  z-index: 1000000;
+  position: relative;
+}

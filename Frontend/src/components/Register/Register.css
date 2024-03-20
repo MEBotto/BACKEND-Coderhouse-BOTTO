@@ -1,0 +1,115 @@
+.ring-register{
+  position: relative;
+  width: 600px;
+  height: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ring-register i{
+  position: absolute;
+  inset: 0;
+  border: 2px solid #fff;
+  transition: 0.5s;
+}
+.ring-register i:nth-child(1){
+  border-radius: 28% 52% 53% 27% / 31% 34% 46% 49%;
+  animation: animate 6s linear infinite;
+}
+.ring-register i:nth-child(2){
+  border-radius: 31% 34% 46% 49% / 28% 52% 53% 27%;
+  animation: animate 6s linear infinite;
+}
+.ring-register i:nth-child(3){
+  border-radius: 31% 34% 46% 49% / 28% 52% 53% 27%;
+  animation: animate2 10s linear infinite;
+}
+.ring-register:hover i{
+  border: 6px solid var(--clr);
+  filter: drop-shadow(0 0 20px var(--clr));
+}
+@keyframes animate{
+  0%{
+    transform: rotate(0);
+  }
+  100%{
+    transform: rotate(360deg);
+  }
+}
+@keyframes animate2{
+  0%{
+    transform: rotate(360deg);
+  }
+  100%{
+    transform: rotate(0);
+  }
+}
+.register{
+  position: absolute;
+  width: 350px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+.register h2{
+  font-size: 2em;
+  color: #fff;
+}
+.register .input-box{
+  position: relative;
+  width: 100%;
+}
+.register .input-box input{
+  position: relative;
+  width: 100%;
+  padding: 12px 20px;
+  background: transparent;
+  border: 2px solid #fff;
+  border-radius: 40px;
+  font-size: 0.8em;
+  color: #fff;
+  box-shadow: none;
+  outline: none;
+}
+.register .input-box input[type="submit"]{
+  width: 100%;
+  background: var(--main-color);
+  background: linear-gradient(45deg, var(--main-color), var(--main-color-light));
+  border: none;
+  cursor: pointer;
+}
+.register .input-box input::placeholder{
+  color: rgba (255, 255, 255, 0.75);
+}
+.register .links{
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.register .links a{
+  color: #fff;
+  text-decoration: none;
+}
+.light-body .ring-register i{
+  border: 2px solid #000;
+}
+.light-body .ring-register:hover i{
+  border: 6px solid var(--clr);
+  filter: drop-shadow(0 0 20px var(--clr));
+}
+.light-body .register h2{
+  color: #000;
+}
+.light-body .register .input-box input{
+  border: 2px solid #000;
+  color: #000;
+}
+.light-body .register .links a{
+  color: #000;
+}
