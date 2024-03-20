@@ -23,3 +23,5 @@ mockRouter.get("/loggertest", (req, res) => {
   logger.fatal("This is a fatal logger test");
   res.status(200).json({ message: "OK" });
 });
+
+export default mockRouter;
