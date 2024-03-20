@@ -21,6 +21,7 @@ import ProductExtendRouter from "./routes/custom/products.extend.routes.js";
 import MessageExtendRouter from "./routes/custom/message.extend.routes.js";
 import CartExtendRouter from "./routes/custom/cart.extend.routes.js";
 import { messageService } from "./services/factory.js";
+import mockRouter from "./routes/mock.routes.js";
 
 const app = express();
 const PORT = config.port;
@@ -107,6 +108,7 @@ app.use(express.static(`${__dirname}/public`));
 // Rutas
 app.use("/api/carts", cartRouter);
 app.use("/api/auth", authRouter);
+app.use("/api", mockRouter);
 
 // Custom Router
 const productExtendRouter = new ProductExtendRouter();
