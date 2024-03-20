@@ -14,7 +14,7 @@ mockRouter.get("/mockingProducts", (req,res) => {
   res.status(200).json({ message: "OK", products: mockProductsArray });
 })
 
-mockRouter.get("/loggertest", (req, res) => {
+mockRouter.get("/loggerTest", (req, res) => {
   logger.debug("This is a debug logger test");
   logger.http("This is a http logger test /loggertest");
   logger.info("This is an info logger test");
