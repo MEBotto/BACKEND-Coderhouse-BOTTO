@@ -1,0 +1,92 @@
+<div class="container">
+  <h1 class="m-3">{{welcomeMessage}}</h1>
+  <div>
+  <h1>Bienvenido {{user.name}} </h1>
+    <p>Mail:{{user.email}}</p>
+    <p>Edad:{{user.age}}</p>
+    <p>Rol:{{user.rol}}</p>
+  </div>
+  <button id="logout" onclick="logoutButtonEvent()">Logout</button>
+  <div class="btn-group d-flex flex-row m-3" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-outline-primary p-2" onclick="changeLimit(2)">2</button>
+    <button type="button" class="btn btn-outline-primary p-2" onclick="changeLimit(5)">5</button>
+    <button type="button" class="btn btn-outline-primary p-2" onclick="changeLimit(10)">10</button>
+  </div>
+  <div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"> Title </th>
+          <th scope="col"> Description </th>
+          <th scope="col"> Price </th>
+          <th scope="col"> Thumbnail </th>
+          <th scope="col"> Code </th>
+          <th scope="col"> Stock </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each products.docs}}
+          <tr>
+            <td> {{this.title}}</td>
+            <td> {{this.description}}</td>
+            <td> {{this.price}} </td>
+            <td> 
+              <img src="{{this.thumbnail}}" alt="{{this.title}} Thumbnail" style="max-width: 100px; max-height: 100px;">
+            </td>
+            <td> {{this.code}} </td>
+            <td> {{this.stock}} </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div class="position-relative m-4">
+      <nav aria-label="Page navigation example">
+        <ul class=" btn-group pagination">
+          {{#if products.hasPrevPage}}
+            <li class="page-item">
+              <a class="page-link" href="/products?page={{products.prevPage}}&limit={{products.limit}}">Previous</a>
+            </li>
+          {{else}}
+            <li class="page-item disabled">
+              <a class="page-link" href="/products?page={{products.prevPage}}&limit={{products.limit}}">Previous</a>
+            </li>
+          {{/if}}
+
+          {{#each (getPageNumbers products.totalPages limit)}}
+            <li class="page-item {{#if (eq this ../products.page)}}active{{/if}}">
+              <a class="page-link" href="/products?page={{this}}&limit={{../products.limit}}">{{this}}</a>
+            </li>
+          {{/each}}
+
+          {{#if products.hasNextPage}}
+            <li class="page-item">
+              <a class="page-link" href="/products?page={{products.nextPage}}&limit={{products.limit}}">Next</a>
+            </li>
+          {{else}}
+            <li class="page-item disabled">
+              <a class="page-link" href="/products?page={{products.nextPage}}&limit={{products.limit}}">Next</a>
+            </li>
+          {{/if}}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<script>
+  function changeLimit(newLimit) {
+    window.location.href = `/products?page=1&limit=${newLimit}`
+  }
+  function logoutButtonEvent(){
+    console.log("hola")
+    fetch('/api/extend/users/logout', {
+      method:"GET",
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    }).then(result => {
+      console.log(result.status)
+      if(result.status === 200) window.location.replace('/users/login')
+    })
+  }
+</script>
