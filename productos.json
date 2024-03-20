@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Chainsaw Man - Tomo 1",
+    "description": "Primer tomo de la serie de manga Chainsaw Man",
+    "price": 5000,
+    "thumbnail": "https://lesinstantsvolesalavie.files.wordpress.com/2020/02/chainswanman.jpg?w=430",
+    "code": "P002",
+    "stock": 10,
+    "id": 2
+  },
+  {
+    "title": "Violet Evergarden - Tomo 1",
+    "description": "Primer tomo de la serie de novelas Violet Evergarden",
+    "price": 7000,
+    "thumbnail": "https://1.bp.blogspot.com/-RY3LDGKfE5g/WgFOjvHT8CI/AAAAAAAAAPY/ngXwC8yX-44WdBE9pIxbCixDErN_m3H2gCLcBGAs/s640/portada.jpg",
+    "code": "P003",
+    "stock": 5,
+    "id": 3
+  }
+]
