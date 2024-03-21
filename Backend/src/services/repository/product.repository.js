@@ -1,20 +1,29 @@
 export default class ProductRepository {
-  constructor (dao) {
-    this.dao = dao
+  constructor(dao) {
+    this.dao = dao;
   }
-  getAll = (limit, page, query, sort) => {
-    return this.dao.getProducts(limit, page, query, sort);
-  }
-  getByID = (id) => {
-    return this.dao.getProductByID(id);
-  }
-  save = (product) => {
-    return this.dao.addProduct(product);
-  }
-  update = (id, product) => {
-    return this.dao.updateProduct(id, product);
-  }
-  delete = (id) => {
-    return this.dao.deleteProduct(id);
-  }
+
+  getProducts = async (limit, page, sort, query) => {
+    return await this.dao.getProducts(limit, page, sort, query);
+  };
+
+  addProduct = async (product) => {
+    try {
+      return await this.dao.addProduct(product);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  getProductById = async (id) => {
+    return await this.dao.getProductById(id);
+  };
+
+  updateProduct = async (id, product) => {
+    return await this.dao.updateProduct(id, product);
+  };
+
+  deleteProduct = async (id) => {
+    return await this.dao.deleteProduct(id);
+  };
 }
