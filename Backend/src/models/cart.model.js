@@ -2,11 +2,15 @@ import { Schema, model } from "mongoose";
 
 const cartSchema = new Schema({
   products: [{
-    product: { type: Schema.Types.ObjectId, ref: "Product" },
-    quantity: { type: Number, required: true, default: 1 },
+    productId: { type: Schema.Types.ObjectId, ref: "products" },
+    quantity: { type: Number, default: 1 },
   }],
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "users", required: true },
 })
+
+cartSchema.pre("findOne", function () {
+  this.populate("products.productId");
+});
 
 const cartModel = model("carts", cartSchema)
 
