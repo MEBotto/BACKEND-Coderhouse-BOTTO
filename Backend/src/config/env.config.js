@@ -32,6 +32,8 @@ export const config = {
   githubClientID: process.env.GITHUB_CLIENT_ID,
   githubSecret: process.env.GITHUB_SECRET,
   githubCallbackURL: process.env.GITHUB_CALLBACK_URL,
+  mailUser: process.env.MAIL_USER,
+  mailPassword: process.env.MAIL_PASSWORD,
   environment: environment
 };
 
