@@ -6,6 +6,7 @@ const cartSchema = new Schema({
     quantity: { type: Number, default: 1 },
   }],
   userId: { type: Schema.Types.ObjectId, ref: "users", required: true },
+  hasPurchased: { type: Boolean, default: false },
 })
 
 cartSchema.pre("findOne", function () {

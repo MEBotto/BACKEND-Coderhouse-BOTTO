@@ -1,155 +1,171 @@
-import { productModel } from "../../../models/product.model.js";
 import { cartModel } from "../../../models/cart.model.js";
 import { ticketModel } from "../../../models/ticket.model.js";
-import { ObjectId } from "mongodb";
+import { productModel } from "../../../models/product.model.js";
+import { v4 as uuidv4 } from "uuid";
 
-//cart.controller
 export default class CartDAO {
-  constructor () {}
-  
-  getCarts = async () => {
-    return await cartModel.find();
-  }
-  
-  addCart = async (cart) => {
-    return await cartModel.create(cart);
-  }
-  
-  getCartByID = async (_id) => {
-    return await cartModel.findById(_id);
-  }
-  
-  deleteCart = async (_id) => {
-    return await cartModel.findByIdAndDelete(_id);
-  }
-  
-  //cartProduct.controller
-  getProductsFromCart = async (id) => {
-    return await cartModel
-      .findById(id)
-      .populate({
-        path: 'products.product',
-        model: productModel,
-        select: 'title description price thumbnail code stock'
-      })
-      .lean();
-  }
-  
-  addProductToCart = async (cartId, productId) => {
-    const cart = await cartModel.findById(cartId);
-    if (!cart) {
-      throw new Error("Cart not found with that ID!");
-    }
-  
-    const product = await productModel.findById(productId);
-    if (!product) {
-      throw new Error("Product not found!");
-    }
-  
-    const existingProduct = cart.products.find(p => p._id.equals(productId));
-    if (existingProduct) {
-      existingProduct.quantity += 1;
-    } else {
-      cart.products.push({
-        _id: productId
+  constructor() {}
+
+  createCart = async (userId) => {
+    return await cartModel.create({
+      products: [],
+      userId,
+    });
+  };
+
+  addProductByCartId = async (cartId, productId) => {
+    const selectedCart = await this.getCartByCartId(cartId);
+
+    if (selectedCart) {
+      const productIndex = selectedCart.products.findIndex((p) => {
+        return p.productId._id.toString() === productId;
       });
-    }
-  
-    await cart.save();
-    return {message:'The products in the cart have been modified!', data: cart};
-  }
-  
-  updateProductQuantity = async (cartId, productId, newQuantity) => {
-    const cart = await cartModel.findById(cartId);
-    if (!cart) {
+
+      if (productIndex > -1) {
+        selectedCart.products[productIndex].quantity++;
+      } else {
+        selectedCart.products.push({ productId: productId, quantity: 1 });
+      }
+
+      await cartModel.findOneAndUpdate({ _id: cartId }, selectedCart);
+    } else {
       throw new Error("Cart not found!");
     }
-  
-    const product = cart.products.find(p => p._id.equals(productId));
-    if (!product) {
-      throw new Error("Product not found in cart!");
-    }
-  
-    product.quantity = newQuantity;
-    await cart.save();
-    return cart;
-  }
-  
-  deleteProductFromCart = async (cartId, productId) => {
-    const cart = await cartModel.findById(cartId);
-    if (!cart) {
-      throw new Error("Cart not found!");
-    }
-  
-    const initialProductCount = cart.products.length;
-    cart.products = cart.products.filter(p => !p._id.equals(productId));
-  
-    if (cart.products.length === initialProductCount) {
-      throw new Error('Product not found in the cart');
-    }
-  
-    await cart.save();
-    return cart;
-  }
-  
-  deleteAllProductsFromCart = async(cartId) => {
-    const cart = await cartModel.findById(cartId);
-    if (!cart) {
-      throw new Error("Cart not found!");
-    }
-  
-    cart.products = [];
-    await cart.save();
-    return cart;
-  }
-  
-  purchaseCart = async (cartId, cartProducts, purchaserEmail) => {
+  };
+
+  getCartByCartId = async (id) => {
+    return await cartModel.findById(id).lean();
+  };
+
+  getCartByUserId = async (userId) => {
+    return await cartModel.findOne({ userId, hasPurchased: false }).lean();
+  };
+
+  cleanCartByCartId = async (cartId) => {
     try {
-      const failedProducts = [];
-      let totalAmount = 0;
-  
-      // Recorre los productos en el carrito y verifica el stock
-      for (const cartProduct of cartProducts) {
-        const productIdObject = cartProduct._id;
-        const productId = productIdObject.toString()
-        const requestedQuantity = cartProduct.quantity;
-        const product = await productModel.findById(productId);
-  
-        // Verifica si hay suficiente stock
-        if (product.stock >= requestedQuantity) {
-          // Calcula el monto total
-          totalAmount += product.price * requestedQuantity;
-  
-          // Resta la cantidad del stock del producto
-          product.stock -= requestedQuantity;
-          await product.save();
+      return await cartModel.updateOne(
+        { _id: cartId },
+        { $set: { products: [] } }
+      );
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  updateCart = async (cartId, products) => {
+    try {
+      return await cartModel.updateOne({ _id: cartId }, { $set: { products } });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  postPayment = async (cartId) => {
+    let hasNewCart = false;
+    let amountPurchased = 0;
+    let purchasedProducts = [];
+    let nonShopProducts = [];
+    let newCart = null;
+    let ticketCreated = false;
+    let ticketUser = null;
+    try {
+      const productData = await this.getCartByCartId(cartId);
+      console.log(productData);
+      for (let i = 0; i < productData.products.length; i++) {
+        if (
+          productData.products[i].productId.stock >=
+          productData.products[i].quantity
+        ) {
+          productData.products[i].productId.stock -=
+            productData.products[i].quantity;
+          await productModel.updateOne(
+            { _id: productData.products[i].productId._id },
+            { $set: { stock: productData.products[i].productId.stock } }
+          );
+
+          amountPurchased +=
+            productData.products[i].productId.price *
+            productData.products[i].quantity;
+
+          purchasedProducts.push(productData.products[i]);
         } else {
-          // Si no hay suficiente stock, agrega el producto a la lista de productos fallidos
-          failedProducts.push({ productId, requestedQuantity });
+          nonShopProducts.push(productData.products[i]);
         }
       }
-  
-      // Si se compraron productos, crea un ticket
-      if (totalAmount > 0) {
-        const ticketData = {
-          amount: totalAmount,
-          purchaser: purchaserEmail,
-        };
-  
-        const ticket = await ticketModel.create(ticketData);
-  
-        // Aquí puedes agregar lógica adicional para asociar el ticket al usuario, etc.
-  
-        return { failedProducts, ticketId: ticket._id, ticket };
+
+      if (nonShopProducts.length === productData.products.length) {
+        hasNewCart = false;
       } else {
-        // Si no se compraron productos, solo devuelve los productos fallidos
-        return { failedProducts };
+        hasNewCart = true;
       }
+
+      if (hasNewCart) {
+        newCart = await cartModel.create({
+          products: purchasedProducts,
+          userId: productData.userId,
+          hasPurchased: true,
+        });
+
+        await cartModel.updateOne(
+          { _id: cartId },
+          { $set: { products: nonShopProducts } }
+        );
+
+        ticketCreated = true;
+      } else if (!hasNewCart && purchasedProducts.length > 0) {
+        await cartModel.updateOne(
+          { _id: cartId },
+          { $set: { hasPurchased: true } }
+        );
+
+        ticketCreated = true;
+      }
+
+      if (ticketCreated) {
+        ticketUser = await ticketModel.create({
+          code: uuidv4(),
+          purchaseDatetime: new Date(),
+          amount: amountPurchased,
+          productsBought: purchasedProducts,
+          purchaser: productData.userId,
+        });
+      }
+
+      const data = {
+        ticket: ticketUser ? ticketUser : null,
+        hasNewCart: hasNewCart,
+        buyCart: hasNewCart ? newCart : null,
+        productBought: purchasedProducts,
+        nonShopProducts: nonShopProducts,
+      };
+
+      return data;
     } catch (error) {
-      // Manejo de errores, puedes lanzar una excepción o retornar un objeto de error
-      console.error("Error in purchaseCart function:", error);
-      throw new Error("Error processing the purchase.", error);
+      throw new Error(error.message);
+    }
+  };
+
+  updateQuantityProduct = async (cartId, productId, quantity) => {
+    try {
+      return await cartModel.updateOne(
+        { _id: cartId, "products.productId": productId },
+        { $set: { "products.$.quantity": quantity } }
+      );
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  deleteProductByCartId = async (cartId, productId) => {
+    try {
+      return await cartModel.updateOne(
+        { _id: cartId },
+        { $pull: { products: { productId: productId } } }
+      );
+    } catch (error) {
+      throw new Error(error.message);
     }
   };
 }
 
+const cartDao = new CartDAO();

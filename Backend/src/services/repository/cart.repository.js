@@ -1,35 +1,73 @@
 export default class CartRepository {
-  constructor (dao) {
-    this.dao = dao
+  constructor(dao) {
+    this.dao = dao;
   }
-  getAll = () => {
-    return this.dao.getCarts();
-  }
-  getByID = (id) => {
-    return this.dao.getCartByID(id);
-  }
-  save = (cart) => {
-    return this.dao.addCart(cart);
-  }
-  delete = (id) => {
-    return this.dao.deleteCart(id);
-  }
-  productsFromCart = (id) => {
-    return this.dao.getProductsFromCart(id);
-  }
-  saveProductInCart = (cid, pid) => {
-    return this.dao.addProductToCart(cid, pid);
-  }
-  updateProductQuantity = (cid, pid, quantity) => {
-    return this.dao.updateProductQuantity(cid, pid, quantity);
-  }
-  deleteProductFromCart = (cid, pid) => {
-    return this.dao.deleteProductFromCart(cid, pid);
-  }
-  deleteAllProducts = (id) => {
-    return this.dao.deleteAllProductsFromCart(id);
-  }
-  purchase = (id, products, email) => {
-    return this.dao.purchaseCart(id, products, email);
-  }
+
+  createCart = async (products, userId) => {
+    return await this.dao.createCart(products, userId);
+  };
+
+  getCartByCartId = async (id) => {
+    try {
+      return await this.dao.getCartByCartId(id);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  getCartByUserId = async (userId) => {
+    try {
+      return await this.dao.getCartByUserId(userId);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  addProductByCartId = async (cartId, productId) => {
+    try {
+      return await this.dao.addProductByCartId(cartId, productId);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  cleanCartByCartId = async (cartId, productId) => {
+    try {
+      return await this.dao.cleanCartByCartId(cartId, productId);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  updateCart = async (cartId, products) => {
+    try {
+      return await this.dao.updateCart(cartId, products);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  postPayment = async (cartId) => {
+    try {
+      return await this.dao.postPayment(cartId);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  updateQuantityProduct = async (cartId, productId, quantity) => {
+    try {
+      return await this.dao.updateQuantityProduct(cartId, productId, quantity);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  deleteProductByCartId = async (cartId, productId) => {
+    try {
+      return await this.dao.deleteProductByCartId(cartId, productId);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
 }

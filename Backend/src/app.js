@@ -19,7 +19,6 @@ import cartRouter from "./routes/carts.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import ProductExtendRouter from "./routes/custom/products.extend.routes.js";
 import MessageExtendRouter from "./routes/custom/message.extend.routes.js";
-import CartExtendRouter from "./routes/custom/cart.extend.routes.js";
 import { messageService } from "./services/factory.js";
 import mockRouter from "./routes/mock.routes.js";
 
@@ -115,5 +114,3 @@ const productExtendRouter = new ProductExtendRouter();
 app.use("/api/extend/products", productExtendRouter.getRouter());
 const messageExtendRouter = new MessageExtendRouter();
 app.use("/api/extend/messages", messageExtendRouter.getRouter());
-const cartExtendRouter = new CartExtendRouter();
-app.use("/api/extend/carts", cartExtendRouter.getRouter());

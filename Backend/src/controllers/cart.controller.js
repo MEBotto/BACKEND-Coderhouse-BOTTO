@@ -1,68 +1,145 @@
 import { cartService } from "../services/factory.js";
 import sendMail from "../utils/nodeMailer.js";
 
-export const getCartController = async (req, res) => {
+const getCartByUserIdController = async (req, res) => {
+  const { uid } = req.params;
+
   try {
-    const carts = await cartService.getAll();
-    res.status(200).json({ data: carts, message: "Carts list" })
-  }
-  catch(error) {
-    res.status(400).json({ error: error, message: "Error" });
+    const cartSelected = await cartService.getCartByUserId(uid);
+    res.status(200).json({ cartSelected: cartSelected });
+  } catch (e) {
+    res.status(404).json({ error: e.message });
   }
 };
 
-export const getCartByIDController = async (req, res) => {
+const createCartController = async (req, res) => {
+  const { userId } = req.body;
+  const newCart = await cartService.createCart(userId);
+  res
+    .status(200)
+    .json({ message: "Successfully created!", cartCreated: newCart });
+};
+
+const getCartByCartIdController = async (req, res) => {
+  const { cid } = req.params;
+
   try {
-    const { cid } = req.params;
-    const cart = await cartService.getByID(cid);
-    res.status(200).json({ data: cart, message: "Cart found!" });
+    const cartSelected = await cartService.getCartByCartId(cid);
+    res.status(200).json({ cartSelected: cartSelected });
+  } catch (e) {
+    res.status(404).json({ error: e.message });
+  }
+};
+
+const updateCartController = async (req, res) => {
+  const { cid } = req.params;
+  const { products } = req.body;
+
+  const productMap = products.map((p) => {
+    return {
+      productId: p,
+      quantity: 1,
+    };
+  });
+
+  if (!products || !Array.isArray(products)) {
+    return res.status(400).json({
+      error: "Please send an array of products to create your cart.",
+    });
+  }
+
+  try {
+    await cartService.updateCart(cid, productMap);
+    res.status(200).json({ message: "Product updated successuflly" });
   } catch (error) {
-    res.status(400).json({ error, message: "error" });
+    res.status(400).json({ error });
   }
 };
 
-export const postCartController = async (req, res) => {
-  try { 
-    const cart = await cartService.save(req.body);
-    res.status(200).json({ data: cart, message: "Cart created!" });
-  } catch (error) {
-    res.status(400).json({ error, message: "error" });
-  }
-};
+const cleanCartByCartIdController = async (req, res) => {
+  const { cid } = req.params;
 
-export const postCartPurchase = async (req, res) => {
   try {
-    const cartId = req.params.cid;
-    const { email } = req.body
-    // Obtener productos del carrito
-    const cartProducts = await cartService.productsFromCart(cartId);
-    // Lógica para verificar el stock y realizar la compra
-    const result = await cartService.purchase(cartId, cartProducts.products, email);
-    await sendMail(result.ticket)
-    // Si hay productos que no se pudieron procesar, actualizar el carrito
-    if (result.failedProducts.length > 0) {
-      await cartService.deleteAllProducts(cartId);
-      res.status(200).json({ 
-        message: "Purchase completed with some products not processed successfully.",
-        failedProducts: result.failedProducts
+    await cartService.cleanCartByCartId(cid);
+    res.status(200).json({ message: "Cart empty successfully" });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+const addProductByCartIdController = async (req, res) => {
+  const { cid, pid } = req.params;
+
+  try {
+    await cartService.addProductByCartId(cid, pid);
+    res.status(200).json({ message: "New product has added!" });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+
+const postPaymentController = async (req, res) => {
+  const { cid } = req.params;
+
+  try {
+    let result = await cartService.postPayment(cid);
+
+    if (result.ticket !== null) {
+      sendMail
+      res.status(200).json({
+        message: "Payment successufully, email sended",
+        productsBuy: result.productBought,
+        ticket: result.ticket,
+        productsLeft: result.nonShopProducts,
+        hasNewCart: result.hasNewCart,
+        buyCart: result.buyCart,
       });
     } else {
-      // Si todos los productos se procesaron con éxito, vaciar el carrito
-      await cartService.deleteAllProducts(cartId);
-      res.status(200).json({ message: "Purchase completed successfully." });
+      res.status(404).json({
+        message: "Payment failed",
+        productsBuy: result.productBought,
+        ticket: result.ticket,
+        productsLeft: result.nonShopProducts,
+        hasNewCart: result.hasNewCart,
+        buyCart: result.buyCart,
+      });
     }
   } catch (error) {
-    console.error("Error in purchaseCart function:", error);
-    res.status(500).json({ error, message: "Error completing the purchase." });
+    res.status(400).json({ error: error.message });
   }
 };
 
-export const deleteCartController = async (req, res) => {
+const updateQuantityProductController = async (req, res) => {
+  const { cid, pid } = req.params;
+  const { quantity } = req.body;
+
   try {
-    const { cid } = req.params;
-    const cart = await cartService.delete(cid);
-    res.status(200).json({ data: cart, message: "Cart deleted!" });
-  } catch (error){
-    res.status(400).json({ error, message: "error" });
+    await cartService.updateQuantityProduct(cid, pid, quantity);
+    res.status(200).json({ message: "Quantity successufully updated" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
+};
+
+const deleteProductByCartIdController = async (req, res) => {
+  const { cid, pid } = req.params;
+
+  try {
+    await cartService.deleteProductByCartId(cid, pid);
+    res.status(200).json({ message: "Product removed successfully" });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+};
+
+export {
+  getCartByUserIdController,
+  createCartController,
+  getCartByCartIdController,
+  updateCartController,
+  cleanCartByCartIdController,
+  addProductByCartIdController,
+  postPaymentController,
+  updateQuantityProductController,
+  deleteProductByCartIdController,
 };

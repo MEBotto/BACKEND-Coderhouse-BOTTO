@@ -1,17 +1,34 @@
 import { Router } from "express";
-import { getCartController, getCartByIDController, postCartController, postCartPurchase, deleteCartController } from "../controllers/cart.controller.js";
+import {
+  getCartByUserIdController,
+  createCartController,
+  getCartByCartIdController,
+  updateCartController,
+  cleanCartByCartIdController,
+  addProductByCartIdController,
+  postPaymentController,
+  updateQuantityProductController,
+  deleteProductByCartIdController,
+} from "../controllers/cart.controller.js";
 
-const router = Router();
+const cartRouter = Router();
 
-//cart.controller
-router.get("/", getCartController)
+cartRouter.get("/user/:uid", getCartByUserIdController);
 
-router.get("/:cid", getCartByIDController)
+cartRouter.post("/", createCartController);
 
-router.post("/", postCartController)
+cartRouter.get("/:cid", getCartByCartIdController);
 
-router.post("/:cid/purchase", postCartPurchase)
+cartRouter.put("/:cid", updateCartController);
 
-router.delete("/:cid", deleteCartController)
+cartRouter.delete("/:cid", cleanCartByCartIdController);
 
-export default router;
+cartRouter.post("/:cid/product/:pid", addProductByCartIdController);
+
+cartRouter.post("/:cid/purchase", postPaymentController);
+
+cartRouter.put("/:cid/products/:pid", updateQuantityProductController);
+
+cartRouter.delete("/:cid/products/:pid", deleteProductByCartIdController);
+
+export default cartRouter;
