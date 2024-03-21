@@ -1,37 +1,45 @@
 import { productService } from "../services/factory.js";
 import CustomError from "../services/errors/CustomError.js";
-import { generateProductErrorInfo } from "../services/errors/infoError.js"
-import { EErrors } from "../services/errors/enumsError.js"
+import { generateProductErrorInfo } from "../services/errors/infoError.js";
+import { EErrors } from "../services/errors/enumsError.js";
+import logger from "../utils/logger.js";
 
-export const getProductController = async (req, res) => {
+const getProductsController = async (req, res) => {
+  const { limit, page, sort, query } = req.query;
+
+  const productData = await productService.getProducts(
+    limit,
+    page,
+    sort,
+    query
+  );
+
+  res.status(200).json({ productData });
+};
+
+const getProductByIdController = async (req, res) => {
+  const { pid } = req.params;
+
   try {
-    const { limit, page, query, sort } = req.query;
-    const products = await productService.getAll(limit, page, query, sort);
-    res.status(200).json({ data: products, message: "Products list!" });
-  } catch (error) {
-    res.status(400).json({ error, message: "error" });
+    const productFind = await productService.getProductById(pid);
+    res.status(200).json({ productSelected: productFind });
+  } catch (e) {
+    res.status(404).json({ error: e.message });
   }
 };
 
-export const getProductByIDController = async (req, res) => {
-  try {
-    const { pid } = req.params
-    const product = await productService.getByID(pid)
-    res.status(200).json({ data: product, message: "Product found!" });
-  } catch (error) {
-    res.status(400).json({ error, message: "error" });
-  }
-};
-
-export const postProductController = async (req, res) => {
+const addProductController = async (req, res) => {
   const productReq = req.body;
-  try { 
+
+  try {
     if (
       productReq.title === undefined ||
       productReq.description === undefined ||
       productReq.price === undefined ||
       productReq.thumbnail === undefined ||
+      productReq.category === undefined ||
       productReq.code === undefined ||
+      productReq.status === undefined ||
       productReq.stock === undefined
     ) {
       CustomError.createError({
@@ -43,30 +51,60 @@ export const postProductController = async (req, res) => {
       });
     }
 
-    const product = await productService.save(productReq);
-    res.status(200).json({ data: product, message: "Product created!" });
+    const productCreated = await productService.addProduct(productReq);
+    res.status(201).json({
+      message: "Product succesfully created",
+      productCreated: productCreated,
+    });
   } catch (error) {
-    console.error(error.cause)
-    res.status(400).json({ error: error.name, message: error.message, code: error.code });
+    logger.error("[ERROR]: " + error.cause);
+    res.status(400).json({
+      error: error.name,
+      message: error.message,
+      code: error.code,
+    });
   }
 };
 
-export const putProductController = async (req, res) => {
+const updateProductController = async (req, res) => {
+  const { pid } = req.params;
+  const productReq = req.body;
+
   try {
-    const { id } = req.params;
-    const product = await productService.update(id, req.body);
-    res.status(200).json({ data: product, message: "Product updated!" });
-  } catch (error){
-    res.status(400).json({ error, message: "error" });
+    const updateProductResult = await productService.updateProduct(
+      pid,
+      productReq
+    );
+    if (updateProductResult.modifiedCount === 0)
+      throw new Error("Product not found");
+
+    res.status(200).json({ message: "Product has modified" });
+  } catch (e) {
+    res.status(500).json({
+      error: e.message,
+    });
   }
 };
 
-export const deleteProductController = async (req, res) => {
+const deleteProductController = async (req, res) => {
+  const { pid } = req.params;
+
   try {
-    const { id } = req.params;
-    const product = await productService.delete(id);
-    res.status(200).json({ data: product, message: "Product deleted!" });
-  } catch (error){
-    res.status(400).json({ error, message: "error" });
+    await productService.deleteProduct(pid);
+    res.status(200).json({
+      message: "Content successfully deleted!",
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: error.message,
+    });
   }
+};
+
+export {
+  getProductsController,
+  getProductByIdController,
+  addProductController,
+  updateProductController,
+  deleteProductController,
 };

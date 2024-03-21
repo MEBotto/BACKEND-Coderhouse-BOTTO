@@ -13,7 +13,7 @@ import __dirname from "./utils.js";
 // Routers and services
 import cartRouter from "./routes/carts.routes.js";
 import authRouter from "./routes/auth.routes.js";
-import ProductExtendRouter from "./routes/custom/products.extend.routes.js";
+import productRouter from "./routes/products.routes.js";
 import MessageExtendRouter from "./routes/custom/message.extend.routes.js";
 import { messageService } from "./services/factory.js";
 import mockRouter from "./routes/mock.routes.js";
@@ -85,10 +85,9 @@ app.use(express.static(`${__dirname}/public`));
 // Rutas
 app.use("/api/carts", cartRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/products", productRouter)
 app.use("/api", mockRouter);
 
 // Custom Router
-const productExtendRouter = new ProductExtendRouter();
-app.use("/api/extend/products", productExtendRouter.getRouter());
 const messageExtendRouter = new MessageExtendRouter();
 app.use("/api/extend/messages", messageExtendRouter.getRouter());
