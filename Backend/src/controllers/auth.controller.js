@@ -1,6 +1,8 @@
-import { authService } from "../services/factory.js";
+import { config } from "../config/env.config.js";
+import { authService, emailService } from "../services/factory.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import { generateJWToken } from "../utils/jwt.js";
+import { v4 as uuidv4 } from "uuid";
 
 const getAllUsersController = async (req, res) => {
   try {
@@ -13,7 +15,7 @@ const getAllUsersController = async (req, res) => {
 
 const githubCallbackController = async (req, res) => {
   const user = req.user;
-  console.log(user)
+  console.log(user);
 
   const tokenGitHubUser = {
     first_name: user.first_name,
@@ -140,6 +142,51 @@ const updateAccountController = async (req, res) => {
     res.status(200).json({ success: true, data: accountUpdated });
   } catch (error) {
     res.status(400).json({ success: false, error: error });
+  }
+};
+
+const recoverPasswordController = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).send("Email not provided");
+    }
+
+    const token = uuidv4();
+    const link = `http://localhost:5173/password_reset/${token}`;
+
+    const now = new Date();
+    const oneHourMore = 60 * 60 * 1000;
+
+    now.setTime(now.getTime() + oneHourMore)
+
+    const tempDbMails = {
+      email,
+      tokenId: token,
+      expirationTime: new Date(Date.now() + 60 * 60 * 1000)
+    }
+
+    try {
+      const created = await emailService.createEmail(tempDbMails);
+    } catch (error) {
+      console.log(error);
+    }
+
+    mailOptionsToReset.to = email;
+    mailOptionsToReset.html = `To reset your password, click on the following link: <a href="${link}"><b>Reset Password</b></a>`;
+
+    transporter.sendMail(mailOptionsToReset, (error, info) => {
+      if (error) {
+        res.status(500).send({ message: "Error", payload: error });
+      }
+      res.send({ success: true, payload: info });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      error: "No se pudo enviar el email desde: " + config.mailUser,
+    });
   }
 };
 
