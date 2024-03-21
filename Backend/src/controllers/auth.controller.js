@@ -186,7 +186,7 @@ const recoverPasswordController = async (req, res) => {
       if (error) {
         res.status(500).send({ message: "Error", payload: error });
       }
-      res.send({ success: true, payload: info });
+      res.status(200).send({ success: true, payload: info });
     });
   } catch (error) {
     res.status(500).send({
