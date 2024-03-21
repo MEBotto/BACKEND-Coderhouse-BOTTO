@@ -30,4 +30,8 @@ export default class AuthRepository {
   deleteAccount = async (id) => {
     return await this.dao.deleteAccount(id);
   };
+
+  updatePassword = async (email, password) => {
+    return await this.dao.updatePassword(email, password);
+  };
 }
