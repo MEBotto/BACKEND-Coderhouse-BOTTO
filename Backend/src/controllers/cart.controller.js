@@ -85,7 +85,7 @@ const postPaymentController = async (req, res) => {
     let result = await cartService.postPayment(cid);
 
     if (result.ticket !== null) {
-      sendMail
+      sendMail(result.ticket)
       res.status(200).json({
         message: "Payment successufully, email sended",
         productsBuy: result.productBought,
