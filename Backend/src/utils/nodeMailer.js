@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import userModel from "../models/user.model.js";
 import { config } from "../config/env.config.js";
 
-const transporter = nodemailer.createTransport({
+export const transporter = nodemailer.createTransport({
   service: "gmail",
   port: 587,
   auth: {

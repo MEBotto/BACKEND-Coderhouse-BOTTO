@@ -3,6 +3,7 @@ import { authService, emailService } from "../services/factory.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import { generateJWToken } from "../utils/jwt.js";
 import { v4 as uuidv4 } from "uuid";
+import { transporter } from "../utils/nodeMailer.js";
 
 const getAllUsersController = async (req, res) => {
   try {
@@ -143,6 +144,11 @@ const updateAccountController = async (req, res) => {
   } catch (error) {
     res.status(400).json({ success: false, error: error });
   }
+};
+
+const mailOptionsToReset = {
+  from: config.mailUser,
+  subject: "Reset password",
 };
 
 const recoverPasswordController = async (req, res) => {
