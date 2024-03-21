@@ -12,7 +12,6 @@ import { config } from "./config/env.config.js";
 import { program } from "./config/env.config.js";
 import MongoSingleton from "./config/db/mongodb-singleton.js";
 import __dirname from "./utils.js";
-import initializePassport from "./config/auth/passport.config.js";
 
 // Routers and services
 import cartRouter from "./routes/carts.routes.js";
@@ -48,11 +47,6 @@ app.use(
     saveUninitialized: true,
   })
 );
-
-// Inicialización Passport
-initializePassport();
-app.use(passport.initialize());
-app.use(passport.session());
 
 // Configuración del servidor HTTP
 const httpServer = app.listen(PORT, () => {
