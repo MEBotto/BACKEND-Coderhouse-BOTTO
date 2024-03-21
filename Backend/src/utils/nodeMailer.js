@@ -29,10 +29,13 @@ const sendMail = async (ticket) => {
     to: "marianobotto92@gmail.com",
     subject: "Ticket de Compra",
     html: `
-    <div> 
-      <p>Código:${ticket.code}</p>
-      <p>Monto:${ticket.amount}</p>
-      <p>Fecha y Hora:${ticket.purchaseDatetime}</p>
+    <div style="font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px;">
+      <h1 style="color: #333;">Ticket de Compra</h1>
+      <div style="background-color: #fff; padding: 10px; border-radius: 5px;">
+        <p style="margin: 0;">Código: ${ticket.code}</p>
+        <p style="margin: 0;">Monto: ${ticket.amount}</p>
+        <p style="margin: 0;">Fecha y Hora: ${ticket.purchaseDatetime}</p>
+      </div>
     </div>`,
   });
 };
