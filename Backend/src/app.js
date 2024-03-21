@@ -2,10 +2,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import passport from "passport";
 import { Server } from "socket.io";
-import session from "express-session";
-import MongoStore from "connect-mongo";
 
 // Application configurations and utilities
 import { config } from "./config/env.config.js";
@@ -34,19 +31,6 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
-
-// Configuración de Session
-app.use(
-  session({
-    store: MongoStore.create({
-      mongoUrl: mongoURL,
-      ttl: 10 * 60,
-    }),
-    secret: "v5h2Lor01Nu0",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
 
 // Configuración del servidor HTTP
 const httpServer = app.listen(PORT, () => {
