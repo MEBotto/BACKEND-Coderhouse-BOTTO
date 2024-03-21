@@ -3,7 +3,7 @@ import passportLocal from "passport-local";
 import GitHubStrategy from "passport-github2";
 import jwtStrategy from "passport-jwt";
 import userModel from "../../models/user.model.js";
-import { createHash, isValidPassword } from "../../utils.js";
+import { createHash, isValidPassword } from "../../utils/bcrypt.js";
 import { config } from "../env.config.js";
 
 const localStrategy = passportLocal.Strategy;
