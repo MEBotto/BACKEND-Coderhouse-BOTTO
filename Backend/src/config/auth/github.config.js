@@ -14,7 +14,7 @@ const GitHubStrategy = new Strategy(
       let user = await authService.getAccountByGitHubId(profile._json.id);
       if (!user) {
         let newUser = {
-          name: profile._json.name,
+          first_name: profile._json.name,
           photo: profile._json.avatar_url,
           registerWith: profile.provider,
           role: "user",
