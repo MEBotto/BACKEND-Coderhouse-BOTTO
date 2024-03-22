@@ -74,6 +74,6 @@ authRouter.put("/user/:id", updateAccountController);
 
 authRouter.get("/users", checkUserRole(["ADMIN"]), getAllUsersController);
 
-authRouter.get("/userById/:id", getUserByIdController);
+authRouter.get("/user/:id", getUserByIdController);
 
 export default authRouter;
