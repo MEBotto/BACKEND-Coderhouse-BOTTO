@@ -10,6 +10,7 @@ import {
   getAccountByEmailController,
   updateAccountController,
   getAllUsersController,
+  getUserByIdController,
 } from "../controllers/auth.controller.js";
 
 import { Router } from "express";
@@ -72,5 +73,7 @@ authRouter.get("/user/:email", getAccountByEmailController);
 authRouter.put("/user/:id", updateAccountController);
 
 authRouter.get("/users", checkUserRole(["ADMIN"]), getAllUsersController);
+
+authRouter.get("user/:id", getUserByIdController);
 
 export default authRouter;

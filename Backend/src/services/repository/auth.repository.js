@@ -11,6 +11,10 @@ export default class AuthRepository {
     return await this.dao.createAccount(account);
   };
 
+  getAccountById = async (id) => {
+    return await this.dao.getAccountById(id);
+  }
+
   getAccountByEmail = async (email) => {
     return await this.dao.getAccountByEmail(email);
   };
