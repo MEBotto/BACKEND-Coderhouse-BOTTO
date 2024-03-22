@@ -26,7 +26,6 @@ const getUserByIdController = async (req, res) => {
 
 const githubCallbackController = async (req, res) => {
   const user = req.user;
-  console.log(user);
 
   const tokenGitHubUser = {
     name: user.first_name,
