@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Products from "./pages/Products/Products.jsx";
-import Profile from "./components/Profile/Profile.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
 import Register from "./pages/Register/Register.jsx";
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard.jsx";
 import Chat from "./pages/Chat/Chat.jsx";
@@ -27,7 +27,7 @@ function App() {
 
   const logout = () => {
     setToken(null);
-    localStorage.removeItem("token");
+    localStorage.removeItem("token"); 
   };
 
   return (

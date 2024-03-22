@@ -29,9 +29,9 @@ const githubCallbackController = async (req, res) => {
   console.log(user);
 
   const tokenGitHubUser = {
-    first_name: user.first_name,
-    last_name: "N/A",
-    email: "N/A",
+    name: user.first_name,
+    email: user.email,
+    photo: user.photo,
     role: user.role,
     registerWith: user.registerWith,
     userId: user._id,

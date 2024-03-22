@@ -3,6 +3,7 @@ import CustomError from "../services/errors/CustomError.js";
 import { generateProductErrorInfo } from "../services/errors/infoError.js";
 import { EErrors } from "../services/errors/enumsError.js";
 import logger from "../utils/logger.js";
+import { v4 as uuidv4 } from "uuid";
 
 const getProductsController = async (req, res) => {
   const { limit, page, sort, query } = req.query;
@@ -30,6 +31,9 @@ const getProductByIdController = async (req, res) => {
 
 const addProductController = async (req, res) => {
   const productReq = req.body;
+  const uuid = uuidv4();
+  const code = uuid.split('-')[0].toUpperCase();
+  productReq.code = code;
 
   try {
     if (

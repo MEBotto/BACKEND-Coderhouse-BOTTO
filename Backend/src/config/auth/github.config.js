@@ -1,5 +1,5 @@
 import { config } from "../env.config.js";
-import { authService } from "../../services/factory.js";
+import { authService, productService } from "../../services/factory.js";
 import { Strategy } from "passport-github2";
 
 const GitHubStrategy = new Strategy(
@@ -7,6 +7,7 @@ const GitHubStrategy = new Strategy(
     clientID: config.githubClientID,
     clientSecret: config.githubSecret,
     callbackURL: config.githubCallbackURL,
+    scope: ["user:email"],
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
@@ -15,7 +16,8 @@ const GitHubStrategy = new Strategy(
         let newUser = {
           first_name: profile._json.name,
           photo: profile._json.avatar_url,
-          registerWith: "GitHub",
+          email: profile.emails[0].value,
+          registerWith: profile.provider,
           role: "user",
           github_id: profile._json.id,
         };
