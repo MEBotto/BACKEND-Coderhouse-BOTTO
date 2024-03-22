@@ -156,7 +156,9 @@ const recoverPasswordController = async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).send("Email not provided");
+      return res
+        .status(400)
+        .json({ success: false, message: "Email not provided" });
     }
 
     const token = uuidv4();
@@ -165,13 +167,13 @@ const recoverPasswordController = async (req, res) => {
     const now = new Date();
     const oneHourMore = 60 * 60 * 1000;
 
-    now.setTime(now.getTime() + oneHourMore)
+    now.setTime(now.getTime() + oneHourMore);
 
     const tempDbMails = {
       email,
       tokenId: token,
-      expirationTime: new Date(Date.now() + 60 * 60 * 1000)
-    }
+      expirationTime: new Date(Date.now() + 60 * 60 * 1000),
+    };
 
     try {
       const created = await emailService.createEmail(tempDbMails);
@@ -184,14 +186,58 @@ const recoverPasswordController = async (req, res) => {
 
     transporter.sendMail(mailOptionsToReset, (error, info) => {
       if (error) {
-        res.status(500).send({ message: "Error", payload: error });
+        res.status(500).json({ message: "Error", payload: error });
       }
-      res.status(200).send({ success: true, payload: info });
+      res.status(200).json({ success: true, payload: info });
     });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       success: false,
       error: "No se pudo enviar el email desde: " + config.mailUser,
+    });
+  }
+};
+
+const newPasswordController = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  const hashedPassword = await createHash(password);
+
+  const findEmail = await emailService.getEmail(token);
+
+  const findUser = await authService.getAccountByEmail(findEmail.email);
+
+  isEqual = isValidPassword(findUser.password, password);
+
+  if (isEqual) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Same password as previous one" });
+  }
+
+  const now = new Date();
+  const expirationTime = findEmail.expirationTime;
+
+  if (now > expirationTime || !expirationTime) {
+    await emailService.deleteToken(token);
+    console.log("Expiration time completed");
+    return res.redirect("/send-email-to-reset");
+  }
+
+  try {
+    console.log(findEmail.email);
+    console.log(hashedPassword);
+    const updatePassword = await authService.updatePassword(
+      findEmail.email,
+      hashedPassword
+    );
+    console.log(updatePassword);
+    res.status.json({ success: true, data: updatePassword });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      error: err.message,
     });
   }
 };
@@ -204,4 +250,6 @@ export {
   getAccountByEmailController,
   updateAccountController,
   getAllUsersController,
+  recoverPasswordController,
+  newPasswordController,
 };
