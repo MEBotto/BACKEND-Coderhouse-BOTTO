@@ -9,8 +9,8 @@ export default class AuthDAO {
     return await userModel.create(user);
   };
   getAccountById = async (id) => {
-    return await userModel.findById(id)
-  }
+    return await userModel.findOne({ _id: id });
+  };
   getAccountByEmail = async (email) => {
     return await userModel.findOne({ email: email });
   };

@@ -6,6 +6,6 @@ const emailSchema = new Schema({
   expirationTime: { type: Date, required: true },
 });
 
-emailModel = model("recoveryEmail", emailSchema);
+const emailModel = model("recoveryEmail", emailSchema);
 
 export { emailModel };
