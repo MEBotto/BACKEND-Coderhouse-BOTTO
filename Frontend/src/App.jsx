@@ -11,6 +11,7 @@ import Profile from "./pages/Profile/Profile.jsx";
 import Register from "./pages/Register/Register.jsx";
 import AdminDashboard from "./components/AdminDashboard/AdminDashboard.jsx";
 import Chat from "./pages/Chat/Chat.jsx";
+import PasswordReset from "./pages/PasswordReset/PasswordReset.jsx";
 
 function App() {
   const current_theme = localStorage.getItem("current_theme");
@@ -27,7 +28,7 @@ function App() {
 
   const logout = () => {
     setToken(null);
-    localStorage.removeItem("token"); 
+    localStorage.removeItem("token");
   };
 
   return (
@@ -38,6 +39,8 @@ function App() {
             <Route path="/login" element={<Login onLogin={login} />} />
             <Route path="/register" element={<Register />} />
             <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/password_reset" element={<PasswordReset />} />
+            <Route path="/password_reset/:token" element={<PasswordReset />} />
             <Route
               path="/"
               element={
