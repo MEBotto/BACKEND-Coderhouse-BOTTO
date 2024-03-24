@@ -197,6 +197,10 @@ const recoverPasswordController = async (req, res) => {
       if (error) {
         res.status(500).json({ message: "Error", payload: error });
       }
+      res.cookie("email", email, {
+        httpOnly: false,
+        maxAge: 8 * 60 * 60 * 1000,
+      });
       res.status(200).json({ success: true, payload: info, email: email });
     });
   } catch (error) {
