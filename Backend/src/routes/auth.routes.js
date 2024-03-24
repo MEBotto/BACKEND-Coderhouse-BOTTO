@@ -11,6 +11,8 @@ import {
   updateAccountController,
   getAllUsersController,
   getUserByIdController,
+  recoverPasswordController,
+  newPasswordController
 } from "../controllers/auth.controller.js";
 
 import { Router } from "express";
@@ -75,5 +77,9 @@ authRouter.put("/user/:id", updateAccountController);
 authRouter.get("/users", checkUserRole(["ADMIN"]), getAllUsersController);
 
 authRouter.get("/user/:id", getUserByIdController);
+
+authRouter.post("/recover-password", recoverPasswordController);
+
+authRouter.post("/new-password", newPasswordController);
 
 export default authRouter;
