@@ -3,11 +3,13 @@ import { useTheme } from "../../context/ThemeContext.jsx";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import { Link } from "react-router-dom";
 import Button from "../../components/Button/Button.jsx";
 
 const PasswordReset = () => {
+  const navigate = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
   const { theme } = useTheme();
   const { email, setEmail } = useAuth();
@@ -114,6 +116,9 @@ const PasswordReset = () => {
         theme: "light",
         transition: Bounce,
       });
+      setTimeout(() => {
+        navigate("/login");
+      }, 5000);
     } catch (error) {
       toast.error(`${error}`, {
         position: "bottom-center",
