@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext.jsx";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
 import ReCAPTCHA from "react-google-recaptcha";
 import Button from "../../components/Button/Button.jsx";
 
 const PasswordReset = () => {
   const [isClicked, setIsClicked] = useState(false);
   const { theme } = useTheme();
+  const { email, setEmail } = useAuth();
   const { token } = useParams();
 
   const {
@@ -26,11 +28,56 @@ const PasswordReset = () => {
 
   const onSubmitEmail = async (data) => {
     console.log(data);
-    setIsClicked(!isClicked);
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/auth/recover-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: data.email }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+
+      const responseData = await response.json();
+      console.log("Response:", responseData);
+      setIsClicked(true);
+      setEmail(responseData.email);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
   };
 
   const onSubmitPassword = async (data) => {
-    console.log(data);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/auth/new-password/${token}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password: data.password }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+
+      const responseData = await response.json();
+      console.log("Response:", responseData);
+      setIsClicked(true);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
   };
 
   return (
@@ -42,7 +89,7 @@ const PasswordReset = () => {
       {token ? (
         <>
           <h1 className={`mt-5 text-2xl`}>Change password for</h1>
-          <h2 className={`mt-3 mb-5 text-2xl`}>Name</h2>
+          <h2 className={`mt-3 mb-5 text-2xl`}>{email}</h2>
           <div className="border border-gray-400 rounded-xl p-5 w-1/4">
             <form onSubmit={handleSubmit(onSubmitPassword)}>
               <div className="flex flex-col items-center">

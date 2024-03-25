@@ -80,6 +80,6 @@ authRouter.get("/user/:id", getUserByIdController);
 
 authRouter.post("/recover-password", recoverPasswordController);
 
-authRouter.post("/new-password", newPasswordController);
+authRouter.post("/new-password/:token", newPasswordController);
 
 export default authRouter;

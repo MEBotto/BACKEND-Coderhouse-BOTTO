@@ -170,6 +170,14 @@ const recoverPasswordController = async (req, res) => {
         .json({ success: false, message: "Email not provided" });
     }
 
+    const findUser = await authService.getAccountByEmail(email);
+
+    if (!findUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "There is no account with that email" });
+    }
+
     const token = uuidv4();
     const link = `http://localhost:5173/password_reset/${token}`;
 
