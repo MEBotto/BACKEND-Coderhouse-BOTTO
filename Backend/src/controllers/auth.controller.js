@@ -235,8 +235,6 @@ const newPasswordController = async (req, res) => {
 
   const isEqual = await isValidPassword(findUser.password, password);
 
-  console.log(isEqual);
-
   if (isEqual) {
     return res
       .status(400)
