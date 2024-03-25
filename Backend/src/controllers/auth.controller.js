@@ -96,18 +96,18 @@ const loginController = async (req, res) => {
 
       const access_token = generateJWToken(tokenAdmin);
 
-      res.status(200).json({ success: true, jwt: access_token });
+      return res.status(200).json({ success: true, jwt: access_token });
     }
 
     const account = await authService.getAccountByEmail(email);
     if (!account) {
-      res.status(401).json({ success: false, message: "Invalid Credentials" });
+      return res.status(401).json({ success: false, message: "Invalid Credentials" });
     }
 
     const verifyPassword = await isValidPassword(account.password, password);
 
     if (!verifyPassword) {
-      res.status(401).json({ success: false, message: "Invalid Credentials" });
+      return res.status(401).json({ success: false, message: "Invalid Credentials" });
     }
 
     const tokenUser = {
@@ -121,11 +121,12 @@ const loginController = async (req, res) => {
 
     const access_token = generateJWToken(tokenUser);
 
-    res.status(200).json({ success: true, jwt: access_token });
+    return res.status(200).json({ success: true, jwt: access_token });
   } catch (error) {
-    res.status(400).json({ success: false, error: error });
+    return res.status(400).json({ success: false, error: error.message });
   }
 };
+
 
 const getAccountByEmailController = async (req, res) => {
   try {
