@@ -78,7 +78,7 @@ const registerController = async (req, res) => {
     const account = await authService.createAccount(newUser);
     return res.status(200).json({ success: true, data: account });
   } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
+    res.status(400).json({ success: false, error: error });
   }
 };
 
@@ -173,9 +173,10 @@ const recoverPasswordController = async (req, res) => {
     const findUser = await authService.getAccountByEmail(email);
 
     if (!findUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "There is no account with that email" });
+      return res.status(400).json({
+        success: false,
+        message: "There is no account with that email",
+      });
     }
 
     const token = uuidv4();
