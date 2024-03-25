@@ -114,7 +114,7 @@ const loginController = async (req, res) => {
       first_name: account.first_name,
       last_name: account.last_name,
       email: account.email,
-      role: "user",
+      role: account.role,
       registerWith: account.registerWith,
       userId: account._id,
       photo: account.photo,
