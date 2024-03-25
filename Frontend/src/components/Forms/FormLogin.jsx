@@ -56,14 +56,14 @@ const FormLogin = ({ t }) => {
         )}
       </div>
       <div className="flex justify-between">
-        <a
-          href="#"
+        <Link
+          to={"/password_reset"}
           className={`${
             t === "dark" ? "text-white" : "text-black"
           } hover:underline`}
         >
           Forget Password
-        </a>
+        </Link>
         <Link
           to="/register"
           className={`${
