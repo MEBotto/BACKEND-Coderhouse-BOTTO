@@ -40,7 +40,6 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/admin/*" element={<AdminDashboard />} />
             <Route path="/password_reset" element={<PasswordReset />} />
-            <Route path="/password_reset/:token" element={<PasswordReset />} />
             <Route
               path="/"
               element={

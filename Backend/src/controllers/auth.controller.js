@@ -183,7 +183,7 @@ const recoverPasswordController = async (req, res) => {
     }
 
     const token = uuidv4();
-    const link = `http://localhost:5173/password_reset/${token}`;
+    const link = `http://localhost:5173/password_reset?token=${token}&email=${email}`;
 
     const now = new Date();
     const oneHourMore = 60 * 60 * 1000;

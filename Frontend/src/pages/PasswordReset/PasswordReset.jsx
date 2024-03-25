@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext.jsx";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext.jsx";
+import { useParams, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -12,8 +11,13 @@ const PasswordReset = () => {
   const navigate = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
   const { theme } = useTheme();
-  const { email, setEmail } = useAuth();
-  const { token } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const token = searchParams.get("token");
+  const email = searchParams.get("email");
+
+  console.log(token);
+  console.log(email);
 
   const {
     handleSubmit,
@@ -68,7 +72,6 @@ const PasswordReset = () => {
         transition: Bounce,
       });
       setIsClicked(true);
-      setEmail(responseData.email);
     } catch (error) {
       console.log(error);
       toast.error(`${error}`, {
@@ -143,25 +146,25 @@ const PasswordReset = () => {
       {token ? (
         <>
           <h1 className={`mt-5 text-2xl`}>Change password for</h1>
-          {/* <h2 className={`mt-3 mb-5 text-2xl`}>{email}</h2> */}
+          <h2 className={`mt-3 mb-5 text-2xl`}>{email}</h2>
           <div className="border border-gray-400 rounded-xl p-5 w-1/4">
             <form onSubmit={handleSubmit(onSubmitPassword)}>
               <div className="flex flex-col items-center">
-                <label>Password</label>
                 <input
                   type="password"
                   {...register("password", { required: true })}
-                  className={`w-full text-black p-3 rounded-3xl my-3 ${
+                  className={`w-full text-black p-3 rounded-3xl ${
                     theme === "dark" ? "" : "border border-black"
-                  }`}
+                  } ${errors.password ? "mt-3" : "mb-3"}`}
                   placeholder="Password"
                 />
                 {errors.password && (
-                  <span className="text-red-500">This field is required</span>
+                  <span className="text-red-500 mb-3">
+                    This field is required
+                  </span>
                 )}
               </div>
               <div className="flex flex-col items-center">
-                <label>Confirm Password</label>
                 <input
                   type="password"
                   {...register("confirmPassword", {
@@ -169,7 +172,7 @@ const PasswordReset = () => {
                     validate: validatePasswords,
                   })}
                   placeholder="Confirm Password"
-                  className={`w-full text-black p-3 rounded-3xl mt-3 ${
+                  className={`w-full text-black p-3 rounded-3xl ${
                     theme === "dark" ? "" : "border border-black"
                   }`}
                 />
