@@ -111,8 +111,7 @@ const loginController = async (req, res) => {
     }
 
     const tokenUser = {
-      first_name: account.first_name,
-      last_name: account.last_name,
+      name: account.first_name + account.last_name,
       email: account.email,
       role: account.role,
       registerWith: account.registerWith,
@@ -124,7 +123,7 @@ const loginController = async (req, res) => {
 
     res.status(200).json({ success: true, jwt: access_token });
   } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
+    res.status(400).json({ success: false, error: error });
   }
 };
 
