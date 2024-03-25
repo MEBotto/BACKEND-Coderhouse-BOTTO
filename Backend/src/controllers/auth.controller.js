@@ -101,13 +101,17 @@ const loginController = async (req, res) => {
 
     const account = await authService.getAccountByEmail(email);
     if (!account) {
-      return res.status(401).json({ success: false, message: "Invalid Credentials" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid Credentials" });
     }
 
     const verifyPassword = await isValidPassword(account.password, password);
 
     if (!verifyPassword) {
-      return res.status(401).json({ success: false, message: "Invalid Credentials" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid Credentials" });
     }
 
     const tokenUser = {
@@ -126,7 +130,6 @@ const loginController = async (req, res) => {
     return res.status(400).json({ success: false, error: error.message });
   }
 };
-
 
 const getAccountByEmailController = async (req, res) => {
   try {
@@ -230,7 +233,9 @@ const newPasswordController = async (req, res) => {
 
   const findUser = await authService.getAccountByEmail(findEmail.email);
 
-  isEqual = isValidPassword(findUser.password, password);
+  const isEqual = await isValidPassword(findUser.password, password);
+
+  console.log(isEqual);
 
   if (isEqual) {
     return res
@@ -255,7 +260,7 @@ const newPasswordController = async (req, res) => {
       hashedPassword
     );
     console.log(updatePassword);
-    res.status.json({ success: true, data: updatePassword });
+    res.status(200).json({ success: true, data: updatePassword });
   } catch (err) {
     res.status(400).json({
       success: false,

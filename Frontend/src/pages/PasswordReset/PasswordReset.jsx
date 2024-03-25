@@ -3,7 +3,8 @@ import { useTheme } from "../../context/ThemeContext.jsx";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
-import ReCAPTCHA from "react-google-recaptcha";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import { Link } from "react-router-dom";
 import Button from "../../components/Button/Button.jsx";
 
 const PasswordReset = () => {
@@ -23,11 +24,12 @@ const PasswordReset = () => {
   const confirmPassword = watch("confirmPassword", "");
 
   const validatePasswords = () => {
+    console.log(password);
+    console.log(confirmPassword);
     return password === confirmPassword || "Passwords don't match";
   };
 
   const onSubmitEmail = async (data) => {
-    console.log(data);
     try {
       const response = await fetch(
         "http://localhost:8080/api/auth/recover-password",
@@ -42,15 +44,42 @@ const PasswordReset = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
+        let errorMessage = "Something went wrong";
+
+        if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+
+        throw new Error(errorMessage);
       }
 
       const responseData = await response.json();
-      console.log("Response:", responseData);
+      toast.success(`The email was sent!`, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       setIsClicked(true);
       setEmail(responseData.email);
     } catch (error) {
-      console.error("Error:", error.message);
+      console.log(error);
+      toast.error(`${error}`, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -74,9 +103,29 @@ const PasswordReset = () => {
 
       const responseData = await response.json();
       console.log("Response:", responseData);
-      setIsClicked(true);
+      toast.success(`Successfully updated password!`, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     } catch (error) {
-      console.error("Error:", error.message);
+      toast.error(`${error}`, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -89,7 +138,7 @@ const PasswordReset = () => {
       {token ? (
         <>
           <h1 className={`mt-5 text-2xl`}>Change password for</h1>
-          <h2 className={`mt-3 mb-5 text-2xl`}>{email}</h2>
+          {/* <h2 className={`mt-3 mb-5 text-2xl`}>{email}</h2> */}
           <div className="border border-gray-400 rounded-xl p-5 w-1/4">
             <form onSubmit={handleSubmit(onSubmitPassword)}>
               <div className="flex flex-col items-center">
@@ -181,20 +230,35 @@ const PasswordReset = () => {
                   Check your email for a link to reset your password. If it
                   doesn't appear within a few minutes, check your spam folder.
                 </p>
-                <Button
-                  type="submit"
-                  text="Return to sign in"
-                  className={`${
-                    theme === "dark"
-                      ? "bg-mainColor text-black"
-                      : "bg-mainColorLight text-white"
-                  } rounded-3xl font-bold py-2 px-5 mt-3 w-full`}
-                />
+                <Link to={"/login"}>
+                  <Button
+                    type="submit"
+                    text="Return to sign in"
+                    className={`${
+                      theme === "dark"
+                        ? "bg-mainColor text-black"
+                        : "bg-mainColorLight text-white"
+                    } rounded-3xl font-bold py-2 px-5 mt-3 w-full`}
+                  />
+                </Link>
               </>
             )}
           </div>
         </>
       )}
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </div>
   );
 };
