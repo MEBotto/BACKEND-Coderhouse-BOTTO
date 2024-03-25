@@ -11,8 +11,8 @@ const getProductsController = async (req, res) => {
   const productData = await productService.getProducts(
     limit,
     page,
-    sort,
-    query
+    query,
+    sort
   );
 
   res.status(200).json({ productData });
@@ -32,7 +32,7 @@ const getProductByIdController = async (req, res) => {
 const addProductController = async (req, res) => {
   const productReq = req.body;
   const uuid = uuidv4();
-  const code = uuid.split('-')[0].toUpperCase();
+  const code = uuid.split("-")[0].toUpperCase();
   productReq.code = code;
 
   try {

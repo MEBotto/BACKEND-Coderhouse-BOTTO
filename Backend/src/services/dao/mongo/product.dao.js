@@ -12,67 +12,45 @@ export default class ProductDAO {
   };
 
   getProducts = async (limit, page, query, sort) => {
-    let limitFilter = limit ?? 10;
-    let pageFilter = page ?? 1;
-    let queryFilter = query !== undefined ? query : "";
-    let sortFilter;
-
-    if (sort) {
-      sortFilter = "";
-    } else {
-      sort === "asc" ? (sortFilter = "asc") : (sortFilter = "desc");
+    try {
+      let limitFilter = limit || 10;
+      let pageFilter = page || 1;
+      let queryFilter = query || "";
+      let sortFilter = sort || "asc";
+  
+      let filterOptions = {};
+      if (queryFilter) {
+        filterOptions.category = queryFilter;
+      }
+  
+      let sortOptions = { title: sortFilter };
+  
+      let productPaginate = await productModel.paginate(filterOptions, {
+        limit: limitFilter,
+        page: pageFilter,
+        sort: sortOptions,
+      });
+  
+      let responseObject = {
+        status: productPaginate.totalDocs > 0 ? "success" : "error",
+        payload: productPaginate.docs,
+        limit: productPaginate.limit,
+        totalDocs: productPaginate.totalDocs,
+        docsPerPage: productPaginate.docs.length,
+        totalPages: productPaginate.totalPages,
+        prevPage: productPaginate.prevPage,
+        nextPage: productPaginate.nextPage,
+        page: productPaginate.page,
+        hasPrevPage: productPaginate.hasPrevPage,
+        hasNextPage: productPaginate.hasNextPage,
+      };
+  
+      return responseObject;
+    } catch (error) {
+      console.log("Error fetching products:", error);
+      throw new Error("Error fetching products");
     }
-
-    let productPaginate;
-
-    // Case where queryFilter and sortFilter are passed
-    if (queryFilter && sortFilter) {
-      productPaginate = await productModel.paginate(
-        { category: query },
-        { limit: limitFilter, page: pageFilter, sort: { price: sortFilter } }
-      );
-    }
-
-    // Case where only sortFilter are passed
-    if (!queryFilter && sortFilter) {
-      productPaginate = await productModel.paginate(
-        {},
-        { limit: limitFilter, page: pageFilter, sort: { price: sortFilter } }
-      );
-    }
-
-    // Case where only queryFilter are passed
-    if (queryFilter && !sortFilter) {
-      productPaginate = await productModel.paginate(
-        { category: query },
-        { limit: limitFilter, page: pageFilter }
-      );
-    }
-
-    // Case where no queryFilter or sortFilter are passed
-    if (!queryFilter && !sortFilter) {
-      productPaginate = await productModel.paginate(
-        {},
-        { limit: limitFilter, page: pageFilter }
-      );
-    }
-
-    let responseObject = {
-      status: productPaginate.totalDocs > 0 ? "success" : "error",
-      payload: productPaginate.docs,
-      limit: productPaginate.limit,
-      totalDocs: productPaginate.totalDocs,
-      docsPerPage: productPaginate.docs.length,
-      totalPages: productPaginate.totalPages,
-      prevPage: productPaginate.prevPage,
-      nextPage: productPaginate.nextPage,
-      page: productPaginate.page,
-      hasPrevPage: productPaginate.hasPrevPage,
-      hasNextPage: productPaginate.hasNextPage,
-    };
-
-    return responseObject;
-  };
+  };  
 
   getProductById = async (id) => {
     const productSelected = await productModel.findById(id).lean();
