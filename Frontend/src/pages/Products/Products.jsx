@@ -14,15 +14,16 @@ const Products = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/extend/products?limit=${limit}&page=${page}`
+          `http://localhost:8080/api/products?limit=${limit}&page=${page}`
         );
         if (!response.ok) {
           throw new Error("Error al obtener los datos");
         }
 
         const data = await response.json();
-        setProducts(data.data.docs);
-        setTotalPages(data.data.totalPages);
+        console.log(data);
+        setProducts(data.productData.payload);
+        setTotalPages(data.productData.totalPages);
         setLoading(false);
       } catch (error) {
         console.error("Error:", error.message);
