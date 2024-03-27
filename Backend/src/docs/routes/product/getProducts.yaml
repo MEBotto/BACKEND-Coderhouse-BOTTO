@@ -1,0 +1,61 @@
+paths:
+  /api/products:
+    get:
+      tags:
+        - Products
+      summary: Get Products
+      description: Retrieves a list of products with optional pagination, sorting, and search query.
+      operationId: getProducts
+      parameters:
+        - name: limit
+          in: query
+          description: |
+            Number of products per page (default: 10).
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - name: page
+          in: query
+          description: |
+            Page number for pagination (default: 1).
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: sort
+          in: query
+          description: |
+            Sort criteria for products (e.g., asc, desc).
+          required: false
+          schema:
+            type: string
+        - name: query
+          in: query
+          description: |
+            Search query for filtering products by category.
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productData:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal Server Error"

@@ -1,0 +1,76 @@
+paths:
+  /api/products/{pid}:
+    put:
+      tags:
+        - Products
+      summary: Update Product
+      description: Updates an existing product in the system.
+      operationId: updateProduct
+      parameters:
+        - in: path
+          name: pid
+          description: ID of the product to update.
+          required: true
+          schema:
+            type: string
+          example: "6123456789abcdef0123456"
+      requestBody:
+        description: Updated product details.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The updated title of the product.
+                  example: "Updated Smartphone"
+                description:
+                  type: string
+                  description: The updated description of the product.
+                  example: "Updated description for the smartphone."
+                price:
+                  type: number
+                  format: float
+                  description: The updated price of the product.
+                  example: 1099.99
+                thumbnail:
+                  type: string
+                  description: Updated URL of the product's thumbnail image.
+                  example: "https://example.com/updated-product.jpg"
+                category:
+                  type: string
+                  description: The updated category of the product.
+                status:
+                  type: string
+                  enum:
+                    - "active"
+                    - "inactive"
+                  description: The updated status of the product.
+                  example: "inactive"
+                stock:
+                  type: integer
+                  description: The updated available stock of the product.
+                  example: 50
+      responses:
+        "200":
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Product has modified"
+        "400":
+          description: Invalid request body or product ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request body or product ID"

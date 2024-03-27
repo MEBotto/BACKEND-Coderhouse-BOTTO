@@ -1,0 +1,47 @@
+paths:
+  /api/products/{pid}:
+    delete:
+      tags:
+        - Products
+      summary: Delete Product
+      description: Deletes an existing product from the system.
+      operationId: deleteProduct
+      parameters:
+        - in: path
+          name: pid
+          description: ID of the product to delete.
+          required: true
+          schema:
+            type: string
+          example: "6123456789abcdef0123456"
+      responses:
+        "200":
+          description: Product deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Content successfully deleted!"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Product not found"
+        "400":
+          description: Invalid product ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid product ID"

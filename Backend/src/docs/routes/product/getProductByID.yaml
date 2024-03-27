@@ -1,0 +1,33 @@
+paths:
+  /api/products/{pid}:
+    get:
+      tags:
+        - Products
+      summary: Get Product by ID
+      description: Retrieves a product by its ID.
+      operationId: getProductById
+      parameters:
+        - in: path
+          name: pid
+          description: ID of the product to retrieve.
+          required: true
+          schema:
+            type: string
+            example: "6123456789abcdef0123456"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Product not found"

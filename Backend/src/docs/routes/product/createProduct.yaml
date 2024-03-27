@@ -1,0 +1,70 @@
+paths:
+  /api/products:
+    post:
+      tags:
+        - Products
+      summary: Add a New Product
+      description: Adds a new product to the system.
+      operationId: addProduct
+      requestBody:
+        description: Product details to be added.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the product.
+                  example: "Smartphone"
+                description:
+                  type: string
+                  description: A description of the product.
+                  example: "High-end smartphone with advanced features."
+                price:
+                  type: number
+                  format: float
+                  description: The price of the product.
+                  example: 999.99
+                thumbnail:
+                  type: string
+                  description: URL of the product's thumbnail image.
+                  example: "https://example.com/product.jpg"
+                category:
+                  type: string
+                  description: The category of the product.
+                status:
+                  type: string
+                  enum:
+                    - "active"
+                    - "inactive"
+                  description: The status of the product.
+                  example: "active"
+                stock:
+                  type: integer
+                  description: The available stock of the product.
+                  example: 100
+      responses:
+        "201":
+          description: Product added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Product successfully created"
+                  productCreated:
+                    $ref: "#/components/schemas/Product"
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request body"
