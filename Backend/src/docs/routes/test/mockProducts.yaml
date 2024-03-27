@@ -1,0 +1,46 @@
+paths:
+  /api/mockingProducts:
+    get:
+      tags:
+        - Test
+      summary: Generate Mock Products
+      description: Generates a list of mock products.
+      operationId: generateMockProducts
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "OK"
+                  products:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "611fbc72d00ff6001549d03a"
+        name:
+          type: string
+          example: "Mock Product"
+        price:
+          type: number
+          example: 19.99
+        category:
+          type: string
+          example: "Electronics"
+        description:
+          type: string
+          example: "This is a mock product description."
+        stock:
+          type: integer
+          example: 100

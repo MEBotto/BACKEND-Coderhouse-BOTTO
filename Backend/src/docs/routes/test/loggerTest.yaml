@@ -1,0 +1,19 @@
+paths:
+  /api/loggerTest:
+    get:
+      tags:
+        - Test
+      summary: Test Logger Endpoints
+      description: Tests various logging levels for the application.
+      operationId: testLoggerEndpoints
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "OK"
