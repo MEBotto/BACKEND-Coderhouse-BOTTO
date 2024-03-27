@@ -1,11 +1,33 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
+
+const getTokenFromCookie = () => {
+  const name = 'access_token=';
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookie.split(';');
+  for (let cookie of cookieArray) {
+    while (cookie.charAt(0) === ' ') {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(name) === 0) {
+      return cookie.substring(name.length, cookie.length);
+    }
+  }
+  return null;
+};
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const tokenFromCookie = getTokenFromCookie();
+    if (tokenFromCookie) {
+      setToken(tokenFromCookie);
+    }
+  }, []);
 
   const login = (newToken, userInfo) => {
     setToken(newToken);
