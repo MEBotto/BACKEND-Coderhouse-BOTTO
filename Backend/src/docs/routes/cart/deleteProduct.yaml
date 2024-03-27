@@ -1,0 +1,44 @@
+paths:
+  /api/cart/{cid}/products/{pid}:
+    delete:
+      tags:
+        - Cart
+      summary: Delete Product from Cart
+      description: Deletes a product from the cart specified by cart ID and product ID.
+      operationId: deleteProductFromCart
+      parameters:
+        - in: path
+          name: cid
+          description: Cart ID from which the product will be deleted.
+          required: true
+          schema:
+            type: string
+            example: "6123456789abcdef01234567"
+        - in: path
+          name: pid
+          description: Product ID to be deleted from the cart.
+          required: true
+          schema:
+            type: string
+            example: "abcde12345"
+      responses:
+        "200":
+          description: Product deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Product deleted successfully from the cart"
+        "404":
+          description: Cart or Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Cart or Product not found"

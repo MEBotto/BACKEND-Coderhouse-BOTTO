@@ -1,0 +1,36 @@
+paths:
+  /api/cart/user/{uid}:
+    get:
+      tags:
+        - Cart
+      summary: Get Cart by User ID
+      description: Retrieves the cart belonging to the specified user ID.
+      operationId: getCartByUserId
+      parameters:
+        - in: path
+          name: uid
+          description: User ID to retrieve the cart for.
+          required: true
+          schema:
+            type: string
+            example: "6123456789abcdef01234567"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cartSelected:
+                    $ref: "#/components/schemas/Cart"
+        "404":
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Cart not found"

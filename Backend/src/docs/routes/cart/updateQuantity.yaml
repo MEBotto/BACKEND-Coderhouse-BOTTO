@@ -1,0 +1,67 @@
+paths:
+  /api/cart/{cid}/products/{pid}:
+    put:
+      tags:
+        - Cart
+      summary: Update Product Quantity in Cart
+      description: Updates the quantity of a product in the cart specified by cart ID and product ID.
+      operationId: updateProductQuantity
+      parameters:
+        - in: path
+          name: cid
+          description: Cart ID in which the product quantity will be updated.
+          required: true
+          schema:
+            type: string
+            example: "6123456789abcdef01234567"
+        - in: path
+          name: pid
+          description: Product ID for which the quantity will be updated.
+          required: true
+          schema:
+            type: string
+            example: "abcde12345"
+      requestBody:
+        description: New quantity for the product in the cart.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  example: 2
+                  minimum: 1
+                  description: New quantity for the product (must be at least 1).
+      responses:
+        "200":
+          description: Product quantity updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Product quantity updated successfully"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request, please check your parameters"
+        "404":
+          description: Cart or Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Cart or Product not found"

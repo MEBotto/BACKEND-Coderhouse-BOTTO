@@ -1,0 +1,46 @@
+paths:
+  /api/cart/{cid}/product/{pid}:
+    post:
+      tags:
+        - Cart
+      summary: Add Product to Cart
+      description: Adds a product to the cart specified by cart ID and product ID.
+      operationId: addProductToCart
+      parameters:
+        - in: path
+          name: cid
+          description: Cart ID where the product will be added.
+          required: true
+          schema:
+            type: string
+            example: "6123456789abcdef01234567"
+        - in: path
+          name: pid
+          description: Product ID to add to the cart.
+          required: true
+          schema:
+            type: string
+            example: "1234567890abcdef01234567"
+      responses:
+        "200":
+          description: Product added successfully to the cart
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid request, please check your parameters"
+        "404":
+          description: Cart or Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Cart or Product not found"

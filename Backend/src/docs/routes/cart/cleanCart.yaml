@@ -1,0 +1,29 @@
+paths:
+  /api/cart/{cid}:
+    delete:
+      tags:
+        - Cart
+      summary: Clean Cart by ID
+      description: Removes all items from the cart based on the cart ID.
+      operationId: cleanCartById
+      parameters:
+        - in: path
+          name: cid
+          description: Cart ID to clean the cart.
+          required: true
+          schema:
+            type: string
+            example: "6123456789abcdef01234567"
+      responses:
+        "200":
+          description: Cart cleaned successfully
+        "404":
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Cart not found"
