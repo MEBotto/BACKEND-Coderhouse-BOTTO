@@ -1,0 +1,55 @@
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: User Login
+      description: >
+        Logs in a user using their email and password. If the credentials are valid, a JWT token is generated and sent as a cookie. The response varies depending on the user's role.
+      operationId: loginUser
+      requestBody:
+        description: Requires an existing email and a valid password.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email.
+                  example: john@example.com
+                  required: true
+                password:
+                  type: string
+                  description: The user's password.
+                  example: 123456
+                  required: true
+      responses:
+        "200":
+          description: Login successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    oneOf:
+                      - $ref: "#/components/schemas/User"
+                      - type: string
+                        example: "Admin"
+        "400":
+          description: Login failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid credentials"

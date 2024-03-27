@@ -1,3 +1,4 @@
 {
-    "ignore": ["src/data/*.json"]
+    "ignore": ["src/data/*.json"],
+    "ext": ".js, .mjs, .coffee, .litcoffee, .json, .yaml"
 }

@@ -1,0 +1,42 @@
+paths:
+  /api/auth/user/{email}:
+    get:
+      tags:
+        - Auth
+      summary: Get User by Email
+      description: Retrieves user information by email address.
+      operationId: getUserByEmail
+      parameters:
+        - in: path
+          name: email
+          description: User's email address.
+          required: true
+          schema:
+            type: string
+            format: email
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "User not found"

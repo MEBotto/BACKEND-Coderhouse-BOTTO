@@ -1,0 +1,50 @@
+paths:
+  /api/auth/user/{id}:
+    get:
+      tags:
+        - Auth
+      summary: Get User by ID
+      description: Retrieves user information by ID.
+      operationId: getUserById
+      parameters:
+        - in: path
+          name: id
+          description: User ID to retrieve.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "60f062ed2aeb183074c4f120"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid ID format"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "User not found"

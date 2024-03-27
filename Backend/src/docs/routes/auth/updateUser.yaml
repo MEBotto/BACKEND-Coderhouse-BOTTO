@@ -1,0 +1,65 @@
+paths:
+  /api/auth/user/{id}:
+    put:
+      tags:
+        - Auth
+      summary: Update User Account
+      description: Updates the account information of a user by ID.
+      operationId: updateUserAccount
+      parameters:
+        - in: path
+          name: id
+          description: User ID to update.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Updated user account data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: Successful update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "User account updated successfully"
+                  data:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid request"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Unauthorized"

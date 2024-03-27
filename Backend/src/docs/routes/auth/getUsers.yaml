@@ -1,0 +1,51 @@
+paths:
+  /api/auth/users:
+    get:
+      tags:
+        - Auth
+      summary: Get all Users
+      description: Returns all users registered in the database. Requires admin privileges.
+      operationId: getAllUsers
+      parameters:
+        - in: header
+          name: Authorization
+          description: Bearer JWT token.
+          required: true
+          schema:
+            type: string
+            format: jwt
+            example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"            
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Unauthorized"
+      security:
+        - JWTAuth: []
+      securitySchemes:
+        JWTAuth:
+          type: http
+          scheme: bearer

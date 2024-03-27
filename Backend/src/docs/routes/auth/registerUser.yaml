@@ -1,0 +1,63 @@
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: User Registration
+      description: Registers a new user with the provided information.
+      operationId: registerUser
+      requestBody:
+        description: User information for registration.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  description: The user's first name.
+                  example: John
+                  required: true
+                lastName:
+                  type: string
+                  description: The user's last name.
+                  example: Doe
+                  required: true
+                email:
+                  type: string
+                  format: email
+                  description: The user's email.
+                  example: john@example.com
+                  required: true
+                password:
+                  type: string
+                  description: The user's password.
+                  example: password123
+                  required: true
+      responses:
+        "200":
+          description: Registration successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: Registration failed.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Registration failed. User with email already exists."
