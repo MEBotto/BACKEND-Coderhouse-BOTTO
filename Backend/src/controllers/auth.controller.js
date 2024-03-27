@@ -115,7 +115,7 @@ const loginController = async (req, res) => {
     }
 
     const tokenUser = {
-      name: account.first_name + account.last_name,
+      name: account.first_name + " " + account.last_name,
       email: account.email,
       role: account.role,
       registerWith: account.registerWith,
