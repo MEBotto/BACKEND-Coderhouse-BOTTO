@@ -9,6 +9,8 @@ import { config } from "./config/env.config.js";
 import { program } from "./config/env.config.js";
 import MongoSingleton from "./config/db/mongodb-singleton.js";
 import __dirname from "./utils.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUIExpress from "swagger-ui-express";
 
 // Routers and services
 import cartRouter from "./routes/carts.routes.js";
@@ -20,8 +22,29 @@ import mockRouter from "./routes/mock.routes.js";
 
 const app = express();
 const PORT = config.port;
-const mongoURL =
-  "mongodb+srv://marianobotto92:47pjMQKnnwIQOect@clustercoder.81upg7k.mongodb.net/?retryWrites=true&w=majority";
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.3",
+    info: {
+      title: "FriKommerce - OpenAPI 3.0",
+      description:
+        "Here you have all the endpoints available at FriKommerce Server. This is a backend for and e-commerce. You have role system, CRUD for products, payments support",
+      version: "1.13.0",
+      contact: {
+        email: "marianobotto92@gmail.com",
+      },
+      license: {
+        name: "Apache 2.0",
+        url: "http://www.apache.org/licenses/LICENSE-2.0.html",
+      },
+    },
+  },
+  apis: [`./src/docs/**/*.yaml`],
+};
+
+const specs = swaggerJSDoc(swaggerOptions);
+app.use("/apidocs", swaggerUIExpress.serve, swaggerUIExpress.setup(specs));
 
 // CORS Options
 const corsOptions = {
@@ -85,7 +108,7 @@ app.use(express.static(`${__dirname}/public`));
 // Rutas
 app.use("/api/carts", cartRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/products", productRouter)
+app.use("/api/products", productRouter);
 app.use("/api", mockRouter);
 
 // Custom Router

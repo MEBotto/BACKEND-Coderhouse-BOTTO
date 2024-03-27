@@ -1,0 +1,21 @@
+components:
+  schemas:
+    Chat:
+      type: object
+      required:
+        - user
+        - message
+        - date
+      properties:
+        user:
+          type: string
+          description: The user who sent the message
+          example: johndoe
+        message:
+          type: string
+          description: The message
+          example: hello world
+        date:
+          type: string
+          description: The date when the message was sent
+          example: 2020-01-01 00:00:00

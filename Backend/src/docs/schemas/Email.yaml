@@ -1,0 +1,22 @@
+components:
+  schemas:
+    Email:
+      type: object
+      required:
+        - tokenId
+        - email
+        - expirationTime
+      properties:
+        tokenId:
+          type: string
+          format: uuid
+          description: Unique identifier of the token.
+          example: 00000000-0000-000
+        email:
+          type: string
+          description: Email address of the user.
+          example: john@example.com
+        expirationTime:
+          type: date
+          description: Date and time when the token expires.
+          example: 2020-01-01T00:00:00

@@ -1,0 +1,55 @@
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - first_name
+        - registerWith
+        - role
+      properties:
+        first_name:
+          type: string
+          description: Nombre del usuario
+          example: John
+        last_name:
+          type: string
+          description: Apellido del usuario
+          example: Doe
+        email:
+          type: string
+          description: Dirección de correo electrónico del usuario
+          example: johndoe@example.com
+        age:
+          type: number
+          description: Edad del usuario
+          example: 20
+        photo:
+          type: string
+          description: URL del avatar del usuario
+          example: https://example.com/avatar.jpg
+        password:
+          type: string
+          description: Contraseña hasheada del usuario
+          example: 8d969eef6ecad3c29a3a629280e686cf
+        cart:
+          type: array
+          items:
+            type: string
+          description: Elementos en el carrito del usuario
+          example: ["ObjectId(66019097316ed0cdfa04dba2)"]
+        registerWith:
+          type: string
+          description: Método de registro (por ejemplo, "form", "github", "google")
+          example: App
+        role:
+          type: string
+          description: Rol del usuario (por ejemplo, "admin", "user")
+          example: Classic
+        github_id:
+          type: string
+          description: ID de GitHub del usuario (si se registró con GitHub)
+          example: ""
+        google_id:
+          type: string
+          description: ID de Google del usuario (si se registró con Google)
+          example: ""
