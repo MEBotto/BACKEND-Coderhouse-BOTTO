@@ -1,14 +1,54 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useTheme } from "../../context/ThemeContext.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import Button from "../Button/Button.jsx";
 
 function Navbar() {
-  const { token, logout, user } = useAuth();
+  const { token, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [remainingTime, setRemainingTime] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    let intervalId;
+
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setUser(decodedToken.user);
+
+      const currentTime = Math.floor(Date.now() / 1000);
+      const expirationTime = decodedToken.exp;
+      const timeRemainingInSeconds = expirationTime - currentTime;
+      setRemainingTime(timeRemainingInSeconds);
+
+      if (timeRemainingInSeconds <= 0) {
+        logout();
+      }
+
+      intervalId = setInterval(() => {
+        setRemainingTime((prevTime) => prevTime - 1);
+      }, 1000);
+    } else {
+      setUser(null);
+      setRemainingTime(null);
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [token, logout]);
+
+  useEffect(() => {
+    if (remainingTime !== null) {
+      const minutes = Math.floor(remainingTime / 60);
+      const seconds = remainingTime % 60;
+      console.log(`Remaining time: ${minutes} minutes and ${seconds} seconds`);
+    }
+  }, [remainingTime]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -16,7 +56,7 @@ function Navbar() {
 
   const handleLogout = () => {
     logout();
-    navigate("/products");
+    navigate("/");
   };
 
   return (
@@ -68,18 +108,20 @@ function Navbar() {
         <div
           className={`${
             isMenuOpen ? "block" : "hidden"
-          } w-full md:block md:w-auto`}
+          } w-full md:block md:w-auto flex justify-end`}
           id="navbar-dropdown"
         >
-          <div className="flex justify-between items-center font-bold">
+          <div className="flex flex-col mt-4 items-end gap-2 md:flex-row md:gap-0 md:justify-between md:items-center md:mt-0 font-bold">
             <Link to={"/"}>Home</Link>
-            <Link to={"/products"} className="mx-2">
+            <Link to={"/products"} className="mx-0 md:mx-2">
               Products
             </Link>
-            <Link to={"/products"} className="mr-2">
+            <Link to={"/products"} className="mx-0 md:mr-2">
               Manga
             </Link>
-            <Link to={"/products"}>Comics</Link>
+            <Link to={"/products"} className="mx-0 md:mr-2">
+              Comics
+            </Link>
             {user?.role === "admin" ? (
               <Link to={"/dashboard"}>Dashboard</Link>
             ) : null}
@@ -91,37 +133,54 @@ function Navbar() {
           } w-full md:block md:w-auto`}
           id="navbar-dropdown"
         >
-          <div className="flex items-center justify-end gap-4 mr-4">
-            <div className="flex gap-4 items-center">
-              <Link to={"/login"}>
-                {" "}
-                <Button
-                  text={"Log in"}
-                  iconName={"ri-login-box-fill"}
-                  className={"font-bold"}
-                  iClass={"font-normal"}
+          <div className="flex flex-col items-end gap-2 mt-2 md:flex-row md:items-center justify-end md:gap-4 md:mr-4 md:mt-0">
+            {user ? (
+              <Link to={"/profile"} className="flex gap-4 items-center">
+                <img
+                  src={user.photo}
+                  alt={`Avatar of ${user.name}`}
+                  className="w-10 rounded-full"
                 />
+                <p>{user.name}</p>
               </Link>
-              <Link to={"/register"}>
-                {" "}
+            ) : (
+              <div className="flex gap-4 items-center">
+                <Link to={"/login"}>
+                  <Button
+                    text={"Log in"}
+                    iconName={"ri-login-box-fill"}
+                    className={"font-bold"}
+                    iClass={"font-normal"}
+                  />
+                </Link>
+                <Link to={"/register"}>
+                  <Button
+                    text={"Sign Up"}
+                    className={`${
+                      theme === "dark"
+                        ? "bg-mainColor text-black"
+                        : "bg-mainColorLight text-white"
+                    } p-2 rounded-xl font-bold`}
+                  />
+                </Link>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-1 md:flex-nowrap">
+              {user && (
                 <Button
-                  text={"Sign Up"}
-                  className={`${
-                    theme === "dark"
-                      ? "bg-mainColor text-black"
-                      : "bg-mainColorLight text-white"
-                  } p-2 rounded-xl font-bold`}
+                  onClickFunction={handleLogout}
+                  iconName={"ri-logout-box-line"}
+                  iSize={"text-3xl"}
                 />
-              </Link>
-            </div>
-            <div>
+              )}
+
               <Button
                 onClickFunction={toggleTheme}
                 iconName={theme === "dark" ? "ri-moon-fill" : "ri-sun-fill"}
                 iSize={"text-3xl"}
               />
               <Link to={"/cart"}>
-                {" "}
                 <Button
                   iconName={"ri-shopping-cart-2-fill"}
                   iSize={"text-3xl"}
