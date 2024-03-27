@@ -16,9 +16,9 @@ import swaggerUIExpress from "swagger-ui-express";
 import cartRouter from "./routes/carts.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import productRouter from "./routes/products.routes.js";
-import MessageExtendRouter from "./routes/custom/message.extend.routes.js";
 import { messageService } from "./services/factory.js";
 import mockRouter from "./routes/mock.routes.js";
+import messageRouter from "./routes/message.routes.js";
 
 const app = express();
 const PORT = config.port;
@@ -109,8 +109,5 @@ app.use(express.static(`${__dirname}/public`));
 app.use("/api/carts", cartRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
+app.use("/api/messages", messageRouter)
 app.use("/api", mockRouter);
-
-// Custom Router
-const messageExtendRouter = new MessageExtendRouter();
-app.use("/api/extend/messages", messageExtendRouter.getRouter());

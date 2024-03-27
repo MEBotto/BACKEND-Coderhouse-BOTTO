@@ -21,11 +21,11 @@ export const createMessageController = async (req, res) => {
 };
 
 export const updateMessageController = async (req, res) => {
-    const { _id } = req.params;
+    const { id } = req.params;
     const updatedMessage = req.body;
 
     try {
-        const updated = await messageService.update(_id, updatedMessage);
+        const updated = await messageService.update(id, updatedMessage);
         res.status(200).json({ data: updated, message: "Message updated successfully." });
     } catch (error) {
         res.status(500).json({ error: "Internal server error.", message: error.message });
@@ -33,10 +33,10 @@ export const updateMessageController = async (req, res) => {
 };
 
 export const deleteMessageController = async (req, res) => {
-    const { _id } = req.params;
+    const { id } = req.params;
 
     try {
-        const deletedMessage = await messageService.delete(_id);
+        const deletedMessage = await messageService.delete(id);
         res.status(200).json({ data: deletedMessage, message: "Message deleted successfully." });
     } catch (error) {
         res.status(500).json({ error: "Internal server error.", message: error.message });

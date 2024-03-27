@@ -5,7 +5,7 @@ export default class MessageDAO {
 
   findMessages = async () => {
     try {
-      const messages = await messageModel.find();
+      const messages = await messageModel.find().lean();
       return messages;
     } catch (error) {
       console.error("Error finding messages:", error);
