@@ -38,18 +38,13 @@ export const config = {
 };
 
 process.on("exit", (code) => {
-  console.log("Este codigo se ejecuta antes de salir del proceso.");
-  console.log("Process exit code: ", code);
+  console.log("Exit code process: ", code);
 });
 
 process.on("uncaughtException", (exception) => {
-  console.log("Esta exception no fue capturada o controlada.");
-  console.log(`Uncaught Exception: ${exception}`);
+  console.log(`Something went wrong! Unhandled exception: ${exception}`);
 });
 
 process.on("message", (message) => {
-  console.log(
-    "Este codigo ejecutará cuando reciba un mensaje de otro proceso."
-  );
   console.log(`Received message: ${message}`);
 });
