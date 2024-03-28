@@ -46,7 +46,7 @@ function Navbar() {
     if (remainingTime !== null) {
       const minutes = Math.floor(remainingTime / 60);
       const seconds = remainingTime % 60;
-      console.log(`Remaining time: ${minutes} minutes and ${seconds} seconds`);
+      // console.log(`Remaining time: ${minutes} minutes and ${seconds} seconds`);
     }
   }, [remainingTime]);
 
