@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
+import logger from "../../utils/logger.js";
 import { config } from "../env.config.js";
+import userModel from "../../models/user.model.js";
 
 export default class MongoSingleton {
   static #instance;
@@ -11,7 +13,7 @@ export default class MongoSingleton {
   //Implementing Singleton
   static getInstance() {
     if (this.#instance) {
-      console.log("A connection to MongoDB has already been opened");
+      logger.error("[ERROR] Already exist a connection to MongoDB");
     } else {
       this.#instance = new MongoSingleton();
     }
@@ -20,11 +22,13 @@ export default class MongoSingleton {
 
   #connectMongoDB = async () => {
     try {
-      await mongoose.connect(config.urlMongo);
-      console.log("Successfully connected to MongoDB using Mongoose!");
+      await mongoose.connect(config.urlMongo).then(() => {
+        userModel.syncIndexes();
+        logger.info("[Server] - MongoDB connected.");
+      });
     } catch (error) {
-      console.error("Failed to connect to DB using Mongoose: ", error);
-      process.exit(error);
+      logger.error("[ERROR] Connection to MongoDB failed: " + error);
+      process.exit();
     }
   };
 }
