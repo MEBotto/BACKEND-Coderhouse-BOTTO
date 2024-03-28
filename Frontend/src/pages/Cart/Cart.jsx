@@ -1,9 +1,62 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/AuthContext";
+import { jwtDecode } from "jwt-decode";
 import Button from "../../components/Button/Button";
 
 const Cart = () => {
   const { theme } = useTheme();
+  const { token } = useAuth();
+  const [cart, setCart] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        const user = decodedToken.user;
+
+        try {
+          const response = await fetch(
+            `http://localhost:8080/api/carts/user/${user.userId}`
+          );
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const cartData = await response.json();
+          if (cartData.cartSelected) {
+            setCart(cartData.cartSelected);
+          } else {
+            const postResponse = await fetch(
+              "http://localhost:8080/api/carts",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId: user.userId }),
+              }
+            );
+
+            if (!postResponse.ok) {
+              throw new Error("Error adding user's cart");
+            }
+
+            const newCartData = await postResponse.json();
+            setCart(newCartData.cartCreated);
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(cart.products.length);
+
   return (
     <div
       className={`${
