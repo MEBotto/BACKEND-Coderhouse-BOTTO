@@ -15,7 +15,7 @@ program
   );
 program.parse();
 
-console.log("Modo Options: ", program.opts().mode);
+console.log("[Server] - Server is running on mode:", program.opts().mode);
 
 const environment = program.opts().mode;
 
