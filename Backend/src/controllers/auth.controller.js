@@ -4,6 +4,7 @@ import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import { generateJWToken } from "../utils/jwt.js";
 import { v4 as uuidv4 } from "uuid";
 import { transporter } from "../utils/nodeMailer.js";
+import logger from "../utils/logger.js";
 
 const getAllUsersController = async (req, res) => {
   try {
@@ -199,7 +200,7 @@ const recoverPasswordController = async (req, res) => {
     try {
       const created = await emailService.createEmail(tempDbMails);
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
 
     mailOptionsToReset.to = email;
@@ -246,18 +247,15 @@ const newPasswordController = async (req, res) => {
 
   if (now > expirationTime || !expirationTime) {
     await emailService.deleteToken(token);
-    console.log("Expiration time completed");
+    logger.info("Expiration time of token completed");
     return res.redirect("/send-email-to-reset");
   }
 
   try {
-    console.log(findEmail.email);
-    console.log(hashedPassword);
     const updatePassword = await authService.updatePassword(
       findEmail.email,
       hashedPassword
     );
-    console.log(updatePassword);
     res.status(200).json({ success: true, data: updatePassword });
   } catch (err) {
     res.status(400).json({

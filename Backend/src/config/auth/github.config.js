@@ -1,6 +1,7 @@
 import { config } from "../env.config.js";
-import { authService, productService } from "../../services/factory.js";
+import { authService } from "../../services/factory.js";
 import { Strategy } from "passport-github2";
+import logger from "../../utils/logger.js"
 
 const GitHubStrategy = new Strategy(
   {
@@ -28,7 +29,7 @@ const GitHubStrategy = new Strategy(
       }
     } catch (error) {
       done(error);
-      console.log(error);
+      logger.error(error);
     }
   }
 );

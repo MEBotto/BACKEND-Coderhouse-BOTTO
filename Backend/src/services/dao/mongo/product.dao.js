@@ -1,4 +1,5 @@
 import { productModel } from "../../../models/product.model.js";
+import logger from "../../../utils/logger.js";
 
 export default class ProductDAO {
   constructor() {}
@@ -47,7 +48,7 @@ export default class ProductDAO {
   
       return responseObject;
     } catch (error) {
-      console.log("Error fetching products:", error);
+      logger.error("Error fetching products:", error);
       throw new Error("Error fetching products");
     }
   };  

@@ -70,7 +70,6 @@ export default class CartDAO {
     let ticketUser = null;
     try {
       const productData = await this.getCartByCartId(cartId);
-      console.log(productData);
       for (let i = 0; i < productData.products.length; i++) {
         if (
           productData.products[i].productId.stock >=
