@@ -4,6 +4,8 @@ import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
 import Button from "../../components/Button/Button";
+import CartProductCard from "../../components/Cards/CartProductCard";
+import SummaryCard from "../../components/Cards/SummaryCard";
 
 const Cart = () => {
   const { theme } = useTheme();
@@ -55,13 +57,19 @@ const Cart = () => {
     fetchData();
   }, []);
 
-  console.log(cart);
-
   return (
     <div
       className={`${
         theme === "dark" ? "bg-color text-white" : "bg-colorLight text-black"
-      } w-screen h-screen flex justify-center pt-24 pb-12`}
+      } ${
+        cart
+          ? cart.products.length === 0
+            ? "w-screen h-screen"
+            : cart.products.length > 5
+            ? "w-full h-full"
+            : "w-screen h-screen"
+          : "w-screen h-screen"
+      } flex justify-center pt-24 pb-12`}
     >
       {cart ? (
         cart.products.length === 0 ? (
@@ -98,10 +106,37 @@ const Cart = () => {
             </div>
           </div>
         ) : (
-          <p>Hay productos en el carrito</p>
+          <div className="w-3/4 grid grid-cols-4 gap-4 p-5">
+            <div className="col-span-3 h-fit flex flex-col items-center justify-center gap-4">
+              {cart.products.map((product) => (
+                <CartProductCard product={product} />
+              ))}
+            </div>
+            <div className="border border-gray-400 rounded-lg col-span-1 h-fit flex flex-col items-center justify-start">
+              <div className="w-full border-b border-gray-400 p-5">
+                <h2 className="text-xl">Purchase Summary</h2>
+              </div>
+              <SummaryCard theme={theme} products={cart.products} />
+            </div>
+          </div>
         )
       ) : (
-        <>No existe cart</>
+        <div className="w-3/4 h-fit p-5 border border-gray-400 rounded-lg flex flex-col justify-center items-center">
+          <h1 className="text-bold text-3xl my-4">
+            Oops! It looks like you are not logged in.
+          </h1>
+          <h2 className="my-2">Please log in to view the cart</h2>
+          <Link to={"/login"}>
+            <Button
+              text={"Go to login"}
+              className={`${
+                theme === "dark"
+                  ? "bg-mainColor text-black"
+                  : "bg-mainColorLight text-white"
+              } p-2 rounded-xl font-bold mt-6`}
+            />
+          </Link>
+        </div>
       )}
     </div>
   );
