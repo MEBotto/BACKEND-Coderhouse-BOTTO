@@ -7,10 +7,12 @@ const Button = ({
   onClickFunction,
   iconName,
   type,
+  isDisabled,
 }) => {
   return (
     <>
       <button
+        disabled={isDisabled}
         type={type ? type : undefined}
         onClick={onClickFunction}
         className={`my-1 ${className}`}
@@ -19,7 +21,9 @@ const Button = ({
         <span className="bg-transparent">
           {iconName && (
             <i
-              className={`${iconName} bg-transparent ${iSize ? iSize : "text-xl"} ${iClass} mr-2`}
+              className={`${iconName} bg-transparent ${
+                iSize ? iSize : "text-xl"
+              } ${iClass} mr-2`}
             ></i>
           )}
           {text}

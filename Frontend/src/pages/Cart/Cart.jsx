@@ -11,6 +11,7 @@ const Cart = () => {
   const { theme } = useTheme();
   const { token } = useAuth();
   const [cart, setCart] = useState(null);
+  const [forceUpdate, setForceUpdate] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +56,7 @@ const Cart = () => {
     };
 
     fetchData();
-  }, []);
+  }, [forceUpdate]);
 
   return (
     <div
@@ -109,7 +110,14 @@ const Cart = () => {
           <div className="w-3/4 grid grid-cols-4 gap-4 p-5">
             <div className="col-span-3 h-fit flex flex-col items-center justify-center gap-4">
               {cart.products.map((product) => (
-                <CartProductCard product={product} />
+                <CartProductCard
+                  product={product}
+                  theme={theme}
+                  cid={cart._id}
+                  forceUpdate={forceUpdate}
+                  setForceUpdate={setForceUpdate}
+                  key={product.productId._id}
+                />
               ))}
             </div>
             <div className="border border-gray-400 rounded-lg col-span-1 h-fit flex flex-col items-center justify-start">
