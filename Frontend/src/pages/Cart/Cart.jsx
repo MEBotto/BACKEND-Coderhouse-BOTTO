@@ -124,7 +124,7 @@ const Cart = () => {
               <div className="w-full border-b border-gray-400 p-5">
                 <h2 className="text-xl">Purchase Summary</h2>
               </div>
-              <SummaryCard theme={theme} products={cart.products} />
+              <SummaryCard theme={theme} products={cart.products} cid={cart._id}/>
             </div>
           </div>
         )

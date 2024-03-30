@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
 
-const SummaryCard = ({ theme, products }) => {
+const SummaryCard = ({ theme, products, cid }) => {
+  const navigate = useNavigate();
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQuantity, setTotalQuantity] = useState(0);
 
@@ -21,6 +23,31 @@ const SummaryCard = ({ theme, products }) => {
       return total + product.quantity;
     }, 0);
   }
+
+  const purchaseFunction = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/carts/${cid}/purchase`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const responseData = await response.json();
+      console.log("Compra realizada con éxito:", responseData);
+      alert("Se le ha enviado un correo con su ticket");
+      navigate("/products");
+    } catch (error) {
+      console.error("Error purchasing cart:", error);
+    }
+  };
 
   return (
     <div className="h-full w-full p-5 grid-rows-5">
@@ -61,6 +88,7 @@ const SummaryCard = ({ theme, products }) => {
               ? "bg-mainColor text-black"
               : "bg-mainColorLight text-white"
           } p-2 rounded-xl font-bold w-full`}
+          onClickFunction={() => purchaseFunction()}
         />
       </div>
     </div>
