@@ -4,6 +4,7 @@ import { useTheme } from "../../context/ThemeContext";
 
 const Products = () => {
   const { theme } = useTheme();
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
@@ -21,7 +22,6 @@ const Products = () => {
         }
 
         const data = await response.json();
-        console.log(data);
         setProducts(data.productData.payload);
         setTotalPages(data.productData.totalPages);
         setLoading(false);
