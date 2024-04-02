@@ -8,7 +8,7 @@ const userSchema = new Schema({
   password: { type: String },
   cart: { type: Array },
   registerWith: { type: String },
-  role: { type: String, default: "user", enum: ["user", "admin"] },
+  role: { type: String, default: "user", enum: ["user", "admin", "premiun"] },
   photo: {
     type: String,
     default: "https://i.imgur.com/6tqjCI3.png",

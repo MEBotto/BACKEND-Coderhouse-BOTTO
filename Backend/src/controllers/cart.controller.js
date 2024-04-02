@@ -1,4 +1,4 @@
-import { cartService } from "../services/factory.js";
+import { cartService, productService } from "../services/factory.js";
 import sendMail from "../utils/nodeMailer.js";
 
 const getCartByUserIdController = async (req, res) => {
@@ -71,6 +71,13 @@ const addProductByCartIdController = async (req, res) => {
   const { cid, pid } = req.params;
 
   try {
+    const cart = await cartService.getCartByCartId(cid);
+    const product = await productService.getProductById(pid);
+
+    if (cart.userId === product.owner) {
+      return res.status(400).json({ message: "You can't add a product created by you to your cart" })
+    }
+
     await cartService.addProductByCartId(cid, pid);
     res.status(200).json({ message: "New product has added!" });
   } catch (e) {
@@ -85,7 +92,7 @@ const postPaymentController = async (req, res) => {
     let result = await cartService.postPayment(cid);
 
     if (result.ticket !== null) {
-      sendMail(result.ticket)
+      sendMail(result.ticket);
       res.status(200).json({
         message: "Payment successufully, email sended",
         productsBuy: result.productBought,
