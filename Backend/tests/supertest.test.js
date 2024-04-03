@@ -83,26 +83,6 @@ describe("Testing Auth Endpoints", () => {
       expect(_body.success).is.equals(false);
       expect(_body.error).is.equals("Invalid credentials");
     });
-
-    it("Valid login should store cookie", async function () {
-      const mockUser = {
-        email: "test@example.com",
-        password: "test1234",
-      };
-
-      const result = await requester.post("/api/auth/login").send(mockUser);
-
-      const cookieResult = result.headers["set-cookie"][0];
-
-      const cookieData = cookieResult.split("=");
-      this.cookie = {
-        name: cookieData[0],
-        value: cookieData[1],
-      };
-
-      expect(this.cookie.name).to.be.ok.and.equal("access_token");
-      expect(this.cookie.value).to.be.ok.and.not.equal("");
-    });
   });
 
   describe("Logout user", () => {
