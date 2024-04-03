@@ -123,7 +123,10 @@ function Navbar() {
               Comics
             </Link>
             {user?.role === "admin" ? (
-              <Link to={"/dashboard"}>Dashboard</Link>
+              <Link to={"/dashboard"} className="mx-0 md:mr-2">Dashboard</Link>
+            ) : null}
+            {user?.role === "premiun" ? (
+              <Link to={"/products/add"} className="mx-0 md:mr-2">Add Product</Link>
             ) : null}
           </div>
         </div>

@@ -53,7 +53,7 @@ function App() {
               <Route path="/chat" element={<Chat />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/products" element={<Products theme={theme} />} />
+              <Route path="/products/*" element={<Products theme={theme} />} />
             </Route>
           </Routes>
         </BrowserRouter>

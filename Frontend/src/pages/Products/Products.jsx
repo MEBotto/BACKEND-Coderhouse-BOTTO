@@ -1,18 +1,30 @@
 import { useState, useEffect } from "react";
 import ProductCard from "../../components/Cards/ProductCard";
+import FormProduct from "../../components/Forms/FormProduct";
+import { useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
+import { useAuth } from "../../context/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
 const Products = () => {
   const { theme } = useTheme();
+  const { pathname } = useLocation();
+  const { token } = useAuth();
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      if (token) {
+        const decodedToken = jwtDecode(token)
+        setUser(decodedToken.user)
+      }
+      
       try {
         const response = await fetch(
           `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc`
@@ -59,7 +71,15 @@ const Products = () => {
     return pageNumbers;
   };
 
-  return (
+  return pathname === "/products/add" ? (
+    <div
+      className={`${
+        theme === "dark" ? "bg-color" : "bg-colorLight"
+      } w-screen h-screen flex justify-center items-center pt-24 pb-12`}
+    >
+      <FormProduct t={theme} uid={user?.userId}/>
+    </div>
+  ) : (
     <div
       className={`${
         theme === "dark" ? "bg-color" : "bg-colorLight"
@@ -82,7 +102,7 @@ const Products = () => {
         >
           <button
             className={`${page === 1 ? "invisible" : "visible"} text-2xl`}
-            onClick={() => handlePageChange(setPage(page - 1))}
+            onClick={() => handlePageChange(page - 1)}
           >
             <i className="ri-arrow-left-s-line"></i>
           </button>
@@ -91,7 +111,7 @@ const Products = () => {
             className={`${
               page === totalPages ? "invisible" : "visible"
             } text-2xl`}
-            onClick={() => handlePageChange(setPage(page + 1))}
+            onClick={() => handlePageChange(page + 1)}
           >
             <i className="ri-arrow-right-s-line"></i>
           </button>
