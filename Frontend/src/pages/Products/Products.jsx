@@ -77,7 +77,7 @@ const Products = () => {
         theme === "dark" ? "bg-color" : "bg-colorLight"
       } w-screen h-screen flex justify-center items-center pt-24 pb-12`}
     >
-      <FormProduct t={theme} uid={user?.userId}/>
+      <FormProduct t={theme}/>
     </div>
   ) : (
     <div
