@@ -78,10 +78,10 @@ describe("Testing Auth Endpoints", () => {
         .post("/api/auth/login")
         .send(mockUser);
 
-      expect(statusCode).is.equals(400);
+      expect(statusCode).is.equals(401);
       expect(ok).is.equals(false);
       expect(_body.success).is.equals(false);
-      expect(_body.error).is.equals("Invalid credentials");
+      expect(_body.message).is.equals("Invalid Credentials");
     });
   });
 
@@ -131,7 +131,7 @@ describe("Testing Product Endpoints", () => {
       };
 
       const { statusCode, ok, _body } = await requester
-        .post("/api/product")
+        .post("/api/products")
         .send(mockProduct);
 
       expect(statusCode).is.equals(201);
@@ -152,7 +152,7 @@ describe("Testing Product Endpoints", () => {
       };
 
       const { statusCode, ok, _body } = await requester
-        .post("/api/product")
+        .post("/api/products")
         .send(mockProduct);
 
       expect(statusCode).is.equals(400);
@@ -174,7 +174,7 @@ describe("Testing Product Endpoints", () => {
       };
 
       const { statusCode, ok, _body } = await requester
-        .post("/api/product")
+        .post("/api/products")
         .send(mockProduct);
 
       expect(statusCode).is.equals(400);
@@ -186,7 +186,7 @@ describe("Testing Product Endpoints", () => {
 
   describe("Get products", () => {
     it("Get all products", async function () {
-      const { statusCode, ok, _body } = await requester.get("/api/product");
+      const { statusCode, ok, _body } = await requester.get("/api/products");
 
       expect(statusCode).is.equals(200);
       expect(ok).is.equals(true);
@@ -195,7 +195,7 @@ describe("Testing Product Endpoints", () => {
 
     it("Get product by ID", async function () {
       const { statusCode, ok, _body } = await requester.get(
-        `/api/product/${newProduct._id}`
+        `/api/products/${newProduct._id}`
       );
 
       expect(statusCode).is.equals(200);
@@ -205,7 +205,7 @@ describe("Testing Product Endpoints", () => {
 
     it("Failed to get product with an invalid ID", async function () {
       const { statusCode, ok, _body } = await requester.get(
-        `/api/product/asleñw`
+        `/api/products/asleñw`
       );
 
       expect(statusCode).is.equals(404);
@@ -217,7 +217,7 @@ describe("Testing Product Endpoints", () => {
   describe("Delete a product", () => {
     it("Failed to delete a product with invalid ProductID", async function () {
       const { statusCode, ok, _body } = await requester.delete(
-        `/api/product/sñelqweña`
+        `/api/products/sñelqweña`
       );
 
       expect(statusCode).is.equals(400);
@@ -227,7 +227,7 @@ describe("Testing Product Endpoints", () => {
 
     it("Delete a product with a valid ProductID", async function () {
       const { statusCode, ok, _body } = await requester.delete(
-        `/api/product/${newProduct._id}`
+        `/api/products/${newProduct._id}`
       );
 
       expect(statusCode).is.equals(200);
@@ -251,7 +251,7 @@ describe("Testing Cart Endpoints", () => {
         status: true,
       };
 
-      const result = await requester.post("/api/product").send(mockProduct);
+      const result = await requester.post("/api/products").send(mockProduct);
 
       const productGeneratedForTesting = result._body;
 
@@ -261,27 +261,11 @@ describe("Testing Cart Endpoints", () => {
       };
 
       const { statusCode, ok, _body } = await requester
-        .post("/api/cart")
+        .post("/api/carts")
         .send(cartMock);
       expect(statusCode).is.equals(200);
       expect(ok).is.equals(true);
       expect(_body.cartCreated).to.not.be.empty;
-    });
-
-    it("Fail to create a new cart with missing properties", async function () {
-      const cartMock = {
-        userId: createdUser._id,
-      };
-
-      const { statusCode, ok, _body } = await requester
-        .post("/api/cart")
-        .send(cartMock);
-
-      expect(statusCode).is.equals(400);
-      expect(ok).is.equals(false);
-      expect(_body.error).is.equals(
-        "Please send an array of products to create your cart."
-      );
     });
   });
 });

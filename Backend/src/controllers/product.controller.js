@@ -31,9 +31,11 @@ const getProductByIdController = async (req, res) => {
 
 const addProductController = async (req, res) => {
   const productReq = req.body;
-  const uuid = uuidv4();
-  const code = uuid.split("-")[0].toUpperCase();
-  productReq.code = code;
+  if (!productReq.code) {
+    const uuid = uuidv4();
+    const code = uuid.split("-")[0].toUpperCase();
+    productReq.code = code;
+  }
 
   try {
     if (
