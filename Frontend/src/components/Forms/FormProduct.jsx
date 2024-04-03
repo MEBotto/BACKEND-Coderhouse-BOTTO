@@ -41,6 +41,7 @@ const FormProduct = ({ t }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        let errorMessage
 
         if (errorData.error) {
           errorMessage = errorData.error;

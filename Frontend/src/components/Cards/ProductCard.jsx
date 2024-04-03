@@ -40,7 +40,16 @@ const ProductCard = ({ p, t }) => {
                   }
                 );
                 if (!addProductResponse.ok) {
-                  throw new Error("Add product error");
+                  const errorData = await addProductResponse.json();
+                  let errorMessage;
+
+                  if (errorData.error) {
+                    errorMessage = errorData.error;
+                  } else if (errorData.message) {
+                    errorMessage = errorData.message;
+                  }
+
+                  throw new Error(errorMessage);
                 }
                 console.log("Se agrego bien el producto");
               } else {
@@ -57,7 +66,16 @@ const ProductCard = ({ p, t }) => {
                 }
               );
               if (!addProductResponse.ok) {
-                throw new Error("Add product error");
+                const errorData = await addProductResponse.json();
+                let errorMessage;
+
+                if (errorData.error) {
+                  errorMessage = errorData.error;
+                } else if (errorData.message) {
+                  errorMessage = errorData.message;
+                }
+
+                throw new Error(errorMessage);
               }
               console.log("Se agrego bien el producto");
             }
@@ -96,7 +114,16 @@ const ProductCard = ({ p, t }) => {
                   }
                 );
                 if (!addProductResponse.ok) {
-                  throw new Error("Add product error");
+                  const errorData = await addProductResponse.json();
+                  let errorMessage;
+
+                  if (errorData.error) {
+                    errorMessage = errorData.error;
+                  } else if (errorData.message) {
+                    errorMessage = errorData.message;
+                  }
+
+                  throw new Error(errorMessage);
                 }
                 console.log("Se agrego bien el producto");
               } else {
@@ -113,13 +140,23 @@ const ProductCard = ({ p, t }) => {
                 }
               );
               if (!addProductResponse.ok) {
-                throw new Error("Add product error");
+                const errorData = await addProductResponse.json();
+                let errorMessage;
+
+                if (errorData.error) {
+                  errorMessage = errorData.error;
+                } else if (errorData.message) {
+                  errorMessage = errorData.message;
+                }
+
+                throw new Error(errorMessage);
               }
               console.log("Se agrego bien el producto");
             }
           }
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error(error);
+          alert(error);
         }
       } else {
         alert(
