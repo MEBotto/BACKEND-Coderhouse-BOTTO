@@ -97,7 +97,15 @@ const loginController = async (req, res) => {
 
       const access_token = generateJWToken(tokenAdmin);
 
-      return res.status(200).json({ success: true, jwt: access_token });
+      res.cookie("access_token", access_token, {
+        httpOnly: false,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      return res.status(200).json({
+        success: true,
+        data: "Admin",
+      });
     }
 
     const account = await authService.getAccountByEmail(email);
@@ -127,10 +135,26 @@ const loginController = async (req, res) => {
 
     const access_token = generateJWToken(tokenUser);
 
-    return res.status(200).json({ success: true, jwt: access_token });
+    res.cookie("access_token", access_token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: account,
+    });
   } catch (error) {
     return res.status(400).json({ success: false, error: error.message });
   }
+};
+
+const logoutController = async (req, res) => {
+  res.clearCookie("access_token");
+  res.status(200).json({
+    success: true,
+    data: "Logged out",
+  });
 };
 
 const getAccountByEmailController = async (req, res) => {
@@ -277,4 +301,5 @@ export {
   getUserByIdController,
   recoverPasswordController,
   newPasswordController,
+  logoutController
 };
