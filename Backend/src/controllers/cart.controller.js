@@ -74,8 +74,12 @@ const addProductByCartIdController = async (req, res) => {
     const cart = await cartService.getCartByCartId(cid);
     const product = await productService.getProductById(pid);
 
-    if (cart.userId === product.owner) {
-      return res.status(400).json({ message: "You can't add a product created by you to your cart" })
+    if (cart.userId.toString() === product.owner) {
+      return res
+        .status(400)
+        .json({
+          message: "You can't add a product created by you to your cart",
+        });
     }
 
     await cartService.addProductByCartId(cid, pid);
