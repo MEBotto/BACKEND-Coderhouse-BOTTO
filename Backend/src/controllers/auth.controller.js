@@ -97,14 +97,9 @@ const loginController = async (req, res) => {
 
       const access_token = generateJWToken(tokenAdmin);
 
-      res.cookie("access_token", access_token, {
-        httpOnly: false,
-        maxAge: 24 * 60 * 60 * 1000,
-      });
-
       return res.status(200).json({
         success: true,
-        data: "Admin",
+        jwt: access_token,
       });
     }
 
@@ -135,14 +130,9 @@ const loginController = async (req, res) => {
 
     const access_token = generateJWToken(tokenUser);
 
-    res.cookie("access_token", access_token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      data: account,
+      jwt: access_token,
     });
   } catch (error) {
     return res.status(400).json({ success: false, error: error.message });

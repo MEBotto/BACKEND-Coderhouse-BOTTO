@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import Button from "../Button/Button.jsx";
 
 function Navbar() {
-  const { token, logout } = useAuth();
+  const { token, logout, setToken } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -26,7 +26,7 @@ function Navbar() {
       setRemainingTime(timeRemainingInSeconds);
 
       if (timeRemainingInSeconds <= 0) {
-        logout();
+        setToken(null);
       }
 
       intervalId = setInterval(() => {
@@ -40,7 +40,7 @@ function Navbar() {
     return () => {
       clearInterval(intervalId);
     };
-  }, [token, logout]);
+  }, [token]);
 
   useEffect(() => {
     if (remainingTime !== null) {
@@ -55,8 +55,19 @@ function Navbar() {
   };
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
+    setToken(null);
+    fetch("http://localhost:8080/api/auth/logout")
+      .then((response) => {
+        console.log(response)
+        if (response.ok) {
+          navigate("/");
+        } else {
+          throw new Error("Failed to logout");
+        }
+      })
+      .catch((error) => {
+        console.error("Logout error:", error);
+      });
   };
 
   return (
@@ -123,10 +134,14 @@ function Navbar() {
               Comics
             </Link>
             {user?.role === "admin" ? (
-              <Link to={"/dashboard"} className="mx-0 md:mr-2">Dashboard</Link>
+              <Link to={"/dashboard"} className="mx-0 md:mr-2">
+                Dashboard
+              </Link>
             ) : null}
             {user?.role === "premiun" ? (
-              <Link to={"/products/add"} className="mx-0 md:mr-2">Add Product</Link>
+              <Link to={"/products/add"} className="mx-0 md:mr-2">
+                Add Product
+              </Link>
             ) : null}
           </div>
         </div>

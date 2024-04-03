@@ -1,13 +1,13 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
 const getTokenFromCookie = () => {
-  const name = 'access_token=';
+  const name = "access_token=";
   const decodedCookie = decodeURIComponent(document.cookie);
-  const cookieArray = decodedCookie.split(';');
+  const cookieArray = decodedCookie.split(";");
   for (let cookie of cookieArray) {
-    while (cookie.charAt(0) === ' ') {
+    while (cookie.charAt(0) === " ") {
       cookie = cookie.substring(1);
     }
     if (cookie.indexOf(name) === 0) {
@@ -19,7 +19,6 @@ const getTokenFromCookie = () => {
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
 
   useEffect(() => {
@@ -29,36 +28,20 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (newToken, userInfo) => {
-    setToken(newToken);
-    setUser(userInfo);
-  };
-
-  const logout = () => {
-    setToken(null);
-  };
-
   const value = {
     token,
-    user,
-    login,
-    logout,
     email,
     setEmail,
-    setToken
+    setToken,
   };
 
-  return (
-    <AuthContext.Provider value={ value }>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-}
+};
