@@ -14,10 +14,7 @@ productRouter.get("/", getProductsController);
 
 productRouter.get("/:pid", getProductByIdController);
 
-productRouter.post(
-  "/",
-  addProductController
-);
+productRouter.post("/", checkUserRole(["ADMIN", "PREMIUN"]),  addProductController);
 
 productRouter.put("/:pid", updateProductController);
 

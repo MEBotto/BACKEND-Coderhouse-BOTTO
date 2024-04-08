@@ -4,6 +4,8 @@ import { generateProductErrorInfo } from "../services/errors/infoError.js";
 import { EErrors } from "../services/errors/enumsError.js";
 import logger from "../utils/logger.js";
 import { v4 as uuidv4 } from "uuid";
+import jwt, { decode } from "jsonwebtoken";
+import { config } from "../config/env.config.js";
 
 const getProductsController = async (req, res) => {
   const { limit, page, sort, query } = req.query;
@@ -31,13 +33,24 @@ const getProductByIdController = async (req, res) => {
 
 const addProductController = async (req, res) => {
   const productReq = req.body;
-  if (!productReq.code) {
-    const uuid = uuidv4();
-    const code = uuid.split("-")[0].toUpperCase();
-    productReq.code = code;
-  }
+  const authHeader = req.headers.authorization;
+  const token = authHeader.split(" ")[1];
 
   try {
+    const decodedToken = jwt.verify(token, config.jwtSecret);
+    const { user } = decodedToken;
+    const { role, userId } = user;
+
+    if (role === "premiun") {
+      productReq.owner = userId;
+    }
+
+    if (!productReq.code) {
+      const uuid = uuidv4();
+      const code = uuid.split("-")[0].toUpperCase();
+      productReq.code = code;
+    }
+
     if (
       productReq.title === undefined ||
       productReq.description === undefined ||
@@ -63,7 +76,7 @@ const addProductController = async (req, res) => {
       productCreated: productCreated,
     });
   } catch (error) {
-    logger.error("[ERROR]: " + error.cause);
+    logger.error("[ERROR]: " + error);
     res.status(400).json({
       error: error.name,
       message: error.message,
