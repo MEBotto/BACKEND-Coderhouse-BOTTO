@@ -14,10 +14,10 @@ productRouter.get("/", getProductsController);
 
 productRouter.get("/:pid", getProductByIdController);
 
-productRouter.post("/", checkUserRole(["ADMIN", "PREMIUN"]),  addProductController);
+productRouter.post("/", checkUserRole(["ADMIN", "PREMIUN"]), addProductController);
 
-productRouter.put("/:pid", updateProductController);
+productRouter.put("/:pid", checkUserRole(["ADMIN", "PREMIUN"]), updateProductController);
 
-productRouter.delete("/:pid", deleteProductController);
+productRouter.delete("/:pid", checkUserRole(["ADMIN", "PREMIUN"]), deleteProductController);
 
 export default productRouter;
