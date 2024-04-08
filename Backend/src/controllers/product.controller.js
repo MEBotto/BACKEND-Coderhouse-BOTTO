@@ -90,8 +90,20 @@ const addProductController = async (req, res) => {
 const updateProductController = async (req, res) => {
   const { pid } = req.params;
   const productReq = req.body;
+  const authHeader = req.headers.authorization;
+  const token = authHeader.split(" ")[1];
+  const product = await productService.getProductById(pid);
 
   try {
+    const decodedToken = jwt.verify(token, config.jwtSecret);
+    const { user } = decodedToken;
+    const { role, userId } = user;
+    const { owner } = product;
+
+    if (role === "premiun" && userId !== owner) {
+      throw new Error("You can only modify products created by the same user");
+    }
+
     const updateProductResult = await productService.updateProduct(
       pid,
       productReq
@@ -101,6 +113,7 @@ const updateProductController = async (req, res) => {
 
     res.status(200).json({ message: "Product has modified" });
   } catch (e) {
+    logger.error("[ERROR]: " + e);
     res.status(500).json({
       error: e.message,
     });
@@ -116,6 +129,7 @@ const deleteProductController = async (req, res) => {
       message: "Content successfully deleted!",
     });
   } catch (error) {
+    logger.error("[ERROR]: " + error);
     res.status(400).json({
       error: error.message,
     });
