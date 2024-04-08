@@ -41,6 +41,8 @@ const addProductController = async (req, res) => {
     const { user } = decodedToken;
     const { role, userId } = user;
 
+    productReq.status = true;
+
     if (role === "premiun") {
       productReq.owner = userId;
     }

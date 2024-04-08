@@ -1,9 +1,8 @@
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { jwtDecode } from "jwt-decode";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "../Button/Button.jsx";
 
@@ -24,11 +23,6 @@ const FormProduct = ({ t }) => {
   }, [token, navigate]);
 
   const onSubmit = async (data) => {
-    const user = jwtDecode(token).user
-    data.status = true;
-    if (user.role === "premiun") {
-      data.owner = user.userId;
-    }
     try {
       const response = await fetch(`http://localhost:8080/api/products`, {
         method: "POST",

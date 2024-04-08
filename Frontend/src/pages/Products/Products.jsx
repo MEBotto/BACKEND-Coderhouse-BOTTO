@@ -3,28 +3,19 @@ import ProductCard from "../../components/Cards/ProductCard";
 import FormProduct from "../../components/Forms/FormProduct";
 import { useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
-import { useAuth } from "../../context/AuthContext";
-import { jwtDecode } from "jwt-decode";
 
 const Products = () => {
   const { theme } = useTheme();
   const { pathname } = useLocation();
-  const { token } = useAuth();
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      if (token) {
-        const decodedToken = jwtDecode(token)
-        setUser(decodedToken.user)
-      }
-      
       try {
         const response = await fetch(
           `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc`
