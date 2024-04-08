@@ -122,7 +122,6 @@ const updateProductController = async (req, res) => {
 
 const deleteProductController = async (req, res) => {
   const { pid } = req.params;
-  const productReq = req.body;
   const authHeader = req.headers.authorization;
   const token = authHeader.split(" ")[1];
   const product = await productService.getProductById(pid);
