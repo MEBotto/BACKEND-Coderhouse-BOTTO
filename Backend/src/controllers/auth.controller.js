@@ -140,11 +140,19 @@ const loginController = async (req, res) => {
 };
 
 const logoutController = async (req, res) => {
-  res.clearCookie("access_token");
-  res.status(200).json({
-    success: true,
-    data: "Logged out",
-  });
+  const { uid } = req.body;
+  try {
+    const userUpdated = await authService.updateAccount(uid, {
+      last_connection: new Date(),
+    });
+    res.clearCookie("access_token");
+    res.status(200).json({
+      success: true,
+      data: "Logged out",
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
 };
 
 const getAccountByEmailController = async (req, res) => {
