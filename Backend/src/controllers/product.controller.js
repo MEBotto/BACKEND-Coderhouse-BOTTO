@@ -40,6 +40,8 @@ const addProductController = async (req, res) => {
     const decodedToken = jwt.verify(token, config.jwtSecret);
     const { user } = decodedToken;
     const { role, userId } = user;
+    const file = req.file;
+    console.log(file);
 
     productReq.status = true;
 
@@ -52,6 +54,9 @@ const addProductController = async (req, res) => {
       const code = uuid.split("-")[0].toUpperCase();
       productReq.code = code;
     }
+
+    const path = file.path.split("public")[1];
+    productReq.thumbnail = path;
 
     if (
       productReq.title === undefined ||

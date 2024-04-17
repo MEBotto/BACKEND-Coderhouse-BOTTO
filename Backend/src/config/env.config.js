@@ -34,7 +34,10 @@ export const config = {
   githubCallbackURL: process.env.GITHUB_CALLBACK_URL,
   mailUser: process.env.MAIL_USER,
   mailPassword: process.env.MAIL_PASSWORD,
-  environment: environment
+  environment: environment,
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
 };
 
 process.on("exit", (code) => {
