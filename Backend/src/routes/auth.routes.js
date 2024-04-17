@@ -14,13 +14,15 @@ import {
   recoverPasswordController,
   newPasswordController,
   logoutController,
-  userPremium
+  userPremiumController,
+  documentsController
 } from "../controllers/auth.controller.js";
 
 import { Router } from "express";
 import passport from "passport";
 
 import { checkUserRole } from "../middlewares/hasPermissionsMiddleware.js";
+import { multerMiddleware } from "../middlewares/multerMiddleware.js";
 
 passport.use(GitHubStrategy);
 passport.use(JwtStrategy);
@@ -86,6 +88,8 @@ authRouter.post("/recover-password", recoverPasswordController);
 
 authRouter.post("/new-password/:token", newPasswordController);
 
-authRouter.put("/user/premium/:uid", userPremium);
+authRouter.put("/user/premium/:uid", userPremiumController);
+
+authRouter.post('/users/:uid/documents', multerMiddleware.array('documents'), documentsController);
 
 export default authRouter;

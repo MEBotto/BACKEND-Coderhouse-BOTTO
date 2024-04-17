@@ -290,7 +290,7 @@ const newPasswordController = async (req, res) => {
   }
 };
 
-const userPremium = async (req, res) => {
+const userPremiumController = async (req, res) => {
   const { uid } = req.params;
   try {
     const user = await authService.getAccountById(uid);
@@ -313,6 +313,32 @@ const userPremium = async (req, res) => {
   }
 };
 
+const documentsController = async (req, res) => {
+  const { uid } = req.params;
+  const files = req.files;
+  try {
+    const user = await authService.getAccountById(uid);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    if(!files) {
+      return res.status(400).json({ success: false, message: "No files provided" });
+    }
+    
+    const documents = files.map(file => ({
+      name: file.filename, 
+      reference: file.path
+    }));
+
+    await authService.updateAccount(uid, { documents: documents });
+    return res.status(200).json({ success: true, documents });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
 export {
   githubCallbackController,
   googleCallbackController,
@@ -325,5 +351,6 @@ export {
   recoverPasswordController,
   newPasswordController,
   logoutController,
-  userPremium,
+  userPremiumController,
+  documentsController,
 };

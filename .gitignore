@@ -28,3 +28,4 @@ Backend/node_modules
 Backend/.env.production
 Backend/.env.development
 Backend/logs
+Backend/src/public/uploads/documents
