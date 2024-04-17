@@ -13,7 +13,8 @@ import {
   getUserByIdController,
   recoverPasswordController,
   newPasswordController,
-  logoutController
+  logoutController,
+  userPremium
 } from "../controllers/auth.controller.js";
 
 import { Router } from "express";
@@ -84,5 +85,7 @@ authRouter.get("/user/:id", getUserByIdController);
 authRouter.post("/recover-password", recoverPasswordController);
 
 authRouter.post("/new-password/:token", newPasswordController);
+
+authRouter.put("/user/premium/:uid", userPremium);
 
 export default authRouter;

@@ -43,7 +43,7 @@ const addProductController = async (req, res) => {
 
     productReq.status = true;
 
-    if (role === "premiun") {
+    if (role === "premium") {
       productReq.owner = userId;
     }
 
@@ -100,7 +100,7 @@ const updateProductController = async (req, res) => {
     const { role, userId } = user;
     const { owner } = product;
 
-    if (role === "premiun" && userId !== owner) {
+    if (role === "premium" && userId !== owner) {
       throw new Error("You can only modify products created by the same user");
     }
 
@@ -132,7 +132,7 @@ const deleteProductController = async (req, res) => {
     const { role, userId } = user;
     const { owner } = product;
 
-    if (role === "premiun" && userId !== owner) {
+    if (role === "premium" && userId !== owner) {
       throw new Error("You can only delete products created by the same user");
     }
 

@@ -138,7 +138,7 @@ function Navbar() {
                 Dashboard
               </Link>
             ) : null}
-            {user?.role === "premiun" ? (
+            {user?.role === "premium" ? (
               <Link to={"/products/add"} className="mx-0 md:mr-2">
                 Add Product
               </Link>

@@ -280,6 +280,29 @@ const newPasswordController = async (req, res) => {
   }
 };
 
+const userPremium = async (req, res) => {
+  const { uid } = req.params;
+  try {
+    const user = await authService.getAccountById(uid);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    if (user.role === "premium") {
+      return res
+        .status(400)
+        .json({ success: false, message: "User is already premium" });
+    }
+    const userUpdated = await authService.updateAccount(uid, {
+      role: "premium",
+    });
+    return res.status(200).json({ success: true, data: userUpdated });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
 export {
   githubCallbackController,
   googleCallbackController,
@@ -291,5 +314,6 @@ export {
   getUserByIdController,
   recoverPasswordController,
   newPasswordController,
-  logoutController
+  logoutController,
+  userPremium,
 };
