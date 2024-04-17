@@ -15,6 +15,11 @@ const userSchema = new Schema({
   },
   github_id: { type: String },
   google_id: { type: String },
+  documents: { 
+    name: { type: String }, 
+    reference: { type: String } 
+  },
+  last_connection: { type: Date },
 });
 
 userSchema.index(
