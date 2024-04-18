@@ -75,6 +75,10 @@ const registerController = async (req, res) => {
   } else {
     newUser.role = "user";
   }
+  if (req.cloudinaryUploads) {
+    const url = req.cloudinaryUploads[0].url;
+    newUser.photo = url;
+  }
   try {
     const account = await authService.createAccount(newUser);
     return res.status(200).json({ success: true, data: account });
@@ -174,9 +178,13 @@ const updateAccountController = async (req, res) => {
   try {
     const { id } = req.params;
     const newValues = req.body;
+    if (req.cloudinaryUploads) {
+      const url = req.cloudinaryUploads[0].url;
+      newValues.photo = url;
+    }
     const accountUpdated = await authService.updateAccount(id, newValues);
-    if (!accountUpdated) {
-      res.status(404).json({ success: false, message: "Account not found" });
+    if (accountUpdated.modifiedCount === 0) {
+      res.status(404).json({ success: false, message: "No changes were made, as the received values are the same as those stored" });
     }
     res.status(200).json({ success: true, data: accountUpdated });
   } catch (error) {
@@ -315,7 +323,7 @@ const userPremiumController = async (req, res) => {
 
 const documentsController = async (req, res) => {
   const { uid } = req.params;
-  const files = req.files;
+  const files = req.cloudinaryUploads;
   try {
     const user = await authService.getAccountById(uid);
 
@@ -328,8 +336,8 @@ const documentsController = async (req, res) => {
     }
     
     const documents = files.map(file => ({
-      name: file.filename, 
-      reference: file.path
+      name: file.name, 
+      reference: file.url
     }));
 
     await authService.updateAccount(uid, { documents: documents });

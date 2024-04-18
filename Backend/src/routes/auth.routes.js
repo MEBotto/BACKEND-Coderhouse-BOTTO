@@ -22,7 +22,7 @@ import { Router } from "express";
 import passport from "passport";
 
 import { checkUserRole } from "../middlewares/hasPermissionsMiddleware.js";
-import { multerMiddleware } from "../middlewares/multerMiddleware.js";
+import { uploadToCloudinary } from "../middlewares/multerMiddleware.js";
 
 passport.use(GitHubStrategy);
 passport.use(JwtStrategy);
@@ -70,7 +70,7 @@ authRouter.get(
 //   googleCallbackController
 // );
 
-authRouter.post("/register", registerController);
+authRouter.post("/register", uploadToCloudinary('', 'any'),  registerController);
 
 authRouter.post("/login", loginController);
 
@@ -78,7 +78,7 @@ authRouter.get("/logout", logoutController);
 
 authRouter.get("/user/:email", getAccountByEmailController);
 
-authRouter.put("/user/:id", updateAccountController);
+authRouter.put("/user/:id", uploadToCloudinary('', 'any'), updateAccountController);
 
 authRouter.get("/users", checkUserRole(["ADMIN"]), getAllUsersController);
 
@@ -90,6 +90,6 @@ authRouter.post("/new-password/:token", newPasswordController);
 
 authRouter.put("/user/premium/:uid", userPremiumController);
 
-authRouter.post('/users/:uid/documents', multerMiddleware.array('documents'), documentsController);
+authRouter.post('/users/:uid/documents', uploadToCloudinary('documents', "array"), documentsController);
 
 export default authRouter;

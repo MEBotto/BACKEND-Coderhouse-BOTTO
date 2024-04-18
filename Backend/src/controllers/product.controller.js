@@ -40,8 +40,6 @@ const addProductController = async (req, res) => {
     const decodedToken = jwt.verify(token, config.jwtSecret);
     const { user } = decodedToken;
     const { role, userId } = user;
-    const file = req.file;
-    console.log(file);
 
     productReq.status = true;
 
@@ -55,8 +53,8 @@ const addProductController = async (req, res) => {
       productReq.code = code;
     }
 
-    const path = file.path.split("public")[1];
-    productReq.thumbnail = path;
+    productReq.thumbnail = req.cloudinaryUrl;
+    console.log(productReq);
 
     if (
       productReq.title === undefined ||
@@ -109,12 +107,18 @@ const updateProductController = async (req, res) => {
       throw new Error("You can only modify products created by the same user");
     }
 
+    if (req.cloudinaryUploads) {
+      const url = req.cloudinaryUploads[0].url;
+      productReq.thumbnail = url;
+    }
+
     const updateProductResult = await productService.updateProduct(
       pid,
       productReq
     );
+    console.log(updateProductResult)
     if (updateProductResult.modifiedCount === 0)
-      throw new Error("Product not found");
+      throw new Error("No changes were made, as the received values are the same as those stored");
 
     res.status(200).json({ message: "Product has modified" });
   } catch (e) {

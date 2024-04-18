@@ -6,7 +6,7 @@ import {
   deleteProductController,
 } from "../controllers/product.controller.js";
 import { checkUserRole } from "../middlewares/hasPermissionsMiddleware.js";
-import { multerMiddleware } from "../middlewares/multerMiddleware.js";
+import { uploadToCloudinary } from "../middlewares/multerMiddleware.js";
 import { Router } from "express";
 
 const productRouter = Router();
@@ -18,13 +18,14 @@ productRouter.get("/:pid", getProductByIdController);
 productRouter.post(
   "/",
   checkUserRole(["ADMIN", "PREMIUM"]),
-  multerMiddleware.single("thumbnail"),
+  uploadToCloudinary("thumbnail", "single"),
   addProductController
 );
 
 productRouter.put(
   "/:pid",
   checkUserRole(["ADMIN", "PREMIUM"]),
+  uploadToCloudinary("", "any"),
   updateProductController
 );
 
