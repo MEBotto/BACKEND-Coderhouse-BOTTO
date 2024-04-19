@@ -137,7 +137,7 @@ function Navbar() {
       <div className="w-screen flex items-center justify-between">
         <div className="hidden lg:flex gap-4 w-1/2 2xl:w-1/3">
           {links.map((link) => (
-            <NavLink key={link.name} link={link} role={user?.role} />
+            <NavLink key={link.name} link={link} role={user?.role} theme={theme}/>
           ))}
         </div>
         <div className="lg:hidden 2xl:flex 2xl:w-1/3 xl:justify-center">
