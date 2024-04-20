@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import { useAuth } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
-import Button from "../../components/Button/Button";
-import CartProductCard from "../../components/Cards/CartProductCard";
-import SummaryCard from "../../components/Cards/SummaryCard";
+import Button from "../../components/Button";
+import CartProductCard from "../../components/CartProductCard";
+import SummaryCard from "../../components/SummaryCard";
 
 const Cart = () => {
   const { theme } = useTheme();
@@ -124,7 +124,11 @@ const Cart = () => {
               <div className="w-full border-b border-gray-400 p-5">
                 <h2 className="text-xl">Purchase Summary</h2>
               </div>
-              <SummaryCard theme={theme} products={cart.products} cid={cart._id}/>
+              <SummaryCard
+                theme={theme}
+                products={cart.products}
+                cid={cart._id}
+              />
             </div>
           </div>
         )

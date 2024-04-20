@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "../Button/Button";
+import Button from "./Button";
+import PropTypes from "prop-types";
 
-const SummaryCard = ({ theme, products, cid }) => {
+export default function SummaryCard({ theme, products, cid }) {
   const navigate = useNavigate();
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQuantity, setTotalQuantity] = useState(0);
@@ -93,6 +94,12 @@ const SummaryCard = ({ theme, products, cid }) => {
       </div>
     </div>
   );
-};
+}
 
-export default SummaryCard;
+SummaryCard.propTypes = {
+  theme: PropTypes.string.isRequired,
+  products: PropTypes.array.isRequired,
+  cid: PropTypes.string.isRequired,
+  calculateTotalPrice: PropTypes.func.isRequired,
+  calculateTotalQuantity: PropTypes.func.isRequired,
+};

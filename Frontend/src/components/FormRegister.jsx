@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "../Button/Button.jsx";
+import Button from "./Button.jsx";
+import PropTypes from "prop-types";
 
-const FormRegister = ({ t }) => {
+export default function FormRegister({ t }) {
   const {
     handleSubmit,
     register,
@@ -12,6 +13,7 @@ const FormRegister = ({ t }) => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    // eslint-disable-next-line no-unused-vars
     const { confirm_password, ...postData } = data;
     try {
       const response = await fetch(`http://localhost:8080/api/auth/register`, {
@@ -33,7 +35,6 @@ const FormRegister = ({ t }) => {
         throw new Error(errorMessage);
       }
 
-      const responseData = await response.json();
       toast.success("You've successfully registered!", {
         position: "top-center",
         autoClose: 5000,
@@ -185,6 +186,8 @@ const FormRegister = ({ t }) => {
       />
     </div>
   );
-};
+}
 
-export default FormRegister;
+FormRegister.propTypes = {
+  t: PropTypes.string.isRequired,
+};

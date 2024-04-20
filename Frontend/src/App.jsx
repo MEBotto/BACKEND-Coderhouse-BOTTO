@@ -4,12 +4,12 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { useEffect, useState } from "react";
-import Navbar from "./components/Navbar/Navbar.jsx";
+import Navbar from "./components/Navbar.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Products from "./pages/Products/Products.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import Register from "./pages/Register/Register.jsx";
-import AdminDashboard from "./components/AdminDashboard/AdminDashboard.jsx";
+import Dashboard from "./pages/Dashboard/Dashboard.jsx";
 import Chat from "./pages/Chat/Chat.jsx";
 import PasswordReset from "./pages/PasswordReset/PasswordReset.jsx";
 import Cart from "./pages/Cart/Cart.jsx";
@@ -23,23 +23,14 @@ function App() {
     document.body.className = `${theme}-body`;
   }, [theme]);
 
-  const login = (newToken) => {
-    setToken(newToken);
-  };
-
-  const logout = () => {
-    setToken(null);
-    localStorage.removeItem("token");
-  };
-
   return (
     <ThemeProvider>
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<Login onLogin={login} />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/dashboard/*" element={<Dashboard />} />
             <Route path="/password_reset" element={<PasswordReset />} />
             <Route
               path="/"
@@ -61,12 +52,5 @@ function App() {
     </ThemeProvider>
   );
 }
-
-const OutletWithNavbar = ({ theme, setTheme }) => (
-  <>
-    <Navbar theme={theme} setTheme={setTheme} />
-    <Outlet />
-  </>
-);
 
 export default App;

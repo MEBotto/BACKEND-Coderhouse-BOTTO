@@ -1,14 +1,15 @@
 import { useState } from "react";
-import Button from "../Button/Button";
+import Button from "./Button";
 import { Spinner } from "@material-tailwind/react";
+import PropTypes from "prop-types";
 
-const CartProductCard = ({
+export default function CartProductCard({
   product,
   theme,
   cid,
   forceUpdate,
   setForceUpdate,
-}) => {
+}) {
   const [quantity, setQuantity] = useState(product.quantity);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -156,6 +157,12 @@ const CartProductCard = ({
       </div>
     </div>
   );
-};
+}
 
-export default CartProductCard;
+CartProductCard.propTypes = {
+  product: PropTypes.object.isRequired,
+  theme: PropTypes.string.isRequired,
+  cid: PropTypes.string.isRequired,
+  forceUpdate: PropTypes.bool.isRequired,
+  setForceUpdate: PropTypes.func.isRequired,
+};

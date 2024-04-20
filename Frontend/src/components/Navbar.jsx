@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext.jsx";
-import { useTheme } from "../../context/ThemeContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
-import Button from "../Button/Button.jsx";
-import NavLink from "../NavLink.jsx";
+import Button from "./Button.jsx";
+import NavLink from "./NavLink.jsx";
 
 const links = [
   { name: "Home", path: "/" },
@@ -102,7 +102,7 @@ function Navbar() {
     return () => {
       clearInterval(intervalId);
     };
-  }, [token]);
+  }, [token, setToken]);
 
   useEffect(() => {
     if (remainingTime !== null) {
@@ -137,7 +137,12 @@ function Navbar() {
       <div className="w-screen flex items-center justify-between">
         <div className="hidden lg:flex gap-4 w-1/2 2xl:w-1/3">
           {links.map((link) => (
-            <NavLink key={link.name} link={link} role={user?.role} theme={theme}/>
+            <NavLink
+              key={link.name}
+              link={link}
+              role={user?.role}
+              theme={theme}
+            />
           ))}
         </div>
         <div className="lg:hidden 2xl:flex 2xl:w-1/3 xl:justify-center">
@@ -255,7 +260,9 @@ function Navbar() {
                     <img
                       src={user.photo}
                       alt={`Avatar of ${user.name}`}
-                      className={`w-10 rounded-full ${theme === "dark" ? "bg-white" : ""}`}
+                      className={`w-10 rounded-full ${
+                        theme === "dark" ? "bg-white" : ""
+                      }`}
                     />
                     <p>{user.name}</p>
                   </Link>

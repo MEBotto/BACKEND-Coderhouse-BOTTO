@@ -1,9 +1,10 @@
-import Button from "../Button/Button";
+import Button from "./Button";
 import Swal from "sweetalert2";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
+import PropTypes from "prop-types";
 
-const ProductCard = ({ p, t }) => {
+export default function ProductCard({ p, t }) {
   const { token } = useAuth();
 
   const addProductToCart = (pid) => {
@@ -222,6 +223,9 @@ const ProductCard = ({ p, t }) => {
       </div>
     </div>
   );
-};
+}
 
-export default ProductCard;
+ProductCard.propTypes = {
+  p: PropTypes.object.isRequired,
+  t: PropTypes.string.isRequired,
+};

@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useAuth } from "../../context/AuthContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "../Button/Button";
+import Button from "./Button.jsx";
+import PropTypes from "prop-types";
 
-const FormLogin = ({ t }) => {
+export default function FormLogin({ t }) {
   const navigate = useNavigate();
   const { setToken } = useAuth();
   const {
@@ -48,7 +49,7 @@ const FormLogin = ({ t }) => {
         theme: "light",
         transition: Bounce,
       });
-      setToken(responseData.jwt)
+      setToken(responseData.jwt);
       navigate("/products");
     } catch (error) {
       toast.error(`${error}`, {
@@ -162,6 +163,8 @@ const FormLogin = ({ t }) => {
       />
     </div>
   );
-};
+}
 
-export default FormLogin;
+FormLogin.propTypes = {
+  t: PropTypes.string.isRequired,
+};

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import ProductCard from "../../components/Cards/ProductCard";
-import FormProduct from "../../components/Forms/FormProduct";
+import ProductCard from "../../components/ProductCard";
+import FormProduct from "../../components/FormProduct";
 import { useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -12,6 +12,7 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
+  // eslint-disable-next-line no-unused-vars
   const [limit, setLimit] = useState(20);
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const Products = () => {
         theme === "dark" ? "bg-color" : "bg-colorLight"
       } w-screen h-screen flex justify-center items-center pt-24 pb-12`}
     >
-      <FormProduct t={theme}/>
+      <FormProduct t={theme} />
     </div>
   ) : (
     <div

@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { toast, ToastContainer, Bounce } from "react-toastify";
-import { useAuth } from "../../context/AuthContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "../Button/Button.jsx";
+import Button from "./Button.jsx";
+import PropTypes from "prop-types";
 
-const FormProduct = ({ t }) => {
+export default function FormProduct({ t }) {
   const navigate = useNavigate();
   const { token } = useAuth();
   const {
@@ -35,7 +36,7 @@ const FormProduct = ({ t }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        let errorMessage
+        let errorMessage;
 
         if (errorData.error) {
           errorMessage = errorData.error;
@@ -46,7 +47,6 @@ const FormProduct = ({ t }) => {
         throw new Error(errorMessage);
       }
 
-      const responseData = await response.json();
       toast.success("The product was successfully registered!", {
         position: "top-center",
         autoClose: 5000,
@@ -233,6 +233,8 @@ const FormProduct = ({ t }) => {
       />
     </div>
   );
-};
+}
 
-export default FormProduct;
+FormProduct.propTypes = {
+  t: PropTypes.string.isRequired,
+};

@@ -1,4 +1,6 @@
-const Button = ({
+import PropTypes from "prop-types";
+
+export default function Button ({
   text,
   bg,
   className,
@@ -8,7 +10,7 @@ const Button = ({
   iconName,
   type,
   isDisabled,
-}) => {
+}) {
   return (
     <>
       <button
@@ -31,6 +33,16 @@ const Button = ({
       </button>
     </>
   );
-};
+}
 
-export default Button;
+Button.propTypes = {
+  text: PropTypes.string,
+  bg: PropTypes.string,
+  className: PropTypes.string,
+  iSize: PropTypes.string,
+  iClass: PropTypes.string,
+  onClickFunction: PropTypes.func,
+  iconName: PropTypes.string,
+  type: PropTypes.string,
+  isDisabled: PropTypes.bool,
+};

@@ -5,7 +5,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import { Link } from "react-router-dom";
-import Button from "../../components/Button/Button.jsx";
+import Button from "../../components/Button.jsx";
 
 const PasswordReset = () => {
   const navigate = useNavigate();
