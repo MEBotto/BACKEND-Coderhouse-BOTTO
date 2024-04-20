@@ -16,7 +16,7 @@ export default function SideBar({ theme }) {
   const { pathname } = useLocation();
 
   return (
-    <div className={`flex h-screen flex-col px-3 py-4 md:px-2 gap-2`}>
+    <div className={`flex h-full flex-col px-3 py-4 md:px-2 gap-2`}>
       <Link
         to="/"
         className={`"mb-2 flex h-20 items-end justify-start rounded-md ${

@@ -10,19 +10,21 @@ export default function Dashboard() {
   const { theme } = useTheme();
   return (
     <div
-      className={`h-screen w-screen ${
+      className={`flex h-screen ${
         theme === "dark" ? "bg-color" : "bg-colorLight"
-      } flex `}
+      } flex-col md:flex-row md:overflow-hidden`}
     >
       <div className="w-full flex-none md:w-64">
         <Sidebar theme={theme} />
       </div>
-      <Routes>
-        <Route path="/" element={<Home theme={theme} />} />
-        {/* <Route path="/products" element={<Products />} />
+      <div className="flex-grow p-4 md:overflow-y-auto md:p-8">
+        <Routes>
+          <Route path="/" element={<Home theme={theme} />} />
+          {/* <Route path="/products" element={<Products />} />
         <Route path="/users" element={<Users />} />
         <Route path="/invoices" element={<Invoices />} /> */}
-      </Routes>
+        </Routes>
+      </div>
     </div>
   );
 }
