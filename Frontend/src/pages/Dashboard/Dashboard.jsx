@@ -17,7 +17,11 @@ export default function Dashboard() {
       <div className="w-full flex-none md:w-64">
         <Sidebar theme={theme} />
       </div>
-      <div className="flex-grow p-4 md:overflow-y-auto md:p-8">
+      <div
+        className={`flex-grow p-4 md:overflow-y-auto md:p-8 ${
+          theme === "dark" ? "bg-color" : "bg-colorLight"
+        }`}
+      >
         <Routes>
           <Route path="/" element={<Home theme={theme} />} />
           {/* <Route path="/products" element={<Products />} />
