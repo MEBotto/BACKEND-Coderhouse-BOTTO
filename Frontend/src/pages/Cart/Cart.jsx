@@ -56,7 +56,7 @@ const Cart = () => {
     };
 
     fetchData();
-  }, [forceUpdate]);
+  }, [forceUpdate, token]);
 
   return (
     <div
@@ -78,7 +78,7 @@ const Cart = () => {
             <div className="border border-gray-400 rounded-lg col-span-3 h-1/2 flex flex-col items-center justify-center">
               <i className="ri-shopping-cart-2-fill text-6xl" />
               <h1 className="text-bold text-3xl my-4">
-                It looks like you don't have anything in your cart!
+                It looks like you don&apos;t have anything in your cart!
               </h1>
               <h2>Add products for free shipping!</h2>
               <h2 className="my-2">
@@ -101,7 +101,7 @@ const Cart = () => {
               </div>
               <div className="h-full p-5">
                 <p>
-                  Here you'll see your purchase amounts once you add products.
+                  Here you&apos;ll see your purchase amounts once you add products.
                 </p>
               </div>
             </div>
