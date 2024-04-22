@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useTheme } from "../../context/ThemeContext";
-import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
-import Button from "../../components/Button";
-import CartProductCard from "../../components/CartProductCard";
-import SummaryCard from "../../components/SummaryCard";
+import Button from "../components/Button";
+import CartProductCard from "../components/CartProductCard";
+import SummaryCard from "../components/SummaryCard";
 
 const Cart = () => {
   const { theme } = useTheme();

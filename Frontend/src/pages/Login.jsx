@@ -1,5 +1,5 @@
-import { useTheme } from "../../context/ThemeContext.jsx";
-import FormLogin from "../../components/FormLogin.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
+import FormLogin from "../components/FormLogin.jsx";
 
 const Login = () => {
   const { theme } = useTheme();

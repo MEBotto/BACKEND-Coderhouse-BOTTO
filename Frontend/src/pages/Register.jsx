@@ -1,5 +1,5 @@
-import FormRegister from "../../components/FormRegister";
-import { useTheme } from "../../context/ThemeContext";
+import FormRegister from "../components/FormRegister";
+import { useTheme } from "../context/ThemeContext";
 
 const Register = () => {
   const { theme } = useTheme();

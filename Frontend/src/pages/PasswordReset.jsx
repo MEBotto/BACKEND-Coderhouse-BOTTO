@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useTheme } from "../../context/ThemeContext.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 import { useForm } from "react-hook-form";
 import { useParams, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import { Link } from "react-router-dom";
-import Button from "../../components/Button.jsx";
+import Button from "../components/Button.jsx";
 
 const PasswordReset = () => {
   const navigate = useNavigate();
