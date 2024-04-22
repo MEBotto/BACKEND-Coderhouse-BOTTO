@@ -291,6 +291,7 @@ const newPasswordController = async (req, res) => {
 };
 
 const userPremiumController = async (req, res) => {
+  const files = req.files;
   const { uid } = req.params;
   try {
     const user = await authService.getAccountById(uid);
@@ -299,6 +300,21 @@ const userPremiumController = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found" });
     }
+    if (!req.files) {
+      return res
+        .status(400)
+        .send({ status: "error", message: "No files were attached" });
+    }
+    if (req.files.length !== 3) {
+      return res
+        .status(400)
+        .send({ status: "error", message: "You must attach exactly 3 files" });
+    }
+    const documents = files.map((file) => ({
+      name: file.filename,
+      reference: file.path,
+    }));
+
     if (user.role === "premium") {
       return res
         .status(400)
@@ -306,6 +322,7 @@ const userPremiumController = async (req, res) => {
     }
     const userUpdated = await authService.updateAccount(uid, {
       role: "premium",
+      documents: documents,
     });
     return res.status(200).json({ success: true, data: userUpdated });
   } catch (error) {
@@ -320,16 +337,20 @@ const documentsController = async (req, res) => {
     const user = await authService.getAccountById(uid);
 
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
-    if(!files) {
-      return res.status(400).json({ success: false, message: "No files provided" });
+    if (!files) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No files provided" });
     }
-    
-    const documents = files.map(file => ({
-      name: file.filename, 
-      reference: file.path
+
+    const documents = files.map((file) => ({
+      name: file.filename,
+      reference: file.path,
     }));
 
     await authService.updateAccount(uid, { documents: documents });
