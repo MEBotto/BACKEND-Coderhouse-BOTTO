@@ -12,16 +12,18 @@ export default class ProductDAO {
     }
   };
 
-  getProducts = async (limit, page, query, sort) => {
+  getProducts = async (limit, page, filters, sort) => {
     try {
       let limitFilter = limit || 10;
       let pageFilter = page || 1;
-      let queryFilter = query || "";
       let sortFilter = sort || "asc";
   
       let filterOptions = {};
-      if (queryFilter) {
-        filterOptions.category = queryFilter;
+      if (filters.title) {
+        filterOptions.title = { $regex: new RegExp(filters.title, "i") };
+      }
+      if (filters.category) {
+        filterOptions.category = { $regex: new RegExp(filters.category, "i") };
       }
   
       let sortOptions = { title: sortFilter };

@@ -3,8 +3,8 @@ export default class ProductRepository {
     this.dao = dao;
   }
 
-  getProducts = async (limit, page, sort, query) => {
-    return await this.dao.getProducts(limit, page, sort, query);
+  getProducts = async (limit, page, sort, filters) => {
+    return await this.dao.getProducts(limit, page, sort, filters);
   };
 
   addProduct = async (product) => {
