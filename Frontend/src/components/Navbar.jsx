@@ -147,15 +147,11 @@ function Navbar() {
         </div>
         <div className="lg:hidden 2xl:flex 2xl:w-1/3 xl:justify-center">
           <Link to={"/"}>
-            <Button
-              text={"Logo"}
-              iconName={"ri-home-smile-fill"}
-              className={"text-3xl font-bold"}
-              iSize={"text-3xl"}
-              iClass={`${
-                theme === "dark" ? "text-mainColor" : "text-mainColorLight"
-              }`}
-            />
+            {theme === "dark" ? (
+              <img src="/logo_dark.webp" alt="Logo dark" className="h-14" />
+            ) : (
+              <img src="/logo_light.webp" alt="Logo light" className="h-14" />
+            )}
           </Link>
         </div>
         <div className="hidden lg:flex gap-4 w-1/2 2xl:w-1/3 justify-end items-center">
@@ -250,13 +246,19 @@ function Navbar() {
                 }
                 return (
                   <motion.div variants={listItemVariants} key={link.name}>
-                    <Link to={link.path}>{link.name}</Link>
+                    <Link to={link.path} onClick={() => setOpen(false)}>
+                      {link.name}
+                    </Link>
                   </motion.div>
                 );
               })}
               {user ? (
                 <motion.div variants={listItemVariants} className="flex gap-2">
-                  <Link to={"/profile"} className="flex gap-4 items-center">
+                  <Link
+                    to={"/profile"}
+                    onClick={() => setOpen(false)}
+                    className="flex gap-4 items-center"
+                  >
                     <img
                       src={user.photo}
                       alt={`Avatar of ${user.name}`}
@@ -266,18 +268,20 @@ function Navbar() {
                     />
                     <p>{user.name}</p>
                   </Link>
-                  <Button
-                    onClickFunction={handleLogout}
-                    iconName={"ri-logout-box-line"}
-                    iSize={"text-4xl"}
-                  />
+                  <div onClick={() => setOpen(false)}>
+                    <Button
+                      onClickFunction={handleLogout}
+                      iconName={"ri-logout-box-line"}
+                      iSize={"text-4xl"}
+                    />
+                  </div>
                 </motion.div>
               ) : (
                 <motion.div
                   variants={listItemVariants}
                   className="flex gap-4 items-center"
                 >
-                  <Link to={"/login"}>
+                  <Link to={"/login"} onClick={() => setOpen(false)}>
                     <Button
                       text={"Log in"}
                       iconName={"ri-login-box-fill"}
@@ -286,7 +290,7 @@ function Navbar() {
                       iSize={"text-4xl"}
                     />
                   </Link>
-                  <Link to={"/register"}>
+                  <Link to={"/register"} onClick={() => setOpen(false)}>
                     <Button
                       text={"Sign Up"}
                       className={`${
@@ -299,12 +303,14 @@ function Navbar() {
                 </motion.div>
               )}
               <motion.div variants={listItemVariants} className="flex gap-0">
-                <Button
-                  onClickFunction={toggleTheme}
-                  iconName={theme === "dark" ? "ri-moon-fill" : "ri-sun-fill"}
-                  iSize={"text-6xl"}
-                />
-                <Link to={"/cart"}>
+                <div onClick={() => setOpen(false)}>
+                  <Button
+                    onClickFunction={toggleTheme}
+                    iconName={theme === "dark" ? "ri-moon-fill" : "ri-sun-fill"}
+                    iSize={"text-6xl"}
+                  />
+                </div>
+                <Link to={"/cart"} onClick={() => setOpen(false)}>
                   <Button
                     iconName={"ri-shopping-cart-2-fill"}
                     iSize={"text-6xl"}

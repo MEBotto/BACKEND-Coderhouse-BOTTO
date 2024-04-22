@@ -19,10 +19,10 @@ export default function NavLink({ link, role, theme }) {
 
 NavLink.propTypes = {
   link: PropTypes.shape({
-    role: PropTypes.string.isRequired, 
+    role: PropTypes.string, 
     path: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
-  role: PropTypes.string.isRequired,
+  role: PropTypes.string,
   theme: PropTypes.string.isRequired,
 };
