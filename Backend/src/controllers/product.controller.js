@@ -54,7 +54,6 @@ const addProductController = async (req, res) => {
     }
 
     productReq.thumbnail = req.cloudinaryUrl;
-    console.log(productReq);
 
     if (
       productReq.title === undefined ||
@@ -76,6 +75,7 @@ const addProductController = async (req, res) => {
     }
 
     const productCreated = await productService.addProduct(productReq);
+    
     res.status(201).json({
       message: "Product succesfully created",
       productCreated: productCreated,

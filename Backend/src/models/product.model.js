@@ -14,7 +14,9 @@ const productSchema = new Schema({
     enum: ["Comics", "Manga", "Fantasy", "Romance", "Other"],
   },
   status: { type: Boolean, required: true },
-  owner: { type: String, default: "admin" }
+  owner: { type: String, default: "admin" },
+  upload_date: { type: Date, default: new Date() },
+  publication_date: { type: Date, default: new Date() },
 });
 
 productSchema.plugin(mongoosePaginate);
