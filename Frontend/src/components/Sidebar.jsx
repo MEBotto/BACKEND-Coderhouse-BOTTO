@@ -19,16 +19,20 @@ export default function SideBar({ theme }) {
     <div className={`flex h-full flex-col px-3 py-4 md:px-2 gap-2`}>
       <Link
         to="/"
-        className={`"mb-2 flex h-20 items-end justify-start rounded-md ${
-          theme === "dark" ? "bg-mainColor" : "bg-mainColorLight"
-        } p-4 md:h-40"`}
+        className={`"mb-2 flex h-20 items-center justify-center rounded-md p-4 md:h-40"`}
       >
         <div
           className={`flex flex-row items-center leading-none ${
             theme === "dark" ? "text-black" : "text-black"
           }`}
         >
-          <p className="text-[44px]">Logo</p>
+          {
+            <img
+              src={theme === "dark" ? "/logo_dark.webp" : "/logo_light.webp"}
+              className="h-20 md:h-20 rounded-full"
+              alt="logo"
+            />
+          }
         </div>
       </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
@@ -50,10 +54,16 @@ export default function SideBar({ theme }) {
             <p className="hidden md:block">{link.name}</p>
           </Link>
         ))}
-        <div className={`hidden h-auto w-full grow rounded-md ${theme === "dark" ? "bg-color" : "bg-colorLight"} md:block`}></div>
+        <div
+          className={`hidden h-auto w-full grow rounded-md ${
+            theme === "dark" ? "bg-color" : "bg-colorLight"
+          } md:block`}
+        ></div>
         <button
           className={`flex items-center justify-start gap-2 rounded-md p-2 md:p-3 ${
-            theme === "dark" ? "hover:bg-gray-700 text-white" : "hover:bg-gray-200 text-black"
+            theme === "dark"
+              ? "hover:bg-gray-700 text-white"
+              : "hover:bg-gray-200 text-black"
           }`}
         >
           <i className={`ri-logout-circle-line text-2xl`} />
