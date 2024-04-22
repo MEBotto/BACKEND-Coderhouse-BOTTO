@@ -88,7 +88,7 @@ authRouter.post("/recover-password", recoverPasswordController);
 
 authRouter.post("/new-password/:token", newPasswordController);
 
-authRouter.put("/user/premium/:uid", userPremiumController);
+authRouter.put("/user/premium/:uid", multerMiddleware.array('documents'), userPremiumController);
 
 authRouter.post('/users/:uid/documents', multerMiddleware.array('documents'), documentsController);
 
