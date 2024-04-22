@@ -25,7 +25,9 @@ export default class ProductDAO {
       if (filters.category) {
         filterOptions.category = { $regex: new RegExp(filters.category, "i") };
       }
-  
+      if (filters.owner) {
+        filterOptions.owner = filters.owner;
+      }
       let sortOptions = { title: sortFilter };
   
       let productPaginate = await productModel.paginate(filterOptions, {
