@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 const getTokenFromCookie = () => {
   const name = "access_token=";

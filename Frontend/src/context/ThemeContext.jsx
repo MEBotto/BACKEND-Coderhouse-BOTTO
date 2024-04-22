@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const ThemeContext = createContext();
+export const ThemeContext = createContext();
 
 // Creamos un componente proveedor para el contexto
 export const ThemeProvider = ({ children }) => {
