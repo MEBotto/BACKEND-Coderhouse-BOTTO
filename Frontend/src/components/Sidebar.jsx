@@ -46,7 +46,6 @@ export default function SideBar({ theme }) {
                 : `${theme === "dark" ? "text-white" : "text-black"}`
             }`}
           >
-            {console.log(theme)}
             <i className={`${link.icon} text-2xl`} />
             <p className="hidden md:block">{link.name}</p>
           </Link>
