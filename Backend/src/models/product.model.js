@@ -12,7 +12,7 @@ const productSchema = new Schema({
   category: {
     type: String,
     required: true,
-    enum: ["Comics", "Manga", "Fantasy", "Romance", "Other"],
+    enum: ["Comics", "Josei", "Seinen", "Shojo", "Shonen", "Yaoi", "Yuri"],
   },
   status: { type: Boolean, required: true },
   owner: { type: String, default: "admin" },
