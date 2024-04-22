@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useTheme from "../hooks/useTheme.jsx";
+import useTheme from "../hooks/useTheme.js";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
