@@ -12,7 +12,7 @@ const Profile = () => {
     const decodedToken = jwtDecode(token);
     setUserData(decodedToken.user);
     console.log(userData);
-  }, []);
+  }, [token, userData]);
 
   return (
     <div
