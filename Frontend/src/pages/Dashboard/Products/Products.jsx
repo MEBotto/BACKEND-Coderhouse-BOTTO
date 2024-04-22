@@ -48,7 +48,7 @@ export default function Products({ theme }) {
           <i className="ri-add-fill md:ml-4 text-2xl" />
         </Link>
       </div>
-      <ProductsTable query={query} currentPage={Number(page)} theme={theme} limit={limit}/>
+      <ProductsTable query={query} currentPage={Number(page)} theme={theme} limit={limit} />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} theme={theme} />
       </div>

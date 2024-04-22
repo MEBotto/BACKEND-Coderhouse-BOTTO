@@ -8,12 +8,12 @@ import jwt, { decode } from "jsonwebtoken";
 import { config } from "../config/env.config.js";
 
 const getProductsController = async (req, res) => {
-  const { limit, page, sort, query } = req.query;
+  const { limit, page, sort, query, category } = req.query;
 
   const productData = await productService.getProducts(
     limit,
     page,
-    query,
+    { title: query, category: category },
     sort
   );
 
@@ -116,9 +116,11 @@ const updateProductController = async (req, res) => {
       pid,
       productReq
     );
-    console.log(updateProductResult)
+    console.log(updateProductResult);
     if (updateProductResult.modifiedCount === 0)
-      throw new Error("No changes were made, as the received values are the same as those stored");
+      throw new Error(
+        "No changes were made, as the received values are the same as those stored"
+      );
 
     res.status(200).json({ message: "Product has modified" });
   } catch (e) {

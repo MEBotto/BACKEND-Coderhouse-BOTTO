@@ -1,9 +1,13 @@
-export async function fetchProductData(limit, page, query) {
+export async function fetchProductData(limit, page, query, category) {
   let url
-  if (query) {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&query=${query}`
+  if (query && category) {
+    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&query=${query}&category=${category}`;
+  } else if (query) {
+    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&query=${query}`;
+  } else if (category) {
+    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&category=${category}`;
   } else {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc`
+    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc`;
   }
   try {
     const response = await fetch(
