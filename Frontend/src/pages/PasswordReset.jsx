@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useForm } from "react-hook-form";
-import { useParams, useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
-import { Link } from "react-router-dom";
 import Button from "../components/Button.jsx";
 
 const PasswordReset = () => {
@@ -15,9 +13,6 @@ const PasswordReset = () => {
   const searchParams = new URLSearchParams(location.search);
   const token = searchParams.get("token");
   const email = searchParams.get("email");
-
-  console.log(token);
-  console.log(email);
 
   const {
     handleSubmit,
@@ -59,7 +54,6 @@ const PasswordReset = () => {
         throw new Error(errorMessage);
       }
 
-      const responseData = await response.json();
       toast.success(`The email was sent!`, {
         position: "bottom-center",
         autoClose: 5000,
@@ -106,8 +100,6 @@ const PasswordReset = () => {
         throw new Error(errorData.message || "Something went wrong");
       }
 
-      const responseData = await response.json();
-      console.log("Response:", responseData);
       toast.success(`Successfully updated password!`, {
         position: "bottom-center",
         autoClose: 5000,
@@ -202,7 +194,7 @@ const PasswordReset = () => {
             {!isClicked ? (
               <>
                 <p className="mb-3">
-                  Enter your user account's email adress and we will send you a
+                  Enter your user account&apos;s email adress and we will send you a
                   password reset link.
                 </p>
                 <form onSubmit={handleSubmit(onSubmitEmail)}>
@@ -236,7 +228,7 @@ const PasswordReset = () => {
               <>
                 <p>
                   Check your email for a link to reset your password. If it
-                  doesn't appear within a few minutes, check your spam folder.
+                  doesn&apos;t appear within a few minutes, check your spam folder.
                 </p>
                 <Link to={"/login"}>
                   <Button
