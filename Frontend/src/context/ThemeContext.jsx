@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useState } from 'react';
+import PropTypes from 'prop-types';
 
 const ThemeContext = createContext();
 
@@ -17,5 +18,6 @@ export const ThemeProvider = ({ children }) => {
   );
 };
 
-// Hook personalizado para usar el contexto
-export const useTheme = () => useContext(ThemeContext);
+ThemeProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
