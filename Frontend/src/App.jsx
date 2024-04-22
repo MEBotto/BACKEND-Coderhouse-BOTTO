@@ -5,14 +5,14 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar.jsx";
-import Login from "./pages/Login/Login.jsx";
-import Products from "./pages/Products/Products.jsx";
-import Profile from "./pages/Profile/Profile.jsx";
-import Register from "./pages/Register/Register.jsx";
+import Login from "./pages/Login.jsx";
+import Products from "./pages/Products.jsx";
+import Profile from "./pages/Profile.jsx";
+import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
-import Chat from "./pages/Chat/Chat.jsx";
-import PasswordReset from "./pages/PasswordReset/PasswordReset.jsx";
-import Cart from "./pages/Cart/Cart.jsx";
+import Chat from "./pages/Chat.jsx";
+import PasswordReset from "./pages/PasswordReset.jsx";
+import Cart from "./pages/Cart.jsx";
 
 function App() {
   const current_theme = localStorage.getItem("current_theme");

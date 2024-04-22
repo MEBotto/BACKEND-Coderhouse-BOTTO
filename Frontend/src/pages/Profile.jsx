@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext.jsx";
-import { useTheme } from "../context/ThemeContext.jsx";
+import useAuth from "../hooks/useAuth.js";
+import useTheme from "../hooks/useTheme.js";
 import { jwtDecode } from "jwt-decode";
 
 const Profile = () => {

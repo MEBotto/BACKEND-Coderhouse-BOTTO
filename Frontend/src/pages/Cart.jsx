@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useTheme } from "../context/ThemeContext";
-import { useAuth } from "../context/AuthContext";
+import useTheme from "../hooks/useTheme.js";
+import useAuth from "../hooks/useAuth.js";
 import { jwtDecode } from "jwt-decode";
 import Button from "../components/Button";
 import CartProductCard from "../components/CartProductCard";

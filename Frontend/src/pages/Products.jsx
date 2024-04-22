@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
 import FormProduct from "../components/FormProduct";
 import { useLocation } from "react-router-dom";
-import { useTheme } from "../context/ThemeContext";
+import useTheme from "../hooks/useTheme.js";
 
 const Products = () => {
   const { theme } = useTheme();

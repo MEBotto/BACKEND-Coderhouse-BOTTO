@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { toast, ToastContainer, Bounce } from "react-toastify";
-import { useAuth } from "../context/AuthContext.jsx";
+import useAuth from "../hooks/useAuth.js";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "./Button.jsx";
 import PropTypes from "prop-types";

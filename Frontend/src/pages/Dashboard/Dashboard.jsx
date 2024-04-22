@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router";
 import Sidebar from "../../components/Sidebar.jsx";
-import { useTheme } from "../../context/ThemeContext.jsx";
+import useTheme from "../../hooks/useTheme.js";
 import Home from "./Home/Home.jsx";
 import Products from "./Products/Products.jsx";
 // import Users from "./Users/Users.jsx";

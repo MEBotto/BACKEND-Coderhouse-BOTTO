@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext.jsx";
+import useAuth from "../hooks/useAuth.js";
 import io from "socket.io-client";
 
 const Chat = () => {
@@ -34,7 +34,7 @@ const Chat = () => {
       .then((response) => response.json())
       .then((data) => setMessages(data.data))
       .catch((error) => console.error("Error fetching messages:", error));
-  }, []);
+  }, [token]);
 
   const sendMessage = () => {
     // Envía el mensaje al servidor y emite el evento 'chat message'

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.jsx";
-import { useTheme } from "../context/ThemeContext.jsx";
+import useAuth from "../hooks/useAuth.js";
+import useTheme from "../hooks/useTheme.js";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
