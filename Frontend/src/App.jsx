@@ -5,6 +5,7 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar.jsx";
+import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Products from "./pages/Products.jsx";
 import Profile from "./pages/Profile.jsx";
@@ -19,9 +20,22 @@ function App() {
   const [theme, setTheme] = useState(current_theme ? current_theme : "light");
 
   useEffect(() => {
-    localStorage.setItem("current_theme", theme);
-    document.body.className = `${theme}-body`;
-  }, [theme]);
+    const syncThemeWithLocalStorage = (e) => {
+      if (e.key === "current_theme") {
+        setTheme(e.newValue);
+      }
+    };
+
+    window.addEventListener("storage", syncThemeWithLocalStorage);
+
+    return () => {
+      window.removeEventListener("storage", syncThemeWithLocalStorage);
+    };
+  }, []);
+
+  useEffect(() => {
+  localStorage.setItem("current_theme", theme);
+}, [theme]);
 
   return (
     <ThemeProvider>
@@ -36,15 +50,16 @@ function App() {
               path="/"
               element={
                 <>
-                  <Navbar theme={theme} setTheme={setTheme} />
+                  <Navbar />
                   <Outlet />
                 </>
               }
             >
+              <Route path="/" element={<Home />} />
               <Route path="/chat" element={<Chat />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/products/*" element={<Products theme={theme} />} />
+              <Route path="/products/*" element={<Products />} />
             </Route>
           </Routes>
         </BrowserRouter>

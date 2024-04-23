@@ -132,7 +132,7 @@ function Navbar() {
     <nav
       className={`${
         theme === "dark" ? "bg-zinc-900 text-white" : "bg-white text-black"
-      } fixed top-0 left-0 w-screen flex items-center py-4 px-4 sm:px-8 md:px-12 lg:px-20 xl:px-48 text-lg`}
+      } fixed top-0 left-0 w-screen flex items-center py-4 px-4 sm:px-8 md:px-12 lg:px-20 xl:px-48 text-lg z-50`}
     >
       <div className="w-screen flex items-center justify-between">
         <div className="hidden lg:flex gap-4 w-1/2 2xl:w-1/3">
