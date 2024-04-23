@@ -10,9 +10,11 @@ export default function Home() {
       <div
         className={`${
           theme === "dark" ? "bg-color" : "bg-colorLight"
-        } w-full h-full flex flex-col justify-center`}
+        } w-full h-full flex flex-col justify-center items-center p-8`}
       >
-        <h1>Home</h1>
+        <section className="w-full bg-green-50 ">
+          asddddddddddddddd
+        </section>
       </div>  
     </>
   );

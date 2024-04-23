@@ -37,35 +37,37 @@ export default function Carousel({ theme }) {
           <div className="absolute w-full h-full bg-black opacity-50"></div>
         </div>
       </motion.div>
-      <div className="w-3/4 top-1/2 left-1/4 transform z-40 grid grid-cols-2 items-center gap-4">
-        <div className="col-span-1">
-          <div className="grid grid-rows-2 items-center">
+      <div className="w-3/4 top-1/2 left-1/4 transform z-40 grid sm:max-md:grid-rows-1fr-auto md:max-xl:grid-rows-2 xl:grid-cols-2 items-center justify-center gap-4">
+        <div className="sm:max-xl:row-span-1 xl:col-span-1">
+          <div className="grid grid-rows-1fr-auto xl:grid-rows-2 items-center">
             <img
               src={theme === "dark" ? "/logo_dark.webp" : "/logo_light.webp"}
               alt="Logo"
             />
-            <div className="h-full px-8 flex flex-col justify-start gap-4">
-              <h1 className="text-white text-4xl">
+            <div className="h-auto xl:h-full px-8 flex flex-col justify-start gap-4">
+              <h1 className="text-white text-2xl md:text-4xl">
                 Explore Your Passion for Manga!
               </h1>
-              <p className="text-xl font-bold text-zinc-300">We&apos;ve been waiting for you!</p>
+              <p className="text-lg md:text-xl font-bold text-zinc-300">
+                We&apos;ve been waiting for you!
+              </p>
             </div>
           </div>
         </div>
-        <div className="col-span-1 h-full w-full flex items-center justify-center">
-          <div className="h-full w-3/5 bg-black bg-opacity-50 backdrop-blur-md flex flex-col justify-between items-center">
-            <div className="h-3/5 w-4/5 flex flex-col items-center justify-center gap-4">
-              <div className="w-full flex flex-col justify-center items-center border-b pb-4 border-zinc-400">
-                <h2 className="text-4xl text-white font-bold text-center">
+        <div className="sm:max-xl:row-span-1 xl:col-span-1 h-full w-full flex items-center justify-center">
+          <div className="h-full w-full xl:w-3/5 bg-black bg-opacity-50 backdrop-blur-md flex flex-col justify-between items-center pt-4 gap-2 md:gap-0 md:pt-0">
+            <div className="h-3/5 w-4/5 flex flex-col items-center justify-center md:gap-4">
+              <div className="w-full flex flex-col justify-center items-center border-b md:pb-4 border-zinc-400">
+                <h2 className="text-xl md:text-4xl text-white font-bold text-center">
                   New volumes
                 </h2>
-                <p className="text-xl font-bold text-zinc-400">Of the week</p>
+                <p className="md:text-xl font-bold text-zinc-400">Of the week</p>
               </div>
               <div className="w-full flex flex-col justify-center items-center">
-                <p className="text-xl font-bold text-zinc-400">
+                <p className="md:text-xl font-bold text-zinc-400">
                   Until Wednesday
                 </p>
-                <h2 className="text-4xl text-white font-bold text-center">
+                <h2 className="text-xl md:text-4xl text-white font-bold text-center">
                   10% OFF!
                 </h2>
               </div>
@@ -75,11 +77,11 @@ export default function Carousel({ theme }) {
                 theme === "dark" ? "bg-mainColor" : "bg-mainColorLight"
               } w-1/2 h-2/5 rounded-t-lg flex flex-col items-center justify-center`}
             >
-              <h2 className="text-4xl text-black font-bold">Presale</h2>
+              <h2 className="text-xl md:text-4xl text-black font-bold">Presale</h2>
               <p
                 className={`${
                   theme === "dark" ? "text-zinc-500" : "text-zinc-300"
-                } text-xl font-bold`}
+                } md:text-xl font-bold`}
               >
                 Of the week
               </p>
