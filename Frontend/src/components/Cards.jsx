@@ -125,12 +125,12 @@ export function CategoryCard({ category, theme }) {
       url = "/seinen.webp";
       break;
     case "Shojo":
-      title = "Shojo";
+      title = "Shōjo";
       description = "Dreamy & emotional!";
       url = "/shojo.webp";
       break;
     case "Shonen":
-      title = "Shonen";
+      title = "Shōnen";
       description = "For teens & for everyone!";
       url = "/shonen.webp";
       break;
