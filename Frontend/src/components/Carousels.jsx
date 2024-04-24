@@ -2,10 +2,29 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 const images = ["/1.webp", "/2.webp", "/3.webp", "/4.webp", "/5.webp"];
+const responsive = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 3,
+    slidesToSlide: 1
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 2,
+    slidesToSlide: 1
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+    slidesToSlide: 1
+  }
+};
 
-export default function Carousel({ theme }) {
+export function HomeCarousel({ theme }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -61,7 +80,9 @@ export default function Carousel({ theme }) {
                 <h2 className="text-xl md:text-4xl text-white font-bold text-center">
                   New volumes
                 </h2>
-                <p className="md:text-xl font-bold text-zinc-400">Of the week</p>
+                <p className="md:text-xl font-bold text-zinc-400">
+                  Of the week
+                </p>
               </div>
               <div className="w-full flex flex-col justify-center items-center">
                 <p className="md:text-xl font-bold text-zinc-400">
@@ -77,7 +98,9 @@ export default function Carousel({ theme }) {
                 theme === "dark" ? "bg-mainColor" : "bg-mainColorLight"
               } w-1/2 h-2/5 rounded-t-lg flex flex-col items-center justify-center`}
             >
-              <h2 className="text-xl md:text-4xl text-black font-bold">Presale</h2>
+              <h2 className="text-xl md:text-4xl text-black font-bold">
+                Presale
+              </h2>
               <p
                 className={`${
                   theme === "dark" ? "text-zinc-500" : "text-zinc-300"
@@ -94,6 +117,40 @@ export default function Carousel({ theme }) {
   );
 }
 
-Carousel.propTypes = {
+export function ProductsCarousel({ category }) {
+  console.log(category);
+  return (
+    <Carousel
+      swipeable
+      draggable
+      showDots
+      responsive={responsive}
+      ssr
+      infinite
+      autoPlay={true}
+      autoPlaySpeed={2000}
+      keyBoardControl
+      customTransition="all .5"
+      transitionDuration={500}
+      containerClass="carousel-container"
+      removeArrowOnDeviceType={["tablet", "mobile"]}
+      dotListClass="custom-dot-list-style"
+      itemClass="carousel-item-padding-40-px px-1"
+    >
+      {images.map((image, index) => (
+        <div key={index}>
+          <img src={image} alt={`Carousel ${index}`} />
+        </div>
+      ))}
+    </Carousel>
+  );
+}
+
+HomeCarousel.propTypes = {
   theme: PropTypes.string.isRequired,
+};
+
+ProductsCarousel.propTypes = {
+  theme: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
 };
