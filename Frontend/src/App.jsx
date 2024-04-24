@@ -34,13 +34,13 @@ function App() {
   }, []);
 
   useEffect(() => {
-  localStorage.setItem("current_theme", theme);
-}, [theme]);
+    localStorage.setItem("current_theme", theme);
+  }, [theme]);
 
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -62,8 +62,8 @@ function App() {
               <Route path="/products/*" element={<Products />} />
             </Route>
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
