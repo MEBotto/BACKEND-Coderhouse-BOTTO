@@ -33,7 +33,7 @@ const Products = () => {
     }
 
     fetchData();
-  }, [page, limit, query]);
+  }, [page, limit, query, category]);
 
   return (
     <div
