@@ -17,16 +17,25 @@ export default class ProductDAO {
       let limitFilter = limit || 10;
       let pageFilter = page || 1;
       let sortFilter = sort || "asc";
-  
+
       let filterOptions = {};
       if (filters.title) {
-        filterOptions.title = { $regex: new RegExp(filters.title, "i") };
+        const volumeNumber = parseInt(filters.title, 10);
+        if (!isNaN(volumeNumber)) {
+          filterOptions.volume = volumeNumber;
+        } else {
+          filterOptions.title = { $regex: new RegExp(filters.title, "i") };
+        }
       }
       if (filters.category) {
-        if (filters.category.toLowerCase() === 'manga') {
-          filterOptions.category = { $in: ["Josei", "Seinen", "Shojo", "Shonen", "Yaoi", "Yuri"] };
+        if (filters.category.toLowerCase() === "manga") {
+          filterOptions.category = {
+            $in: ["Josei", "Seinen", "Shojo", "Shonen", "Yaoi", "Yuri"],
+          };
         } else {
-          filterOptions.category = { $regex: new RegExp(filters.category, "i") };
+          filterOptions.category = {
+            $regex: new RegExp(filters.category, "i"),
+          };
         }
       }
       if (filters.owner) {
@@ -36,13 +45,13 @@ export default class ProductDAO {
         filterOptions.volume = filters.volume;
       }
       let sortOptions = { title: sortFilter, volume: sortFilter };
-  
+
       let productPaginate = await productModel.paginate(filterOptions, {
         limit: limitFilter,
         page: pageFilter,
         sort: sortOptions,
       });
-  
+
       let responseObject = {
         status: productPaginate.totalDocs > 0 ? "success" : "error",
         payload: productPaginate.docs,
@@ -56,13 +65,13 @@ export default class ProductDAO {
         hasPrevPage: productPaginate.hasPrevPage,
         hasNextPage: productPaginate.hasNextPage,
       };
-  
+
       return responseObject;
     } catch (error) {
       logger.error("Error fetching products:", error);
       throw new Error("Error fetching products");
     }
-  };  
+  };
 
   getProductById = async (id) => {
     const productSelected = await productModel.findById(id).lean();
