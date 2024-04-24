@@ -1,26 +1,24 @@
-export async function fetchProductData(limit, page, query, category, owner) {
-  let url
-  if (query && category && owner) {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&query=${query}&category=${category}&owner=${owner}`;
-  } else if (query && owner) {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&query=${query}&owner=${owner}`;
-  } else if (category && owner) {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&category=${category}&owner=${owner}`;
-  } else if (owner) {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&owner=${owner}`;
-  } else if (query && category) {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&query=${query}&category=${category}`;
-  } else if (query) {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&query=${query}`;
-  } else if (category) {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc&category=${category}`;
-  } else {
-    url = `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc`;
-  }
+export async function fetchProductData(
+  limit,
+  page,
+  query,
+  category,
+  owner,
+  volume
+) {
+  const params = {
+    limit,
+    page,
+    ...(query && { query }),
+    ...(category && { category }),
+    ...(owner && { owner }),
+    ...(volume && { volume }),
+  };
+
+  const queryString = new URLSearchParams(params).toString();
+  const url = `http://localhost:8080/api/products?${queryString}`;
   try {
-    const response = await fetch(
-      url
-    );
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Error al obtener los datos");
     }

@@ -117,8 +117,8 @@ export function HomeCarousel({ theme }) {
   );
 }
 
+// eslint-disable-next-line no-unused-vars
 export function ProductsCarousel({ category }) {
-  console.log(category);
   return (
     <Carousel
       swipeable

@@ -25,8 +25,6 @@ const PasswordReset = () => {
   const confirmPassword = watch("confirmPassword", "");
 
   const validatePasswords = () => {
-    console.log(password);
-    console.log(confirmPassword);
     return password === confirmPassword || "Passwords don't match";
   };
 
@@ -67,7 +65,6 @@ const PasswordReset = () => {
       });
       setIsClicked(true);
     } catch (error) {
-      console.log(error);
       toast.error(`${error}`, {
         position: "bottom-center",
         autoClose: 5000,

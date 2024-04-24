@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { ProductsCarousel } from "./Carousels.jsx";
 
 export default function CategoriesSection({ theme }) {
-  console.log(theme);
   return (
     <section className="w-full">
       <div

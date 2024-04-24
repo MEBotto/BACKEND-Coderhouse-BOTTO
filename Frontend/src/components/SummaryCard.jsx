@@ -41,8 +41,6 @@ export default function SummaryCard({ theme, products, cid }) {
         throw new Error("Network response was not ok");
       }
 
-      const responseData = await response.json();
-      console.log("Compra realizada con éxito:", responseData);
       alert("Se le ha enviado un correo con su ticket");
       navigate("/products");
     } catch (error) {

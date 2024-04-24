@@ -116,7 +116,6 @@ function Navbar() {
     setToken(null);
     fetch("http://localhost:8080/api/auth/logout")
       .then((response) => {
-        console.log(response);
         if (response.ok) {
           navigate("/");
         } else {
