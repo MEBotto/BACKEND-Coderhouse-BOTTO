@@ -21,7 +21,6 @@ function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [remainingTime, setRemainingTime] = useState(null);
   const [open, setOpen] = useState(false);
 
   const topVariants = {
@@ -76,41 +75,14 @@ function Navbar() {
   };
 
   useEffect(() => {
-    let intervalId;
-
     if (token) {
       const decodedToken = jwtDecode(token);
       setUser(decodedToken.user);
 
-      const currentTime = Math.floor(Date.now() / 1000);
-      const expirationTime = decodedToken.exp;
-      const timeRemainingInSeconds = expirationTime - currentTime;
-      setRemainingTime(timeRemainingInSeconds);
-
-      if (timeRemainingInSeconds <= 0) {
-        setToken(null);
-      }
-
-      intervalId = setInterval(() => {
-        setRemainingTime((prevTime) => prevTime - 1);
-      }, 1000);
     } else {
       setUser(null);
-      setRemainingTime(null);
     }
-
-    return () => {
-      clearInterval(intervalId);
-    };
   }, [token, setToken]);
-
-  useEffect(() => {
-    if (remainingTime !== null) {
-      const minutes = Math.floor(remainingTime / 60);
-      const seconds = remainingTime % 60;
-      console.log(`Remaining time: ${minutes} minutes and ${seconds} seconds`);
-    }
-  }, [remainingTime]);
 
   const handleLogout = () => {
     setToken(null);
