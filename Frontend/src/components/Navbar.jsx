@@ -10,10 +10,9 @@ import NavLink from "./NavLink.jsx";
 const links = [
   { name: "Home", path: "/" },
   { name: "Products", path: "/products" },
-  { name: "Manga", path: "/products/manga" },
   { name: "Comics", path: "/products/comics" },
   { name: "Dashboard", path: "/dashboard", role: "admin" },
-  { name: "Add Product", path: "/products/add", role: "premium" },
+  { name: "Premiun", path: "/dashboard", role: "premium" },
 ];
 
 function Navbar() {
