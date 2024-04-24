@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { fetchProductData } from "../lib/data.js";
 import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import useTheme from "../hooks/useTheme.js";
 
 const Products = () => {
   const { theme } = useTheme();
+  const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
   const limit = 20;
 
@@ -16,11 +17,12 @@ const Products = () => {
 
   const page = Number(searchParams.get("page")) || 1;
   const query = searchParams.get("query") || "";
+  const category = pathname.split("/")[2] || "";
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await fetchProductData(limit, page, query);
+        const data = await fetchProductData(limit, page, query, category);
         setProducts(data.products);
         setTotalPages(data.totalPages);
         setLoading(false);
