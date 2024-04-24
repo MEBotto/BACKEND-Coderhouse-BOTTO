@@ -28,7 +28,10 @@ export default class ProductDAO {
       if (filters.owner) {
         filterOptions.owner = filters.owner;
       }
-      let sortOptions = { title: sortFilter };
+      if (filters.volume) {
+        filterOptions.volume = filters.volume;
+      }
+      let sortOptions = { title: sortFilter, volume: sortFilter };
   
       let productPaginate = await productModel.paginate(filterOptions, {
         limit: limitFilter,

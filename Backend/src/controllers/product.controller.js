@@ -8,12 +8,12 @@ import jwt, { decode } from "jsonwebtoken";
 import { config } from "../config/env.config.js";
 
 const getProductsController = async (req, res) => {
-  const { limit, page, sort, query, category, owner } = req.query;
+  const { limit, page, sort, query, category, owner, volume } = req.query;
 
   const productData = await productService.getProducts(
     limit,
     page,
-    { title: query, category: category, owner: owner },
+    { title: query, category: category, owner: owner, volume: volume },
     sort
   );
 
@@ -75,7 +75,7 @@ const addProductController = async (req, res) => {
     }
 
     const productCreated = await productService.addProduct(productReq);
-    
+
     res.status(201).json({
       message: "Product succesfully created",
       productCreated: productCreated,
