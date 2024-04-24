@@ -200,7 +200,7 @@ export default function ProductCard({ p, t }) {
           className="rounded-lg md:h-[400px] lg:h-[340px] xl:h-[390px]"
         />
       </div>
-      <h2 className="uppercase text-lg font-bold mt-2">{p.title}</h2>
+      <h2 className="uppercase text-lg font-bold mt-2">{p.title} #{p.volume}</h2>
       <p className="mx-4 text-justify overflow-hidden overflow-ellipsis whitespace-nowrap max-w-[90%]">
         {p.description}
       </p>
