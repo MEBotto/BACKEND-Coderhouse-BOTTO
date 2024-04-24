@@ -23,7 +23,11 @@ export default class ProductDAO {
         filterOptions.title = { $regex: new RegExp(filters.title, "i") };
       }
       if (filters.category) {
-        filterOptions.category = { $regex: new RegExp(filters.category, "i") };
+        if (filters.category.toLowerCase() === 'manga') {
+          filterOptions.category = { $in: ["Josei", "Seinen", "Shojo", "Shonen", "Yaoi", "Yuri"] };
+        } else {
+          filterOptions.category = { $regex: new RegExp(filters.category, "i") };
+        }
       }
       if (filters.owner) {
         filterOptions.owner = filters.owner;
