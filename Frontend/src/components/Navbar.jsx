@@ -12,11 +12,11 @@ const links = [
   { name: "Products", path: "/products" },
   { name: "Comics", path: "/products/comics" },
   { name: "Dashboard", path: "/dashboard", role: "admin" },
-  { name: "Premiun", path: "/dashboard", role: "premium" },
+  { name: "Premium", path: "/dashboard", role: "premium" },
 ];
 
 function Navbar() {
-  const { token, setToken } = useAuth();
+  const { token, setToken, setUid, setRole } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -77,11 +77,12 @@ function Navbar() {
     if (token) {
       const decodedToken = jwtDecode(token);
       setUser(decodedToken.user);
-
+      setUid(decodedToken.user._id);
+      setRole(decodedToken.user.role);
     } else {
       setUser(null);
     }
-  }, [token, setToken]);
+  }, [token, setToken, setUid, setRole]);
 
   const handleLogout = () => {
     setToken(null);

@@ -22,7 +22,8 @@ const getTokenFromCookie = () => {
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
-  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+  const [uid, setUid] = useState(null);
   const [remainingTime, setRemainingTime] = useState(null);
   const navigate = useNavigate();
 
@@ -71,8 +72,10 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     token,
-    email,
-    setEmail,
+    role,
+    uid,
+    setUid,
+    setRole,
     setToken,
   };
 
