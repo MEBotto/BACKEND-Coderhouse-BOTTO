@@ -43,7 +43,7 @@ const Products = () => {
       } w-full h-full flex justify-center pt-28 pb-12`}
     >
       <div className="container min-h-screen w-4/5">
-        <Search placeholder={"Search Products..."}/>
+        <Search placeholder={"Search Products by Title or Volume number..."}/>
         {loading ? (
           <p>Cargando...</p>
         ) : (
