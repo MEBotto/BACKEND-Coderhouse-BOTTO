@@ -18,6 +18,7 @@ const productSchema = new Schema({
   owner: { type: String, default: "admin" },
   upload_date: { type: Date, default: new Date() },
   publication_date: { type: Date, default: new Date() },
+  editorial: { type: String, required: true },
 });
 
 productSchema.plugin(mongoosePaginate);
