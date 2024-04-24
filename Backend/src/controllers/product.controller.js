@@ -55,6 +55,8 @@ const addProductController = async (req, res) => {
 
     productReq.thumbnail = req.cloudinaryUrl;
 
+    console.log(productReq)
+
     if (
       productReq.title === undefined ||
       productReq.description === undefined ||
