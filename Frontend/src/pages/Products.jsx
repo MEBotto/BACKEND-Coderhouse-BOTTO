@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchProductData } from "../lib/data.js";
 import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
+import Search from "../components/Search.jsx";
 import { useSearchParams, useLocation } from "react-router-dom";
 import useTheme from "../hooks/useTheme.js";
 
@@ -39,13 +40,14 @@ const Products = () => {
     <div
       className={`${
         theme === "dark" ? "bg-color" : "bg-colorLight"
-      } w-full h-full flex justify-center pt-24 pb-12`}
+      } w-full h-full flex justify-center pt-28 pb-12`}
     >
       <div className="container min-h-screen w-4/5">
+        <Search placeholder={"Search Products..."}/>
         {loading ? (
           <p>Cargando...</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-8 mt-8">
             {products.map((product) => (
               <ProductCard p={product} t={theme} key={product._id} />
             ))}
