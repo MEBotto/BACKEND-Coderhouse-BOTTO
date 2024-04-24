@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const iconMap = {
@@ -103,11 +104,91 @@ export function Card({ title, type, theme, value }) {
   );
 }
 
+export function CategoryCard({ category, theme }) {
+  let title;
+  let description;
+  let url;
+  switch (category) {
+    case "Comics":
+      title = "Comics";
+      description = "Vibrant & action-packed!";
+      url = "/comics.webp";
+      break;
+    case "Josei":
+      title = "Josei";
+      description = "Realistic & heartfelt!";
+      url = "/josei.webp";
+      break;
+    case "Seinen":
+      title = "Seinen";
+      description = "Sophisticated & intertwining!";
+      url = "/seinen.webp";
+      break;
+    case "Shojo":
+      title = "Shojo";
+      description = "Dreamy & emotional!";
+      url = "/shojo.webp";
+      break;
+    case "Shonen":
+      title = "Shonen";
+      description = "For teens & for everyone!";
+      url = "/shonen.webp";
+      break;
+    case "Yaoi":
+      title = "Yaoi";
+      description = "Passionate & dramatic!";
+      url = "/yaoi.webp";
+      break;
+    case "Yuri":
+      title = "Yuri";
+      description = "Emotional & inspiring connections!";
+      url = "/yuri.webp";
+      break;
+  }
+
+  return (
+    <div
+      className="flex flex-col justify-center items-center gap-6 p-12 rounded-2xl lg:w-[352px]"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${url})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <h2 className="text-4xl font-bold text-white">{title}</h2>
+      <p className="text-sm text-white">{description}</p>
+      <Link
+        to={`/products/${category.toLowerCase()}`}
+        className={`underline py-3 px-7 ${
+          theme === "dark"
+            ? "bg-mainColor text-black"
+            : "bg-mainColorLight text-white"
+        } rounded-lg`}
+      >
+        View More
+      </Link>
+    </div>
+  );
+}
+
 Card.propTypes = {
   title: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   theme: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
+
+CategoryCard.propTypes = {
+  category: PropTypes.oneOf([
+    "Comics",
+    "Josei",
+    "Seinen",
+    "Shojo",
+    "Shonen",
+    "Yaoi",
+    "Yuri",
+  ]).isRequired,
+  theme: PropTypes.string.isRequired,
 };
 
 CardWrapper.propTypes = {
