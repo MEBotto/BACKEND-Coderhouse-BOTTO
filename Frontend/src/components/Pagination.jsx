@@ -61,8 +61,10 @@ function PaginationNumber({ href, page, position, isActive, theme }) {
   const className = clsx(
     "flex h-10 w-10 items-center justify-center text-lg text-white",
     {
-      "z-10 border-b border-b-2 border-mainColor text-white": isActive && theme === "dark",
-      "z-10 border-b border-b-2 border-mainColorLight text-black": isActive && theme === "light",
+      "z-10 border-b border-b-2 border-mainColor text-white":
+        isActive && theme === "dark",
+      "z-10 border-b border-b-2 border-mainColorLight text-black":
+        isActive && theme === "light",
       "text-gray-300": position === "middle",
     }
   );
@@ -77,16 +79,13 @@ function PaginationNumber({ href, page, position, isActive, theme }) {
 }
 
 function PaginationArrow({ href, direction, isDisabled, theme }) {
-  const className = clsx(
-    "flex text-4xl items-center justify-center",
-    {
-      "text-white": theme === "dark",
-      "text-black": theme === "light",
-      "pointer-events-none text-gray-600": isDisabled,
-      "mr-2 md:mr-4": direction === "left",
-      "ml-2 md:ml-4": direction === "right",
-    }
-  );
+  const className = clsx("flex text-4xl items-center justify-center", {
+    "text-white": theme === "dark",
+    "text-black": theme === "light",
+    "pointer-events-none text-gray-600": isDisabled,
+    "mr-2 md:mr-4": direction === "left",
+    "ml-2 md:ml-4": direction === "right",
+  });
 
   const icon =
     direction === "left" ? (

@@ -1,77 +1,39 @@
 import { useState, useEffect } from "react";
+import { fetchProductData } from "../lib/data.js";
 import ProductCard from "../components/ProductCard";
-import FormProduct from "../components/FormProduct";
-import { useLocation } from "react-router-dom";
+import Pagination from "../components/Pagination";
+import { useSearchParams } from "react-router-dom";
 import useTheme from "../hooks/useTheme.js";
 
 const Products = () => {
   const { theme } = useTheme();
-  const { pathname } = useLocation();
+  const [searchParams] = useSearchParams();
+  const limit = 20;
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
-  const [page, setPage] = useState(1);
-  // eslint-disable-next-line no-unused-vars
-  const [limit, setLimit] = useState(20);
+
+  const page = Number(searchParams.get("page")) || 1;
+  const query = searchParams.get("query") || "";
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function fetchData() {
       try {
-        const response = await fetch(
-          `http://localhost:8080/api/products?limit=${limit}&page=${page}&sort=asc`
-        );
-        if (!response.ok) {
-          throw new Error("Error al obtener los datos");
-        }
-
-        const data = await response.json();
-        setProducts(data.productData.payload);
-        setTotalPages(data.productData.totalPages);
+        const data = await fetchProductData(limit, page, query);
+        setProducts(data.products);
+        setTotalPages(data.totalPages);
         setLoading(false);
       } catch (error) {
         console.error("Error:", error.message);
         setLoading(false);
       }
-    };
+    }
 
     fetchData();
-  }, [page, limit]);
+  }, [page, limit, query]);
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setPage(newPage);
-    }
-  };
-
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={`${i === page ? "border-b-2" : ""} ${
-            theme === "dark" ? "border-mainColor" : "border-mainColorLight"
-          } font-bold text-2xl w-4`}
-        >
-          {i}
-        </button>
-      );
-    }
-    return pageNumbers;
-  };
-
-  return pathname === "/products/add" ? (
-    <div
-      className={`${
-        theme === "dark" ? "bg-color" : "bg-colorLight"
-      } w-screen h-screen flex justify-center items-center pt-24 pb-12`}
-    >
-      <FormProduct t={theme} />
-    </div>
-  ) : (
+  return (
     <div
       className={`${
         theme === "dark" ? "bg-color" : "bg-colorLight"
@@ -92,21 +54,7 @@ const Products = () => {
             theme === "dark" ? "text-white" : "text-black"
           } flex justify-center gap-4 mt-4`}
         >
-          <button
-            className={`${page === 1 ? "invisible" : "visible"} text-2xl`}
-            onClick={() => handlePageChange(page - 1)}
-          >
-            <i className="ri-arrow-left-s-line"></i>
-          </button>
-          {renderPageNumbers()}
-          <button
-            className={`${
-              page === totalPages ? "invisible" : "visible"
-            } text-2xl`}
-            onClick={() => handlePageChange(page + 1)}
-          >
-            <i className="ri-arrow-right-s-line"></i>
-          </button>
+          <Pagination totalPages={totalPages} theme={theme}/>
         </div>
       </div>
     </div>
