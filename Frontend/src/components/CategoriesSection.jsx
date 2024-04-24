@@ -4,7 +4,7 @@ import { ProductsCarousel } from "./Carousels.jsx";
 
 export default function CategoriesSection({ theme }) {
   return (
-    <section className="w-full">
+    <section className="w-full mt-12">
       <div
         className={`container mx-auto p-4 ${
           theme === "dark" ? "text-white" : "text-black"
@@ -20,8 +20,8 @@ export default function CategoriesSection({ theme }) {
               backgroundPosition: "center",
             }}
           >
-            <h2 className="text-4xl font-bold">Seinen</h2>
-            <p className="text-sm">Sofisticado y atrapante!</p>
+            <h2 className="text-4xl font-bold text-white">Seinen</h2>
+            <p className="text-sm text-white">Sophisticated & intertwining!</p>
             <Link
               to={"/products/seinen"}
               className={`underline py-3 px-7 ${
@@ -30,7 +30,7 @@ export default function CategoriesSection({ theme }) {
                   : "bg-mainColorLight text-white"
               } rounded-lg`}
             >
-              Ver más
+              View More
             </Link>
           </div>
           <ProductsCarousel theme={theme} category="seinen" />

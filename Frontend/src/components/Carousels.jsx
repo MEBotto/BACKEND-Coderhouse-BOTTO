@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Carousel from 'react-multi-carousel';
+import { fetchProductData } from "../lib/data.js";
 import 'react-multi-carousel/lib/styles.css';
 
 const images = ["/1.webp", "/2.webp", "/3.webp", "/4.webp", "/5.webp"];
@@ -119,6 +120,20 @@ export function HomeCarousel({ theme }) {
 
 // eslint-disable-next-line no-unused-vars
 export function ProductsCarousel({ category }) {
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const { products } = await fetchProductData(20, 1, null, category, null, 1);
+        setProducts(products);
+      } catch (error) {
+        console.error("Error:", error.message);
+      }
+    }
+
+    fetchData();
+  }, [category]);
+
   return (
     <Carousel
       swipeable
@@ -135,11 +150,11 @@ export function ProductsCarousel({ category }) {
       containerClass="carousel-container"
       removeArrowOnDeviceType={["tablet", "mobile"]}
       dotListClass="custom-dot-list-style"
-      itemClass="carousel-item-padding-40-px px-1"
+      itemClass="carousel-item-padding-40-px px-1 xl:px-0 flex items-center justify-center"
     >
-      {images.map((image, index) => (
-        <div key={index}>
-          <img src={image} alt={`Carousel ${index}`} />
+      {products.map((product) => (
+        <div key={product._id} className="h-full lg:h-[95%] xl:h-[90%]">
+          <img src={product.thumbnail} alt={`Carousel ${product._id}`} className="h-full rounded-xl"/>
         </div>
       ))}
     </Carousel>
