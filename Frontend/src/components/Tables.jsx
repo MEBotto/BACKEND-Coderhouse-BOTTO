@@ -3,19 +3,32 @@ import { useState, useEffect } from "react";
 import { fetchProductData } from "../lib/data.js";
 import { Link } from "react-router-dom";
 
-export function ProductsTable({ query, currentPage, theme, limit }) {
+export function ProductsTable({ query, currentPage, theme, limit, owner }) {
   const [products, setProducts] = useState(null);
   useEffect(() => {
-    fetchProductData(limit, currentPage, query)
-      .then((data) => {
-        if (data && data.products) {
-          setProducts(data.products);
-        } else {
-          console.error("Failed to fetch product data");
-        }
-      })
-      .catch((error) => console.error("An error occurred:", error));
-  }, [query, currentPage, limit]);
+    if (owner) {
+      fetchProductData(limit, currentPage, query, null, owner)
+        .then((data) => {
+          if (data && data.products) {
+            console.log(data);
+            setProducts(data.products);
+          } else {
+            console.error("Failed to fetch product data");
+          }
+        })
+        .catch((error) => console.error("An error occurred:", error));
+    } else {
+      fetchProductData(limit, currentPage, query)
+        .then((data) => {
+          if (data && data.products) {
+            setProducts(data.products);
+          } else {
+            console.error("Failed to fetch product data");
+          }
+        })
+        .catch((error) => console.error("An error occurred:", error));
+    }
+  }, [query, currentPage, limit, owner]);
 
   return (
     <div className="mt-6 flow-root">
@@ -189,4 +202,5 @@ ProductsTable.propTypes = {
   currentPage: PropTypes.number,
   theme: PropTypes.string,
   limit: PropTypes.number,
+  owner: PropTypes.string,
 };

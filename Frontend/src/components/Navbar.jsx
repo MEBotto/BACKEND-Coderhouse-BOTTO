@@ -12,7 +12,7 @@ const links = [
   { name: "Products", path: "/products" },
   { name: "Comics", path: "/products/comics" },
   { name: "Dashboard", path: "/dashboard", role: "admin" },
-  { name: "Premium", path: "/dashboard", role: "premium" },
+  { name: "Premium", path: "/dashboard/products", role: "premium" },
 ];
 
 function Navbar() {
@@ -75,10 +75,10 @@ function Navbar() {
 
   useEffect(() => {
     if (token) {
-      const decodedToken = jwtDecode(token);
-      setUser(decodedToken.user);
-      setUid(decodedToken.user._id);
-      setRole(decodedToken.user.role);
+      const { user } = jwtDecode(token);
+      setUser(user);
+      setUid(user.userId);
+      setRole(user.role);
     } else {
       setUser(null);
     }

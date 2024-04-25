@@ -4,24 +4,35 @@ import { ProductsTable } from "../../../../components/Tables";
 import Pagination from "../../../../components/Pagination";
 import { useSearchParams, Link } from "react-router-dom";
 import { fetchProductData } from "../../../../lib/data";
+import useAuth from "../../../../hooks/useAuth";
 import PropTypes from "prop-types";
 
 export default function Home({ theme }) {
   const [totalPages, setTotalPages] = useState(0);
   const [searchParams] = useSearchParams();
+  const { uid, role } = useAuth();
   const limit = 5;
 
   const page = Number(searchParams.get("page")) || 1;
   const query = searchParams.get("query") || "";
 
   useEffect(() => {
-    async function fetchAndLogTotalPages() {
-      const data = await fetchProductData(limit, page, query);
+    async function fetchAndLogTotalPages(owner) {
+      let data;
+      if (owner) {
+        data = await fetchProductData(limit, page, query, null, owner);
+      } else {
+        data = await fetchProductData(limit, page, query);
+      }
       setTotalPages(data.totalPages);
     }
 
-    fetchAndLogTotalPages();
-  }, [page, query, totalPages]);
+    if (role === "premium") {
+      fetchAndLogTotalPages(uid);
+    } else {
+      fetchAndLogTotalPages();
+    }
+  }, [page, query, role, totalPages, uid]);
 
   return (
     <div className="w-full">
@@ -48,7 +59,13 @@ export default function Home({ theme }) {
           <i className="ri-add-fill md:ml-4 text-2xl" />
         </Link>
       </div>
-      <ProductsTable query={query} currentPage={Number(page)} theme={theme} limit={limit} />
+      <ProductsTable
+        query={query}
+        currentPage={Number(page)}
+        theme={theme}
+        limit={limit}
+        owner={role === "premium" ? uid : undefined}
+      />
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} theme={theme} />
       </div>
