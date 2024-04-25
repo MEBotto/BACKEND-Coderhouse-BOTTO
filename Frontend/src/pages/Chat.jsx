@@ -17,8 +17,15 @@ const Chat = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setMessages([...messages, { message, user: name, timestamp: new Date().toLocaleString()}]);
-    socket.emit("message", { message, user: name, timestamp: new Date().toLocaleString()});
+    setMessages([
+      ...messages,
+      { message, user: name, timestamp: new Date().toLocaleString() },
+    ]);
+    socket.emit("message", {
+      message,
+      user: name,
+      timestamp: new Date().toLocaleString(),
+    });
   };
 
   useEffect(() => {
@@ -26,16 +33,16 @@ const Chat = () => {
       socket.connect();
       socket.on("message", receiveMessage);
       fetchMessages(token)
-      .then(({ data }) => setMessages(data))
-      .catch(error => {
-        showToast("error", `${error}`, theme);
-        navigate("/");
-      });
+        .then(({ data }) => setMessages(data))
+        .catch((error) => {
+          showToast("error", `${error}`, theme);
+          navigate("/");
+        });
     } else {
       socket.off("message", receiveMessage);
       socket.disconnect();
     }
-  
+
     return () => {
       socket.off("message", receiveMessage);
       socket.disconnect();
@@ -47,30 +54,57 @@ const Chat = () => {
   };
 
   return (
-    <>
+    <div
+      className={`${
+        theme === "dark" ? "bg-color" : "bg-colorLight"
+      } w-full h-full flex justify-center pt-28 pb-12`}
+    >
       {token ? (
-        <div className="h-screen w-screen flex items-center justify-center">
-          <form onSubmit={handleSubmit}>
+        <div className="container min-h-screen w-4/5">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col items-center gap-4"
+          >
             <input
               type="text"
               placeholder="Write your message..."
               onChange={(e) => setMessage(e.target.value)}
+              className={`${
+                theme === "dark"
+                  ? "text-white bg-gray-800"
+                  : "text-black bg-white"
+              } p-2 rounded`}
             />
-            <button>Send</button>
+            <button
+              className={`${
+                theme === "dark"
+                  ? "text-white bg-gray-800"
+                  : "text-black bg-white"
+              } p-2 rounded`}
+            >
+              Send
+            </button>
           </form>
 
-          <ul>
+          <ul className="mt-8">
             {messages?.map((msg, index) => (
-              <li key={index}>{msg.timestamp.toLocaleString()} - {msg.user}: {msg.message}</li>
+              <li
+                key={index}
+                className={`${theme === "dark" ? "text-white" : "text-black"}`}
+              >
+                {msg.timestamp.toLocaleString()} - {msg.user}: {msg.message}
+              </li>
             ))}
           </ul>
         </div>
       ) : (
-        <div className="h-screen w-screen flex items-center justify-center">
-          VOLVE A INICAR SESION
+        <div className="container min-h-screen w-4/5 flex items-center justify-center">
+          <p className={`${theme === "dark" ? "text-white" : "text-black"}`}>
+            VOLVE A INICAR SESION
+          </p>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
