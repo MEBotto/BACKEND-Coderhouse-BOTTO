@@ -1,74 +1,74 @@
-import { useEffect, useState } from "react";
-import useAuth from "../hooks/useAuth.js";
-import io from "socket.io-client";
+import { useState, useEffect } from "react";
 import { fetchMessages } from "../lib/data.js";
+import useAuth from "../hooks/useAuth.js";
+import useTheme from "../hooks/useTheme.js";
+import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+import { showToast } from "../lib/utils.js";
 
 const socket = io("http://localhost:8080");
 
 const Chat = () => {
   const { token, name } = useAuth();
+  const { theme } = useTheme();
+  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setMessages([...messages, { message, user: name, timestamp: new Date().toLocaleString()}]);
+    socket.emit("message", { message, user: name, timestamp: new Date().toLocaleString()});
+  };
 
   useEffect(() => {
-    socket.connect();
-  }, []);
-  
-  useEffect(() => {
-    socket.on("messageCreatedServer", (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
+    if (token) {
+      socket.connect();
+      socket.on("message", receiveMessage);
+      fetchMessages(token)
+      .then(({ data }) => setMessages(data))
+      .catch(error => {
+        showToast("error", `${error}`, theme);
+        navigate("/");
+      });
+    } else {
+      socket.off("message", receiveMessage);
+      socket.disconnect();
+    }
   
     return () => {
-      socket.off("messageCreatedServer");
+      socket.off("message", receiveMessage);
+      socket.disconnect();
     };
-  }, []);
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await fetchMessages(token);
-        setMessages((prevMessages) => [...prevMessages, ...data]);
-      } catch (error) {
-        console.error("Error:", error.message);
-      }
-    };
-  
-    fetchData();
   }, [token]);
 
-  const sendMessage = () => {
-    const message = { user: name, message: newMessage };
-    socket.emit("newMessageClient", message);
-    setMessages((prevMessages) => [...prevMessages, message]);
-    setNewMessage("");
+  const receiveMessage = (message) => {
+    setMessages((state) => [...state, message]);
   };
 
   return (
     <>
       {token ? (
-        <div>
-          <div>
-            {messages.map(
-              (message, index) =>
-                message && (
-                  <div key={index}>
-                    <strong>{message.user}:</strong> {message.message}
-                  </div>
-                )
-            )}
-          </div>
-          <div>
+        <div className="h-screen w-screen flex items-center justify-center">
+          <form onSubmit={handleSubmit}>
             <input
               type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="Write your message..."
+              onChange={(e) => setMessage(e.target.value)}
             />
-            <button onClick={sendMessage}>Enviar</button>
-          </div>
+            <button>Send</button>
+          </form>
+
+          <ul>
+            {messages?.map((msg, index) => (
+              <li key={index}>{msg.timestamp.toLocaleString()} - {msg.user}: {msg.message}</li>
+            ))}
+          </ul>
         </div>
       ) : (
-        <div>VOLVE A INICAR SESION</div>
+        <div className="h-screen w-screen flex items-center justify-center">
+          VOLVE A INICAR SESION
+        </div>
       )}
     </>
   );

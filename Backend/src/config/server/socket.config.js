@@ -13,30 +13,23 @@ const socketServer = new Server(httpServer, {
 
 socketServer.on("connection", (socket) => {
   logger.info(`Client connected: ${socket.id}`);
-  socket.on("newMessageClient", (message) => {
+  socket.on("message", (data) => {
     fetch("http://localhost:8080/api/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(message),
+      body: JSON.stringify(data),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) return socket.emit("errorServer", data.error);
-
-        socketServer.emit("messageCreatedServer", data.messageCreated);
-      })
+      .then(socket.broadcast.emit("message", data))
       .catch((err) => {
         logger.error(err);
       });
   });
+
   socket.on("disconnect", () => {
     logger.info(`Client disconnected: ${socket.id}`);
   });
-  socket.on("error", (error) => {
-    logger.error(`Socket error: ${error.message}`);
-  });
 });
 
-export default socketServer
+export default socketServer;
