@@ -5,8 +5,8 @@ export default class MessageRepository {
   getAll = () => {
     return this.dao.findMessages();
   }
-  save = (user, message) => {
-    return this.dao.createMessage(user, message);
+  save = (user, message, timestamp) => {
+    return this.dao.createMessage(user, message, timestamp);
   }
   update = (id, updatedMessage) => {
     return this.dao.updateMessage(id, updatedMessage);

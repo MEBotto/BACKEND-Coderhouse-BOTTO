@@ -9,22 +9,21 @@ import { showToast } from "../lib/utils.js";
 const socket = io("http://localhost:8080");
 
 const Chat = () => {
-  const { token, name } = useAuth();
+  const { token, uid } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
+  console.log(messages);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    setMessages([
-      ...messages,
-      { message, user: name, timestamp: new Date().toLocaleString() },
-    ]);
+    setMessages([...messages, { message, user: uid, timestamp: new Date() }]);
     socket.emit("message", {
       message,
-      user: name,
-      timestamp: new Date().toLocaleString(),
+      user: uid,
+      timestamp: new Date(),
     });
   };
 
@@ -33,7 +32,9 @@ const Chat = () => {
       socket.connect();
       socket.on("message", receiveMessage);
       fetchMessages(token)
-        .then(({ data }) => setMessages(data))
+        .then(({ data }) => {
+          setMessages(data);
+        })
         .catch((error) => {
           showToast("error", `${error}`, theme);
           navigate("/");
@@ -87,14 +88,41 @@ const Chat = () => {
           </form>
 
           <ul className="mt-8">
-            {messages?.map((msg, index) => (
-              <li
-                key={index}
-                className={`${theme === "dark" ? "text-white" : "text-black"}`}
-              >
-                {msg.timestamp.toLocaleString()} - {msg.user}: {msg.message}
-              </li>
-            ))}
+            {messages?.map((msg, index) => {
+              const { message, user, timestamp } = msg;
+              const date = new Date(timestamp);
+              const dateString = date.toLocaleDateString("es-AR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              });
+              const timeString = date.toLocaleTimeString("es-AR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              });
+              let name;
+              if (user && user._id) {
+                if (user._id === uid) {
+                  name = "You";
+                } else {
+                  name = `${user.first_name} ${user.last_name}`;
+                }
+              } else {
+                name = "You";
+              }
+
+              return (
+                <li
+                  key={index}
+                  className={`${
+                    theme === "dark" ? "text-white" : "text-black"
+                  }`}
+                >
+                  {`${dateString}, ${timeString}`} - {name}: {message}
+                </li>
+              );
+            })}
           </ul>
         </div>
       ) : (

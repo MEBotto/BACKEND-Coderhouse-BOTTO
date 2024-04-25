@@ -21,7 +21,10 @@ socketServer.on("connection", (socket) => {
       },
       body: JSON.stringify(data),
     })
-      .then(socket.broadcast.emit("message", data))
+      .then((response) => response.json())
+      .then(({ data }) => {
+        socket.broadcast.emit("message", data)
+      })
       .catch((err) => {
         logger.error(err);
       });

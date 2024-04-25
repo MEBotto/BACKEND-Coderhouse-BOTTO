@@ -10,10 +10,10 @@ export const getMessagesController = async (req, res) => {
 };
 
 export const createMessageController = async (req, res) => {
-    const { user, message } = req.body;
+    const { user, message, timestamp } = req.body;
     
     try {
-        const newMessage = await messageService.save(user, message);
+        const newMessage = await messageService.save(user, message, timestamp);
         res.status(201).json({ data: newMessage, message: "Message created successfully." });
     } catch (error) {
         res.status(500).json({ error: "Internal server error.", message: error.message });
