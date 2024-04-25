@@ -12,6 +12,7 @@ const socketServer = new Server(httpServer, {
 });
 
 socketServer.on("connection", (socket) => {
+  logger.info(`Client connected: ${socket.id}`);
   socket.on("newMessageClient", (message) => {
     fetch("http://localhost:8080/api/messages", {
       method: "POST",
@@ -29,6 +30,12 @@ socketServer.on("connection", (socket) => {
       .catch((err) => {
         logger.error(err);
       });
+  });
+  socket.on("disconnect", () => {
+    logger.info(`Client disconnected: ${socket.id}`);
+  });
+  socket.on("error", (error) => {
+    logger.error(`Socket error: ${error.message}`);
   });
 });
 

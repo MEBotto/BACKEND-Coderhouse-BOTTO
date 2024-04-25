@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Button from "./Button";
 import { Spinner } from "@material-tailwind/react";
+import { deleteProductFromCart, updateProductQuantity } from "../lib/actions";
 import PropTypes from "prop-types";
 
 export default function CartProductCard({
@@ -15,50 +16,11 @@ export default function CartProductCard({
   const [isDisabled, setIsDisabled] = useState(false);
 
   const deleteProductOfCart = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/api/carts/${cid}/products/${product.productId._id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to delete product");
-      }
-      setForceUpdate(!forceUpdate);
-    } catch (error) {
-      console.error(error);
-    }
+    await deleteProductFromCart(cid, product.productId._id, setForceUpdate, forceUpdate);
   };
-
+  
   const updateQuantityOnServer = async (newQuantity) => {
-    try {
-      setIsLoading(true);
-      setIsDisabled(true);
-      const response = await fetch(
-        `http://localhost:8080/api/carts/${cid}/products/${product.productId._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ quantity: newQuantity }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to update quantity");
-      }
-      setIsLoading(false);
-      setIsDisabled(false);
-      setForceUpdate(!forceUpdate);
-    } catch (error) {
-      console.error("Error updating quantity:", error);
-      setIsLoading(false);
-      setIsDisabled(false);
-    }
+    await updateProductQuantity(cid, product.productId._id, newQuantity, setIsLoading, setIsDisabled, setForceUpdate, forceUpdate);
   };
 
   const handleQuantityChange = (newQuantity) => {

@@ -1,16 +1,19 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { fetchProductData } from "../lib/data.js";
+import { deleteProduct } from "../lib/actions.js";
+import useAuth from "../hooks/useAuth.js";
 import { Link } from "react-router-dom";
 
 export function ProductsTable({ query, currentPage, theme, limit, owner }) {
   const [products, setProducts] = useState(null);
+  const [update, setUpdate] = useState(false);
+  const { token } = useAuth();
   useEffect(() => {
     if (owner) {
       fetchProductData(limit, currentPage, query, null, owner)
         .then((data) => {
           if (data && data.products) {
-            console.log(data);
             setProducts(data.products);
           } else {
             console.error("Failed to fetch product data");
@@ -28,7 +31,11 @@ export function ProductsTable({ query, currentPage, theme, limit, owner }) {
         })
         .catch((error) => console.error("An error occurred:", error));
     }
-  }, [query, currentPage, limit, owner]);
+  }, [query, currentPage, limit, owner, update]);
+
+  const handleDelete = async (pid) => {
+    await deleteProduct(pid, token, setUpdate, update);
+  }
 
   return (
     <div className="mt-6 flow-root">
@@ -97,6 +104,7 @@ export function ProductsTable({ query, currentPage, theme, limit, owner }) {
                           ? "hover:bg-mainColor hover:text-black text-white border-zinc-900"
                           : "hover:bg-mainColorLight hover:text-white text-black border-zinc-300"
                       }`}
+                      onClick={() => handleDelete(product._id)}
                     >
                       <i className="ri-delete-bin-line text-xl" />
                     </button>
@@ -182,6 +190,7 @@ export function ProductsTable({ query, currentPage, theme, limit, owner }) {
                             ? "hover:bg-mainColor hover:text-black text-white border-zinc-900"
                             : "hover:bg-mainColorLight hover:text-white text-black border-zinc-300"
                         }`}
+                        onClick={() => handleDelete(product._id)}
                       >
                         <i className="ri-delete-bin-line text-xl" />
                       </button>

@@ -2,8 +2,10 @@ import { useState } from "react";
 import useTheme from "../hooks/useTheme.js";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { toast, ToastContainer, Bounce } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import Button from "../components/Button.jsx";
+import { newPassword, recoverPassword } from "../lib/actions.js";
+import { showToast } from "../lib/utils.js";
 
 const PasswordReset = () => {
   const navigate = useNavigate();
@@ -28,101 +30,22 @@ const PasswordReset = () => {
     return password === confirmPassword || "Passwords don't match";
   };
 
-  const onSubmitEmail = async (data) => {
+  const onSubmitEmail = async ({ email }) => {
     try {
-      const response = await fetch(
-        "http://localhost:8080/api/auth/recover-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: data.email }),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        let errorMessage = "Something went wrong";
-
-        if (errorData.message) {
-          errorMessage = errorData.message;
-        }
-
-        throw new Error(errorMessage);
-      }
-
-      toast.success(`The email was sent!`, {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-      setIsClicked(true);
+      await recoverPassword(email, theme, setIsClicked);
     } catch (error) {
-      toast.error(`${error}`, {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      showToast("error", `${error}`, theme);
     }
   };
 
-  const onSubmitPassword = async (data) => {
+  const onSubmitPassword = async ({ password }) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/auth/new-password/${token}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ password: data.password }),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
-      }
-
-      toast.success(`Successfully updated password!`, {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      await newPassword(password, token, theme);
       setTimeout(() => {
         navigate("/login");
       }, 5000);
     } catch (error) {
-      toast.error(`${error}`, {
-        position: "bottom-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      showToast("error", `${error}`, theme);
     }
   };
 
@@ -148,7 +71,7 @@ const PasswordReset = () => {
                   placeholder="Password"
                 />
                 {errors.password && (
-                  <span className="text-red-500 mb-3">
+                  <span className="text-red-500 mb-3 italic text-xs">
                     This field is required
                   </span>
                 )}
@@ -166,7 +89,7 @@ const PasswordReset = () => {
                   }`}
                 />
                 {errors.confirmPassword && (
-                  <span className="text-red-500">
+                  <span className="text-red-500 italic text-xs">
                     {errors.confirmPassword.message}
                   </span>
                 )}
@@ -205,7 +128,7 @@ const PasswordReset = () => {
                       placeholder="Enter your email adress"
                     />
                     {errors.email && (
-                      <span className="text-red-500">
+                      <span className="text-red-500 italic text-xs">
                         This field is required
                       </span>
                     )}

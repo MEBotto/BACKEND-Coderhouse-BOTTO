@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import PropTypes from "prop-types";
+import { purchaseCart } from "../lib/actions";
+import {
+  showToast,
+  calculateTotalPrice,
+  calculateTotalQuantity,
+} from "../lib/utils";
 
 export default function SummaryCard({ theme, products, cid }) {
   const navigate = useNavigate();
@@ -13,38 +19,12 @@ export default function SummaryCard({ theme, products, cid }) {
     setTotalQuantity(calculateTotalQuantity(products));
   }, [products]);
 
-  function calculateTotalPrice(products) {
-    return products.reduce((total, product) => {
-      return total + product.productId.price * product.quantity;
-    }, 0);
-  }
-
-  function calculateTotalQuantity(products) {
-    return products.reduce((total, product) => {
-      return total + product.quantity;
-    }, 0);
-  }
-
   const purchaseFunction = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/carts/${cid}/purchase`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      alert("Se le ha enviado un correo con su ticket");
+      purchaseCart(cid, theme);
       navigate("/products");
     } catch (error) {
-      console.error("Error purchasing cart:", error);
+      showToast("error", `${error}`, theme);
     }
   };
 
@@ -98,6 +78,6 @@ SummaryCard.propTypes = {
   theme: PropTypes.string.isRequired,
   products: PropTypes.array.isRequired,
   cid: PropTypes.string.isRequired,
-  calculateTotalPrice: PropTypes.func.isRequired,
-  calculateTotalQuantity: PropTypes.func.isRequired,
+  calculateTotalPrice: PropTypes.func,
+  calculateTotalQuantity: PropTypes.func,
 };

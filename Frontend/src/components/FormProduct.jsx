@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
-import { toast, ToastContainer, Bounce } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import useAuth from "../hooks/useAuth.js";
+import { createProduct } from "../lib/actions.js";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "./Button.jsx";
 import PropTypes from "prop-types";
@@ -46,67 +47,7 @@ export default function FormProduct({ t }) {
   }, [token, navigate]);
 
   const onSubmit = async (data) => {
-    const formData = new FormData();
-    if (data && typeof data === 'object') {
-      for (const key in data) {
-        if (key === 'publication_date' && !data[key]) {
-          continue;
-        }
-        if (key === 'checkbox') {
-          continue;
-        }
-        formData.append(key, data[key]);
-      }
-    }
-    formData.append('thumbnail', file);
-
-    try {
-      const response = await fetch(`http://localhost:8080/api/products`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        let errorMessage;
-
-        if (errorData.error) {
-          errorMessage = errorData.error;
-        } else if (errorData.message) {
-          errorMessage = errorData.message;
-        }
-
-        throw new Error(errorMessage);
-      }
-
-      toast.success("The product was successfully registered!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    } catch (error) {
-      console.error(error);
-      toast.error(`${error}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
+    await createProduct(data, file, token);
   };
 
   return (

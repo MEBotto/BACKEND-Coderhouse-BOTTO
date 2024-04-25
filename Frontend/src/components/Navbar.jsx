@@ -1,6 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth.js";
 import useTheme from "../hooks/useTheme.js";
+import { useLogout } from "../lib/actions.js";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { motion } from "framer-motion";
@@ -16,9 +17,9 @@ const links = [
 ];
 
 function Navbar() {
-  const { token, setToken, setUid, setRole } = useAuth();
+  const { token, setToken, setUid, setRole, setName } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const navigate = useNavigate();
+  const logout = useLogout();
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
 
@@ -79,24 +80,14 @@ function Navbar() {
       setUser(user);
       setUid(user.userId);
       setRole(user.role);
+      setName(user.name);
     } else {
       setUser(null);
     }
-  }, [token, setToken, setUid, setRole]);
+  }, [token, setToken, setUid, setRole, setName]);
 
-  const handleLogout = () => {
-    setToken(null);
-    fetch("http://localhost:8080/api/auth/logout")
-      .then((response) => {
-        if (response.ok) {
-          navigate("/");
-        } else {
-          throw new Error("Failed to logout");
-        }
-      })
-      .catch((error) => {
-        console.error("Logout error:", error);
-      });
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (

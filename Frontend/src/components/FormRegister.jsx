@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { toast, ToastContainer, Bounce } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
+import { registerUser } from "../lib/actions.js";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "./Button.jsx";
 import PropTypes from "prop-types";
@@ -13,52 +14,7 @@ export default function FormRegister({ t }) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    // eslint-disable-next-line no-unused-vars
-    const { confirm_password, ...postData } = data;
-    try {
-      const response = await fetch(`http://localhost:8080/api/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(postData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        let errorMessage = "Something went wrong";
-
-        if (errorData.error && errorData.error.code === 11000) {
-          errorMessage = "An account with this email already exists";
-        }
-
-        throw new Error(errorMessage);
-      }
-
-      toast.success("You've successfully registered!", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    } catch (error) {
-      toast.error(`${error}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
+    await registerUser(data);
   };
 
   return (

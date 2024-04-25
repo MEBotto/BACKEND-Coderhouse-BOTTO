@@ -1,167 +1,50 @@
 import Button from "./Button";
 import Swal from "sweetalert2";
 import useAuth from "../hooks/useAuth.js";
-import { jwtDecode } from "jwt-decode";
+import { addProductToCart, createUserCart } from "../lib/actions.js";
+import { fetchUserCart } from "../lib/data.js";
 import PropTypes from "prop-types";
+import { showToast } from "../lib/utils.js";
 
 export default function ProductCard({ p, t }) {
-  const { token } = useAuth();
+  const { token, uid } = useAuth();
 
-  const addProductToCart = (pid) => {
+  const addProductToUserCart = (pid) => {
     const fetchData = async () => {
       if (token) {
-        const decodedToken = jwtDecode(token);
-        const user = decodedToken.user;
-
         try {
-          const response = await fetch(
-            `http://localhost:8080/api/carts/user/${user.userId}`
-          );
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
+          const cartData = await fetchUserCart(uid);
+          let cart;
+          if (cartData.cartSelected) {
+            cart = cartData.cartSelected;
+          } else {
+            const newCartData = await createUserCart(uid);
+            cart = newCartData.cartCreated;
           }
 
-          const cartData = await response.json();
-          if (cartData.cartSelected) {
-            const cart = cartData.cartSelected;
-            const product = cart.products.find(
-              (product) => product.productId._id === pid
-            );
-            if (product) {
-              const stock = product.productId.stock;
-              const quantity = product.quantity;
-              if (stock > quantity) {
-                const addProductResponse = await fetch(
-                  `http://localhost:8080/api/carts/${cart._id}/product/${pid}`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                  }
-                );
-                if (!addProductResponse.ok) {
-                  const errorData = await addProductResponse.json();
-                  let errorMessage;
-
-                  if (errorData.error) {
-                    errorMessage = errorData.error;
-                  } else if (errorData.message) {
-                    errorMessage = errorData.message;
-                  }
-
-                  throw new Error(errorMessage);
-                }
-                console.log("Se agrego bien el producto");
-              } else {
-                alert("No hay mas stock del producto");
-              }
+          const product = cart.products.find(
+            (product) => product.productId._id === pid
+          );
+          if (product) {
+            const stock = product.productId.stock;
+            const quantity = product.quantity;
+            if (stock > quantity) {
+              await addProductToCart(cart._id, pid);
             } else {
-              const addProductResponse = await fetch(
-                `http://localhost:8080/api/carts/${cart._id}/product/${pid}`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-              if (!addProductResponse.ok) {
-                const errorData = await addProductResponse.json();
-                let errorMessage;
-
-                if (errorData.error) {
-                  errorMessage = errorData.error;
-                } else if (errorData.message) {
-                  errorMessage = errorData.message;
-                }
-
-                throw new Error(errorMessage);
-              }
-              console.log("Se agrego bien el producto");
+              showToast("error", "No more stock available", t);
             }
           } else {
-            const postResponse = await fetch(
-              "http://localhost:8080/api/carts",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ userId: user.userId }),
-              }
-            );
-
-            if (!postResponse.ok) {
-              throw new Error("Error adding user's cart");
-            }
-
-            const newCartData = await postResponse.json();
-            const cart = newCartData.cartCreated;
-            const product = cart.products.find(
-              (product) => product.productId._id === pid
-            );
-            if (product) {
-              const stock = product.productId.stock;
-              const quantity = product.quantity;
-              if (stock > quantity) {
-                const addProductResponse = await fetch(
-                  `http://localhost:8080/api/carts/${cart._id}/product/${pid}`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                  }
-                );
-                if (!addProductResponse.ok) {
-                  const errorData = await addProductResponse.json();
-                  let errorMessage;
-
-                  if (errorData.error) {
-                    errorMessage = errorData.error;
-                  } else if (errorData.message) {
-                    errorMessage = errorData.message;
-                  }
-
-                  throw new Error(errorMessage);
-                }
-                console.log("Se agrego bien el producto");
-              } else {
-                alert("No hay mas stock del producto");
-              }
-            } else {
-              const addProductResponse = await fetch(
-                `http://localhost:8080/api/carts/${cart._id}/product/${pid}`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-              if (!addProductResponse.ok) {
-                const errorData = await addProductResponse.json();
-                let errorMessage;
-
-                if (errorData.error) {
-                  errorMessage = errorData.error;
-                } else if (errorData.message) {
-                  errorMessage = errorData.message;
-                }
-
-                throw new Error(errorMessage);
-              }
-              console.log("Se agrego bien el producto");
-            }
+            await addProductToCart(cart._id, pid);
           }
         } catch (error) {
           console.error(error);
-          alert(error);
+          showToast("error", `${error}`, t);
         }
       } else {
-        alert(
-          "No hay un usuario logueado. Ingrese para poder agregar al carrito"
+        showToast(
+          "error",
+          "There is no user logged in. Please log in to be able to add to the cart.",
+          t
         );
       }
     };
@@ -200,7 +83,9 @@ export default function ProductCard({ p, t }) {
           className="rounded-lg md:h-[400px] lg:h-[340px] xl:h-[390px]"
         />
       </div>
-      <h2 className="uppercase text-lg font-bold mt-2">{p.title} #{p.volume}</h2>
+      <h2 className="uppercase text-lg font-bold mt-2">
+        {p.title} #{p.volume}
+      </h2>
       <p className="mx-4 text-justify overflow-hidden overflow-ellipsis whitespace-nowrap max-w-[90%]">
         {p.description}
       </p>
@@ -218,7 +103,7 @@ export default function ProductCard({ p, t }) {
               ? "bg-mainColor text-black"
               : "bg-mainColorLight text-white"
           } p-2 rounded-xl font-bold`}
-          onClickFunction={() => addProductToCart(p._id)}
+          onClickFunction={() => addProductToUserCart(p._id)}
         />
       </div>
     </div>

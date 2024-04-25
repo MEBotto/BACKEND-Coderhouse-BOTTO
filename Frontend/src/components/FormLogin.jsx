@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import useAuth from "../hooks/useAuth.js";
-import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer, Bounce } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Button from "./Button.jsx";
+import { useLogin } from "../lib/actions.js";
 import PropTypes from "prop-types";
 
 export default function FormLogin({ t }) {
-  const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const login = useLogin();
   const {
     handleSubmit,
     register,
@@ -17,53 +15,7 @@ export default function FormLogin({ t }) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        let errorMessage = "Something went wrong";
-
-        if (errorData.message) {
-          errorMessage = errorData.message;
-        }
-
-        throw new Error(errorMessage);
-      }
-
-      const responseData = await response.json();
-      toast.success(`You've logged in successfully!`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-      setToken(responseData.jwt);
-      navigate("/products");
-    } catch (error) {
-      toast.error(`${error}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
+    await login(data);
   };
 
   const handleGithubLogin = async () => {

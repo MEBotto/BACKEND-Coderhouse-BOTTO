@@ -2,61 +2,38 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useTheme from "../hooks/useTheme.js";
 import useAuth from "../hooks/useAuth.js";
-import { jwtDecode } from "jwt-decode";
 import Button from "../components/Button";
 import CartProductCard from "../components/CartProductCard";
 import SummaryCard from "../components/SummaryCard";
+import { fetchUserCart } from "../lib/data.js";
+import { createUserCart } from "../lib/actions.js";
+import { showToast } from "../lib/utils.js";
 
 const Cart = () => {
   const { theme } = useTheme();
-  const { token } = useAuth();
+  const { token, uid } = useAuth();
   const [cart, setCart] = useState(null);
   const [forceUpdate, setForceUpdate] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       if (token) {
-        const decodedToken = jwtDecode(token);
-        const user = decodedToken.user;
-
         try {
-          const response = await fetch(
-            `http://localhost:8080/api/carts/user/${user.userId}`
-          );
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-
-          const cartData = await response.json();
+          const cartData = fetchUserCart(uid);
           if (cartData.cartSelected) {
             setCart(cartData.cartSelected);
           } else {
-            const postResponse = await fetch(
-              "http://localhost:8080/api/carts",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ userId: user.userId }),
-              }
-            );
-
-            if (!postResponse.ok) {
-              throw new Error("Error adding user's cart");
-            }
-
-            const newCartData = await postResponse.json();
+            const newCartData = createUserCart(uid);
             setCart(newCartData.cartCreated);
           }
         } catch (error) {
-          console.error("Error fetching data:", error);
+          showToast("error", `${error}`, theme);
         }
       }
     };
 
     fetchData();
-  }, [forceUpdate, token]);
+  }, [forceUpdate, token, uid, theme]);
 
   return (
     <div
@@ -101,7 +78,8 @@ const Cart = () => {
               </div>
               <div className="h-full p-5">
                 <p>
-                  Here you&apos;ll see your purchase amounts once you add products.
+                  Here you&apos;ll see your purchase amounts once you add
+                  products.
                 </p>
               </div>
             </div>

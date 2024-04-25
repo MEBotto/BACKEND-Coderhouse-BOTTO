@@ -1,67 +1,76 @@
 import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth.js";
 import io from "socket.io-client";
+import { fetchMessages } from "../lib/data.js";
+
+const socket = io("http://localhost:8080");
 
 const Chat = () => {
-  const { token, user } = useAuth();
+  const { token, name } = useAuth();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const socket = io("http://localhost:8080"); // Reemplaza 'PORT' con el puerto donde está corriendo tu servidor
 
   useEffect(() => {
-    // Conexión al socket cuando el componente se monta
     socket.connect();
-
-    // Escucha los mensajes del servidor
-    socket.on("chat message", (message) => {
+  }, []);
+  
+  useEffect(() => {
+    socket.on("messageCreatedServer", (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
-
-    // Maneja la limpieza cuando el componente se desmonta
+  
     return () => {
-      socket.disconnect();
+      socket.off("messageCreatedServer");
     };
-  }, [socket]);
-
+  }, []);
+  
   useEffect(() => {
-    // Obtener todos los mensajes al cargar la página
-    fetch("http://localhost:8080/api/extend/messages", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`, // Asegúrate de incluir el token si es necesario
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => setMessages(data.data))
-      .catch((error) => console.error("Error fetching messages:", error));
+    const fetchData = async () => {
+      try {
+        const { data } = await fetchMessages(token);
+        setMessages((prevMessages) => [...prevMessages, ...data]);
+      } catch (error) {
+        console.error("Error:", error.message);
+      }
+    };
+  
+    fetchData();
   }, [token]);
 
   const sendMessage = () => {
-    // Envía el mensaje al servidor y emite el evento 'chat message'
-    socket.emit("chat message", { user: user.name, message: newMessage });
-
-    // Limpiar el input después de enviar el mensaje
+    const message = { user: name, message: newMessage };
+    socket.emit("newMessageClient", message);
+    setMessages((prevMessages) => [...prevMessages, message]);
     setNewMessage("");
   };
 
   return (
-    <div>
-      <div>
-        {messages.map((message, index) => (
-          <div key={index}>
-            <strong>{message.user}:</strong> {message.message}
+    <>
+      {token ? (
+        <div>
+          <div>
+            {messages.map(
+              (message, index) =>
+                message && (
+                  <div key={index}>
+                    <strong>{message.user}:</strong> {message.message}
+                  </div>
+                )
+            )}
           </div>
-        ))}
-      </div>
-      <div>
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <button onClick={sendMessage}>Enviar</button>
-      </div>
-    </div>
+          <div>
+            <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+            />
+            <button onClick={sendMessage}>Enviar</button>
+          </div>
+        </div>
+      ) : (
+        <div>VOLVE A INICAR SESION</div>
+      )}
+    </>
   );
 };
 

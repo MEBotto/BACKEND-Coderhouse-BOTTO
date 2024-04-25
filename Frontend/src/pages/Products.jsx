@@ -3,6 +3,7 @@ import { fetchProductData } from "../lib/data.js";
 import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
 import Search from "../components/Search.jsx";
+import { ToastContainer, Bounce } from "react-toastify";
 import { useSearchParams, useLocation } from "react-router-dom";
 import useTheme from "../hooks/useTheme.js";
 
@@ -61,6 +62,18 @@ const Products = () => {
           <Pagination totalPages={totalPages} theme={theme}/>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </div>
   );
 };

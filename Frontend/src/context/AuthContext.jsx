@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [role, setRole] = useState("");
   const [uid, setUid] = useState(null);
+  const [name, setName] = useState(null);
   const [remainingTime, setRemainingTime] = useState(null);
   const navigate = useNavigate();
 
@@ -74,9 +75,11 @@ export const AuthProvider = ({ children }) => {
     token,
     role,
     uid,
+    name,
     setUid,
     setRole,
     setToken,
+    setName,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
