@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      height:{
+        minusNavbar: "calc(100vh - 90px)",
+      },
       gridTemplateRows: {
         '1fr-auto': '1fr auto',
       },
