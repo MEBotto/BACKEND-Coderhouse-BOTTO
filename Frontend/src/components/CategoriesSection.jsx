@@ -8,11 +8,15 @@ export default function CategoriesSection({ theme }) {
       <div
         className={`container mx-auto p-4 ${
           theme === "dark" ? "text-white" : "text-black"
-        }`}
+        } flex flex-col gap-16`}
       >
         <div className="grid sm:max-md:grid-rows-2 md:max-lg:grid-cols-2 lg:grid-cols-auto-1fr gap-8">
           <CategoryCard category="Seinen" theme={theme} />
           <ProductsCarousel theme={theme} category="seinen" />
+        </div>
+        <div className="grid sm:max-md:grid-rows-2 md:max-lg:grid-cols-2 lg:grid-cols-auto-1fr gap-8">
+          <CategoryCard category="Shonen" theme={theme} />
+          <ProductsCarousel theme={theme} category="shonen" />
         </div>
       </div>
     </section>

@@ -11,10 +11,12 @@ export default {
       },
       gridTemplateRows: {
         '1fr-auto': '1fr auto',
+        'auto-1fr': 'auto 1fr',
       },
       gridTemplateColumns: {
         '13': 'repeat(13, minmax(0, 1fr))',
         'auto-1fr': 'auto 1fr',
+        '1fr-auto': '1fr auto',
       },
       colors: {
         color: "#222327",

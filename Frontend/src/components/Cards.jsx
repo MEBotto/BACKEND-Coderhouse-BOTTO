@@ -138,7 +138,7 @@ export function CategoryCard({ category, theme }) {
 
   return (
     <div
-      className="flex flex-col justify-center items-center gap-6 p-12 rounded-2xl lg:w-[352px]"
+      className="flex flex-col justify-center items-center gap-6 p-12 rounded-2xl lg:w-[352px] grid-area-category"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${url})`,
         backgroundSize: "cover",
