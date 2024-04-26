@@ -58,3 +58,27 @@ export async function fetchMessages(token) {
   }
   return await response.json();
 }
+
+export async function fetchCardData(token) {
+  const numberOfProducts = await fetch(`${url}/products`)
+    .then((res) => res.json())
+    .then(({ productData }) => productData.totalDocs)
+    .catch((error) => console.error("Error fetching data:", error));
+
+  const numberOfCustomers = await fetch(`${url}/auth/users`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => res.json())
+    .then(({ users }) => users.length)
+    .catch((error) => console.error("Error fetching data:", error));
+
+  return {
+    numberOfCustomers,
+    numberOfInvoices: 0,
+    totalPaidInvoices: 0,
+    numberOfProducts,
+  };
+}

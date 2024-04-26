@@ -8,7 +8,7 @@ import logger from "../utils/logger.js";
 
 const getAllUsersController = async (req, res) => {
   try {
-    const users = authService.getAll();
+    const users = await authService.getAll();
     res.status(200).json({ success: true, users: users });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });

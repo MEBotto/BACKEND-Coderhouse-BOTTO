@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { fetchCardData } from "../lib/data.js";
 import { useState, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
 
 const iconMap = {
   collected: "ri-wallet-3-line",
@@ -10,6 +12,7 @@ const iconMap = {
 };
 
 export default function CardWrapper({ theme }) {
+  const { token } = useAuth();
   const [data, setData] = useState({
     numberOfCustomers: "Loading...",
     numberOfInvoices: "Loading...",
@@ -20,7 +23,7 @@ export default function CardWrapper({ theme }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const cardData = await fetchCardData();
+        const cardData = await fetchCardData(token);
         setData(cardData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -65,19 +68,6 @@ export default function CardWrapper({ theme }) {
       />
     </>
   );
-}
-
-async function fetchCardData() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        numberOfCustomers: 100,
-        numberOfInvoices: 200,
-        totalPaidInvoices: "$300",
-        numberOfProducts: 400,
-      });
-    }, 2000);
-  });
 }
 
 export function Card({ title, type, theme, value }) {
