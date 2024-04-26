@@ -75,3 +75,70 @@ export function calculateTotalQuantity(products) {
     return total + product.quantity;
   }, 0);
 }
+
+export function getRandomColor(theme) {
+  let color;
+  do {
+    color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += Math.floor(Math.random() * 16).toString(16);
+    }
+  } while (isColorTooDarkOrLight(color, theme));
+  return color;
+}
+
+export function isColorTooDarkOrLight(color, theme) {
+  const r = parseInt(color.substr(1, 2), 16);
+  const g = parseInt(color.substr(3, 2), 16);
+  const b = parseInt(color.substr(5, 2), 16);
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  if (theme === "dark") {
+    return brightness < 128;
+  } else {
+    return brightness > 200;
+  }
+}
+
+export function formatDateAndTime(timestamp) {
+  const date = new Date(timestamp);
+  const dateString = date.toLocaleDateString("es-AR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+  const timeString = date.toLocaleTimeString("es-AR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return { dateString, timeString };
+}
+
+export function formatUserName(user, uid) {
+  let name;
+  if (user && user._id) {
+    if (user._id === uid) {
+      name = "You";
+    } else {
+      name = `${user.first_name} ${user.last_name}`;
+      name = name.split(" ")[0];
+      name =
+        name.toLowerCase().charAt(0).toUpperCase() +
+        name.slice(1).toLowerCase();
+    }
+  } else {
+    name = "You";
+  }
+  return name;
+}
+
+export function getUserColor(name, theme, userColors, setUserColors) {
+  let color = userColors[name];
+  if (!color) {
+    do {
+      color = getRandomColor(theme);
+    } while (color === "#000000" || color === "#FFFFFF");
+    setUserColors({ ...userColors, [name]: color });
+  }
+  return color;
+}
