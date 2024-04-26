@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchProductData } from "../lib/data.js";
-import ProductCard from "../components/ProductCard";
+import { ProductCard } from "../components/Cards.jsx";
 import Pagination from "../components/Pagination";
 import Search from "../components/Search.jsx";
 import { ToastContainer, Bounce } from "react-toastify";
@@ -11,7 +11,7 @@ const Products = () => {
   const { theme } = useTheme();
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
-  const limit = 20;
+  const limit = 12;
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,12 +41,16 @@ const Products = () => {
     <div
       className={`${
         theme === "dark" ? "bg-color" : "bg-colorLight"
-      } w-full h-full flex justify-center pt-28 pb-12`}
+      } w-screen h-screen flex items-end justify-center overflow-y-auto pb-4 `}
+      style={{
+        scrollbarWidth: "thin",
+        scrollbarColor: "rgba(255, 255, 255, 0.5) transparent",
+      }}
     >
-      <div className="container min-h-screen w-4/5">
+      <div className="container h-minusNavbar py-8">
         <Search placeholder={"Search Products by Title or Volume number..."}/>
         {loading ? (
-          <p>Cargando...</p>
+          <div className="h-screen w-screen flex items-center justify-center"></div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-8 mt-8">
             {products.map((product) => (
@@ -57,7 +61,7 @@ const Products = () => {
         <div
           className={`${
             theme === "dark" ? "text-white" : "text-black"
-          } flex justify-center gap-4 mt-4`}
+          } flex justify-center gap-4 mt-4 pb-8`}
         >
           <Pagination totalPages={totalPages} theme={theme}/>
         </div>
