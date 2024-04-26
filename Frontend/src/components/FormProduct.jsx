@@ -175,7 +175,7 @@ export default function FormProduct({ t }) {
           <input
             type="file"
             id="thumbnail"
-            accept="image/png, image/jpeg"
+            accept="image/png, image/jpeg, image/webp"
             hidden
             {...register("thumbnail", { required: true })}
             onChange={(e) => {
