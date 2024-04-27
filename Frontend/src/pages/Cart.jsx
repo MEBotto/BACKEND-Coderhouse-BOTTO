@@ -79,8 +79,14 @@ const Cart = () => {
             </div>
           </div>
         ) : (
-          <div className="w-3/4 grid grid-cols-4 gap-4 p-4">
-            <div className="col-span-3 h-fit flex flex-col items-center justify-center gap-4">
+          <div className="w-4/5 h-minusNavbar grid max-sm:grid-rows-auto-1fr md:max-lg:grid-cols-auto-1fr lg:grid-cols-4 gap-4 p-4">
+            <div
+              className="h-full overflow-y-auto flex flex-col items-start justify-start lg:col-span-3 gap-4 p-2"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(255, 255, 255, 0.5) transparent",
+              }}
+            >
               {cart.products.map((product) => (
                 <CartProductCard
                   product={product}
@@ -92,7 +98,7 @@ const Cart = () => {
                 />
               ))}
             </div>
-            <div className="border border-gray-400 rounded-lg col-span-1 h-fit flex flex-col items-center justify-start">
+            <div className="border border-gray-400 rounded-lg h-fit flex flex-col items-center justify-start">
               <div className="w-full border-b border-gray-400 p-5">
                 <h2 className="text-xl">Purchase Summary</h2>
               </div>

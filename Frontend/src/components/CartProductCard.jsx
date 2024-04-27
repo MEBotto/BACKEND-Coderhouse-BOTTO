@@ -53,7 +53,7 @@ export default function CartProductCard({
   };
 
   return (
-    <div className="w-full grid grid-cols-8 p-5 border border-gray-400 rounded-lg">
+    <div className="w-full min-w-[815px] grid grid-cols-8 p-5 border border-gray-400 rounded-lg">
       <div className="col-span-5 flex items-center gap-4">
         <img
           src={product.productId.thumbnail}
