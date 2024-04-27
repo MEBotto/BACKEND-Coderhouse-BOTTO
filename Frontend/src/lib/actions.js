@@ -43,7 +43,7 @@ export function useLogin() {
         transition: Bounce,
       });
       setToken(responseData.jwt);
-      navigate("/products");
+      navigate("/");
     } catch (error) {
       toast.error(`${error}`, {
         position: "top-center",
@@ -135,6 +135,42 @@ export async function registerUser(data) {
       theme: "light",
       transition: Bounce,
     });
+  }
+}
+
+export async function updateUser(data, file, uid, theme) {
+  const formData = new FormData();
+  if (data && typeof data === "object") {
+    for (const key in data) {
+      formData.append(key, data[key]);
+      if (key === "role") {
+        continue;
+      }
+    }
+  }
+  formData.append("photo", file);
+
+  try {
+    const response = await fetch(`${url}/auth/user/${uid}`, {
+      method: "PUT",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      let errorMessage = "Something went wrong";
+
+      if (errorData.error) {
+        errorMessage = errorData.error;
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    showToast("success", "Your account was successfully updated!", theme);
+  } catch (error) {
+    console.error(error);
+    showToast("error", `${error}`, theme);
   }
 }
 

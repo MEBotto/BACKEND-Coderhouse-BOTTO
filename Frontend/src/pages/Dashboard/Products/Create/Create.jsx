@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import Breadcrumbs from "../../../../components/Breadcrumbs";
-import FormProduct from "../../../../components/FormProduct";
+import { FormProduct } from "../../../../components/Forms";
 
 export default function Create({ theme }) {
   return (

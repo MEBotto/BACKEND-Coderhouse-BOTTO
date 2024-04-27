@@ -1,5 +1,5 @@
 import useTheme from "../hooks/useTheme.js";
-import FormLogin from "../components/FormLogin.jsx";
+import { FormLogin } from "../components/Forms.jsx";
 
 const Login = () => {
   const { theme } = useTheme();

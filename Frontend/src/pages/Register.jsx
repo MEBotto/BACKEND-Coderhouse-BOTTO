@@ -1,4 +1,4 @@
-import FormRegister from "../components/FormRegister";
+import { FormRegister } from "../components/Forms.jsx";
 import useTheme from "../hooks/useTheme.js";
 
 const Register = () => {

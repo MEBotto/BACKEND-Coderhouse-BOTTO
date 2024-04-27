@@ -1,5 +1,6 @@
 import "boxicons";
 import "remixicon/fonts/remixicon.css";
+import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
