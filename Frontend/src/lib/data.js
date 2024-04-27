@@ -82,3 +82,11 @@ export async function fetchCardData(token) {
     numberOfProducts,
   };
 }
+
+export async function fetchUser(uid) {
+  const response = await fetch(`${url}/auth/user/${uid}`);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return await response.json();
+}

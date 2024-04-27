@@ -76,7 +76,7 @@ authRouter.post("/login", loginController);
 
 authRouter.get("/logout", logoutController);
 
-authRouter.get("/user/:email", getAccountByEmailController);
+authRouter.get("/user/email/:email", getAccountByEmailController);
 
 authRouter.put("/user/:id", uploadToCloudinary('', 'any'), updateAccountController);
 
