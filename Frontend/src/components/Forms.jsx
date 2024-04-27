@@ -687,7 +687,7 @@ export function FormUser({ t, user }) {
             src={displayedImage}
             alt="Click to upload"
             onClick={handleImageClick}
-            className={`w-80 h-auto rounded-full md:mt-2 ${
+            className={`h-auto w-40 md:w-80 rounded-full md:mt-2 ${
               isEditing ? "cursor-pointer" : ""
             }`}
           />
