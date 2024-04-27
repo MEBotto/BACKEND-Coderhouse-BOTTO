@@ -19,11 +19,11 @@ const Cart = () => {
     const fetchData = async () => {
       if (token) {
         try {
-          const cartData = fetchUserCart(uid);
+          const cartData = await fetchUserCart(uid);
           if (cartData.cartSelected) {
             setCart(cartData.cartSelected);
           } else {
-            const newCartData = createUserCart(uid);
+            const newCartData = await createUserCart(uid);
             setCart(newCartData.cartCreated);
           }
         } catch (error) {
@@ -39,26 +39,20 @@ const Cart = () => {
     <div
       className={`${
         theme === "dark" ? "bg-color text-white" : "bg-colorLight text-black"
-      } ${
-        cart
-          ? cart.products.length === 0
-            ? "w-screen h-screen"
-            : cart.products.length > 5
-            ? "w-full h-full"
-            : "w-screen h-screen"
-          : "w-screen h-screen"
-      } flex justify-center pt-24 pb-12`}
+      } w-screen h-screen flex flex-col items-center justify-end `}
     >
       {cart ? (
         cart.products.length === 0 ? (
-          <div className="w-3/4 grid grid-cols-4 gap-4 p-5">
-            <div className="border border-gray-400 rounded-lg col-span-3 h-1/2 flex flex-col items-center justify-center">
+          <div className="w-full lg:w-fit h-minusNavbar grid max-sm:grid-rows-auto-1fr md:max-lg:grid-cols-auto-1fr lg:grid-cols-4 gap-4 p-4">
+            <div className="border border-gray-400 rounded-lg flex flex-col items-center justify-center md:h-1/2 lg:col-span-3 p-4">
               <i className="ri-shopping-cart-2-fill text-6xl" />
-              <h1 className="text-bold text-3xl my-4">
+              <h1 className="text-bold text-center text-lg md:text-3xl my-4">
                 It looks like you don&apos;t have anything in your cart!
               </h1>
-              <h2>Add products for free shipping!</h2>
-              <h2 className="my-2">
+              <h2 className="text-sm md:text-base">
+                Add products for free shipping!
+              </h2>
+              <h2 className="text-sm md:text-base text-center my-2">
                 Add more than 10 products to get <b>FREE SHIPPING!</b>
               </h2>
               <Link to={"/products"}>
@@ -68,11 +62,11 @@ const Cart = () => {
                     theme === "dark"
                       ? "bg-mainColor text-black"
                       : "bg-mainColorLight text-white"
-                  } p-2 rounded-xl font-bold mt-8`}
+                  } p-2 rounded-xl font-bold`}
                 />
               </Link>
             </div>
-            <div className="border border-gray-400 rounded-lg col-span-1 h-fit flex flex-col items-center justify-start">
+            <div className="border border-gray-400 rounded-lg h-fit lg:w-56 flex flex-col items-center justify-start">
               <div className="w-full border-b border-gray-400 p-5">
                 <h2 className="text-xl">Purchase Summary</h2>
               </div>
@@ -85,7 +79,7 @@ const Cart = () => {
             </div>
           </div>
         ) : (
-          <div className="w-3/4 grid grid-cols-4 gap-4 p-5">
+          <div className="w-3/4 grid grid-cols-4 gap-4 p-4">
             <div className="col-span-3 h-fit flex flex-col items-center justify-center gap-4">
               {cart.products.map((product) => (
                 <CartProductCard

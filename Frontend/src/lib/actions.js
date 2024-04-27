@@ -239,7 +239,7 @@ export async function createProduct(data, file, token) {
 }
 
 export async function createUserCart(uid) {
-  const response = await fetch("${url}/carts", {
+  const response = await fetch(`${url}/carts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
