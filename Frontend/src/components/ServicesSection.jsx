@@ -24,17 +24,20 @@ export default function ServicesSection({ theme }) {
         } divide-gray-200`}
       >
         <div className="flex flex-col lg:flex-row items-center justify-center gap-2 p-4">
-          <i className="ri-truck-line text-6xl hover:scale-110 transition-transform duration-200" />
+          <i className="ri-lock-star-line text-6xl hover:scale-110 transition-transform duration-200" />
           <div className="flex flex-col items-center lg:items-start">
-            <h3 className="font-bold text-xl underline underline-offset-2">
-              We ship to your door!
-            </h3>
+            <Link
+              to={"/premium"}
+              className="font-bold text-xl underline underline-offset-2"
+            >
+              Become Premium
+            </Link>
             <p
               className={`${
                 theme === "dark" ? "text-zinc-300" : "text-zinc-500"
               }`}
             >
-              wherever you are!
+              and create your own products!
             </p>
           </div>
         </div>

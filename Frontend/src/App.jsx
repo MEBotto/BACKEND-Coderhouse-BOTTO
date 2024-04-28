@@ -15,6 +15,7 @@ import Dashboard from "./pages/Dashboard/Dashboard.jsx";
 import Chat from "./pages/Chat.jsx";
 import PasswordReset from "./pages/PasswordReset.jsx";
 import Cart from "./pages/Cart.jsx";
+import Premium from "./pages/Premium.jsx";
 
 function App() {
   const current_theme = localStorage.getItem("current_theme");
@@ -61,6 +62,7 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/products/*" element={<Products />} />
+              <Route path="/premium" element={<Premium />}/>
             </Route>
           </Routes>
         </AuthProvider>
