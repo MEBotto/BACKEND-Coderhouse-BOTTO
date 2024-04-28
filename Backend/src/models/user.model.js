@@ -16,6 +16,7 @@ const userSchema = new Schema({
   github_id: { type: String },
   google_id: { type: String },
   documents: { 
+    file: { type: String },
     name: { type: String }, 
     reference: { type: String } 
   },

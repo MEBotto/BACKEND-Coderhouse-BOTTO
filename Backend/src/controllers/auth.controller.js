@@ -286,6 +286,7 @@ const documentsController = async (req, res) => {
     }
     
     const documents = files.map(file => ({
+      file: file.file,
       name: file.name, 
       reference: file.url
     }));
