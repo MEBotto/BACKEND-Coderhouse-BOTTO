@@ -11,7 +11,7 @@ import {
   newPasswordController,
   logoutController,
   userPremiumController,
-  documentsController
+  documentsController,
 } from "../controllers/auth.controller.js";
 
 import { Router } from "express";
@@ -66,7 +66,7 @@ authRouter.get(
 //   googleCallbackController
 // );
 
-authRouter.post("/register", uploadToCloudinary('', 'any'),  registerController);
+authRouter.post("/register", uploadToCloudinary("", "any"), registerController);
 
 authRouter.post("/login", loginController);
 
@@ -78,6 +78,17 @@ authRouter.post("/new-password/:token", newPasswordController);
 
 authRouter.put("/user/premium/:uid", userPremiumController);
 
-authRouter.post('/users/:uid/documents', uploadToCloudinary('documents', "array"), documentsController);
+authRouter.post(
+  "/users/:uid/documents",
+  uploadToCloudinary(
+    [
+      { name: "id", maxCount: 1 },
+      { name: "residenceProof", maxCount: 1 },
+      { name: "bankStatementProof", maxCount: 1 },
+    ],
+    "fields"
+  ),
+  documentsController
+);
 
 export default authRouter;

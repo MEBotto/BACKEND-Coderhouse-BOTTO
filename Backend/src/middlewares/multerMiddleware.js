@@ -58,6 +58,7 @@ export const uploadToCloudinary = (fieldName, uploadType) => {
 
     multerUpload(req, res, async (err) => {
       if (err) {
+        logger.error(err);
         return res.status(400).json({ error: "Error al cargar el archivo." });
       }
 
@@ -65,7 +66,9 @@ export const uploadToCloudinary = (fieldName, uploadType) => {
         if (req.file) {
           const b64 = Buffer.from(req.file.buffer).toString("base64");
           let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-          const originalname = req.file.originalname.split(".")[0].replace(/\s/g, "_");
+          const originalname = req.file.originalname
+            .split(".")[0]
+            .replace(/\s/g, "_");
           const timestamp = new Date()
             .toLocaleString()
             .replace(/, /g, "-")
@@ -83,7 +86,9 @@ export const uploadToCloudinary = (fieldName, uploadType) => {
           for (const file of req.files) {
             const b64 = Buffer.from(file.buffer).toString("base64");
             let dataURI = "data:" + file.mimetype + ";base64," + b64;
-            const originalname = file.originalname.split(".")[0].replace(/\s/g, "_");
+            const originalname = file.originalname
+              .split(".")[0]
+              .replace(/\s/g, "_");
             const timestamp = new Date()
               .toLocaleString()
               .replace(/, /g, "-")
@@ -102,6 +107,42 @@ export const uploadToCloudinary = (fieldName, uploadType) => {
               response.format
             }`,
             url: `${response.secure_url}`,
+          }));
+        } else if (req.files) {
+          const { id, residenceProof, bankStatementProof } = req.files;
+          const uploadResponses = [];
+          const files = {
+            id: id[0],
+            residenceProof: residenceProof[0],
+            bankStatementProof: bankStatementProof[0],
+          };
+
+          for (const [fileKey, file] of Object.entries(files)) {
+            const b64 = Buffer.from(file.buffer).toString("base64");
+            let dataURI = "data:" + file.mimetype + ";base64," + b64;
+            const originalname = file.originalname
+              .split(".")[0]
+              .replace(/\s/g, "_");
+            const timestamp = new Date()
+              .toLocaleString()
+              .replace(/, /g, "-")
+              .replace(/:|\//g, "-")
+              .replace(/\s/g, "_");
+            const customPublicId = `${timestamp}_${originalname}`;
+
+            const response = await cloudinary.uploader.upload(dataURI, {
+              public_id: customPublicId,
+              folder: "uploads",
+            });
+            uploadResponses.push({ ...response, file: fileKey });
+          }
+
+          req.cloudinaryUploads = uploadResponses.map((response) => ({
+            name: `${response.public_id.split("uploads/")[1]}.${
+              response.format
+            }`,
+            url: `${response.secure_url}`,
+            file: response.file,
           }));
         }
 
