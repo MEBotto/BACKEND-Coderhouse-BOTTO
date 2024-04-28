@@ -757,7 +757,7 @@ export function FormUser({ t, user }) {
               Last Name
             </label>
             <input
-              {...register("last_name", { required: "Last name is required" })}
+              {...register("last_name")}
               type="text"
               disabled={!isEditing}
               placeholder="Last Name"
