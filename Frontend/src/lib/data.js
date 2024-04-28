@@ -65,7 +65,7 @@ export async function fetchCardData(token) {
     .then(({ productData }) => productData.totalDocs)
     .catch((error) => console.error("Error fetching data:", error));
 
-  const numberOfCustomers = await fetch(`${url}/auth/users`, {
+  const numberOfCustomers = await fetch(`${url}/users`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -84,7 +84,7 @@ export async function fetchCardData(token) {
 }
 
 export async function fetchUser(uid) {
-  const response = await fetch(`${url}/auth/user/${uid}`);
+  const response = await fetch(`${url}/users/${uid}`);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }

@@ -151,7 +151,7 @@ export async function updateUser(data, file, uid, theme) {
   formData.append("photo", file);
 
   try {
-    const response = await fetch(`${url}/auth/user/${uid}`, {
+    const response = await fetch(`${url}/users/${uid}`, {
       method: "PUT",
       body: formData,
     });
