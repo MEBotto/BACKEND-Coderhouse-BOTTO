@@ -43,6 +43,15 @@ export const uploadToCloudinary = (fieldName, uploadType) => {
           },
         }).any();
         break;
+      case "fields":
+        multerUpload = multer({
+          storage: storage,
+          onError: (err, next) => {
+            logger.error(err);
+            next(err);
+          },
+        }).fields(fieldName);
+        break;
       default:
         return res.status(400).json({ error: "Tipo de carga no válido." });
     }
