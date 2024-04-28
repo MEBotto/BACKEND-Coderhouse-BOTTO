@@ -302,7 +302,6 @@ export {
   googleCallbackController,
   registerController,
   loginController,
-  updateAccountController,
   recoverPasswordController,
   newPasswordController,
   logoutController,

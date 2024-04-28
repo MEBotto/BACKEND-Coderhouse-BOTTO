@@ -7,10 +7,6 @@ import {
   googleCallbackController,
   registerController,
   loginController,
-  getAccountByEmailController,
-  updateAccountController,
-  getAllUsersController,
-  getUserByIdController,
   recoverPasswordController,
   newPasswordController,
   logoutController,
@@ -75,14 +71,6 @@ authRouter.post("/register", uploadToCloudinary('', 'any'),  registerController)
 authRouter.post("/login", loginController);
 
 authRouter.get("/logout", logoutController);
-
-authRouter.get("/user/email/:email", getAccountByEmailController);
-
-authRouter.put("/user/:id", uploadToCloudinary('', 'any'), updateAccountController);
-
-authRouter.get("/users", checkUserRole(["ADMIN"]), getAllUsersController);
-
-authRouter.get("/user/:id", getUserByIdController);
 
 authRouter.post("/recover-password", recoverPasswordController);
 
