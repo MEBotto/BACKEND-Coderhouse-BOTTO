@@ -2,9 +2,21 @@ import PropTypes from "prop-types";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { fetchCardData, fetchUserCart } from "../lib/data.js";
-import { createUserCart, addProductToCart } from "../lib/actions.js";
-import { showToast } from "../lib/utils.js";
+import {
+  createUserCart,
+  addProductToCart,
+  deleteProductFromCart,
+  updateProductQuantity,
+  purchaseCart,
+} from "../lib/actions.js";
+import {
+  showToast,
+  calculateTotalPrice,
+  calculateTotalQuantity,
+} from "../lib/utils.js";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Spinner } from "@material-tailwind/react";
 import Button from "./Button.jsx";
 import useAuth from "../hooks/useAuth";
 
@@ -35,7 +47,7 @@ export default function CardWrapper({ theme }) {
     }
 
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const {
@@ -276,6 +288,215 @@ export function ProductCard({ p, t }) {
     </div>
   );
 }
+
+export function CartProductCard({
+  product,
+  theme,
+  cid,
+  forceUpdate,
+  setForceUpdate,
+}) {
+  const [quantity, setQuantity] = useState(product.quantity);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const deleteProductOfCart = async () => {
+    await deleteProductFromCart(
+      cid,
+      product.productId._id,
+      setForceUpdate,
+      forceUpdate
+    );
+  };
+
+  const updateQuantityOnServer = async (newQuantity) => {
+    await updateProductQuantity(
+      cid,
+      product.productId._id,
+      newQuantity,
+      setIsLoading,
+      setIsDisabled,
+      setForceUpdate,
+      forceUpdate
+    );
+  };
+
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity >= 1 && newQuantity <= product.productId.stock) {
+      setQuantity(newQuantity);
+      updateQuantityOnServer(newQuantity);
+    } else {
+      console.error("Invalid quantity");
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const inputValue = parseInt(e.target.value);
+    if (
+      !isNaN(inputValue) &&
+      inputValue >= 1 &&
+      inputValue <= product.productId.stock
+    ) {
+      setQuantity(inputValue);
+    } else {
+      console.error("Invalid quantity");
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleQuantityChange(parseInt(e.target.value));
+    }
+  };
+
+  return (
+    <div className="w-full min-w-[815px] grid grid-cols-8 p-5 border border-gray-400 rounded-lg">
+      <div className="col-span-5 flex items-center gap-4">
+        <img
+          src={product.productId.thumbnail}
+          alt={`Image of ${product.productId.title}`}
+          className="w-[64px]"
+        />
+        <div className="grid grid-rows-2">
+          <h2 className="text-bold row-span-1 text-2xl">
+            {product.productId.title}
+          </h2>
+          <div className="flex gap-4">
+            <Button
+              text={"Delete"}
+              className="hover:underline hover:cursor-pointer text-blue-600"
+              onClickFunction={() => deleteProductOfCart()}
+            />
+            <Button
+              text={"Save"}
+              className="hover:underline hover:cursor-pointer text-blue-600"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="col-span-1 flex flex-col items-center justify-center gap-2">
+        <div className="flex items-center justify-center border border-gray-400 rounded-sm py-1 px-4">
+          <Button
+            text={"-"}
+            isDisabled={isDisabled}
+            onClickFunction={() => handleQuantityChange(quantity - 1)}
+          />
+          {!isLoading ? (
+            <input
+              type="text"
+              pattern="[0-9]*"
+              inputMode="numeric"
+              value={quantity}
+              min={1}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              className="border-none bg-transparent focus:outline-none app text-center w-16"
+            />
+          ) : (
+            <Spinner
+              className={`h-6 w-6 mx-5 ${
+                theme === "dark" ? "text-mainColor" : "text-mainColorLight"
+              }`}
+            />
+          )}
+          <Button
+            text={"+"}
+            isDisabled={isDisabled}
+            onClickFunction={() => handleQuantityChange(quantity + 1)}
+          />
+        </div>
+        {product.productId.stock === 1 ? (
+          <p>Latest available</p>
+        ) : (
+          <p>{product.productId.stock} available</p>
+        )}
+      </div>
+      <div className="col-span-2 flex justify-end items-center">
+        <h2 className="text-bold text-3xl">${product.productId.price}</h2>
+      </div>
+    </div>
+  );
+}
+
+export function SummaryCard({ theme, products, cid }) {
+  const navigate = useNavigate();
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+
+  useEffect(() => {
+    setTotalPrice(calculateTotalPrice(products));
+    setTotalQuantity(calculateTotalQuantity(products));
+  }, [products]);
+
+  const purchaseFunction = async () => {
+    try {
+      purchaseCart(cid, theme);
+      navigate("/products");
+    } catch (error) {
+      showToast("error", `${error}`, theme);
+    }
+  };
+
+  return (
+    <div className="h-full w-full p-5 grid-rows-5">
+      <div className="row-span-1 flex justify-between items-center">
+        {totalQuantity === 1 ? (
+          <p>Product</p>
+        ) : (
+          <p>Products ({totalQuantity})</p>
+        )}
+        <p>${totalPrice}</p>
+      </div>
+      <div className="row-span-1 flex justify-between items-center">
+        <p>Shipments</p>
+        {totalQuantity <= 10 ? (
+          <p>$8000</p>
+        ) : (
+          <p className="text-green-500">Free</p>
+        )}
+      </div>
+      <div className="row-span-1 flex justify-start items-center">
+        <p className="hover:underline hover:cursor-pointer text-blue-600">
+          Enter coupon code
+        </p>
+      </div>
+      <div className="row-span-1 flex justify-between items-center my-4 text-2xl text-bold">
+        <p>Total</p>
+        {totalQuantity <= 10 ? (
+          <p>${totalPrice + 8000}</p>
+        ) : (
+          <p>${totalPrice}</p>
+        )}
+      </div>
+      <div className="row-span-1 flex items-center">
+        <Button
+          text={"Checkout"}
+          className={`${
+            theme === "dark"
+              ? "bg-mainColor text-black"
+              : "bg-mainColorLight text-white"
+          } p-2 rounded-xl font-bold w-full`}
+          onClickFunction={() => purchaseFunction()}
+        />
+      </div>
+    </div>
+  );
+}
+
+SummaryCard.propTypes = {
+  theme: PropTypes.string.isRequired,
+  products: PropTypes.array.isRequired,
+  cid: PropTypes.string.isRequired,
+};
+
+CartProductCard.propTypes = {
+  product: PropTypes.object.isRequired,
+  theme: PropTypes.string.isRequired,
+  cid: PropTypes.string.isRequired,
+  forceUpdate: PropTypes.bool.isRequired,
+  setForceUpdate: PropTypes.func.isRequired,
+};
 
 ProductCard.propTypes = {
   p: PropTypes.object.isRequired,

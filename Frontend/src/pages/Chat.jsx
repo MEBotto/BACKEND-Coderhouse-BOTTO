@@ -86,7 +86,7 @@ const handleSubmit = (message) => {
           />
         </div>
       ) : (
-        <LoginPrompt theme={theme} />
+        <LoginPrompt theme={theme} page="chat"/>
       )}
     </div>
   );

@@ -1,28 +1,31 @@
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import PropTypes from "prop-types";
+import Button from "./Button";
+import { Link } from "react-router-dom";
 
-export function LoginPrompt({ theme }) {
+export function LoginPrompt({ theme, page }) {
   return (
-    <div className="container min-h-screen w-full md:w-4/5 flex flex-col items-center justify-center px-4 md:px-0">
-      <p
-        className={`text-center ${
-          theme === "dark" ? "text-white" : "text-black"
-        }`}
-      >
-        Please, log in to continue
-      </p>
-      <Link
-        to="/login"
-        className={`${
-          theme === "dark" ? "text-mainColor" : "text-mainColorLight"
-        } mt-4 underline`}
-      >
-        Go to login
-      </Link>
+    <div className="w-full h-minusNavbar p-4 flex justify-center items-center">
+      <div className="h-fit border border-gray-400 rounded-lg flex flex-col justify-center items-center p-4">
+        <h1 className="text-bold text-3xl my-4 text-center">
+          Oops! It looks like you are not logged in.
+        </h1>
+        <h2 className="my-2 text-center">Please log in to view the {page}</h2>
+        <Link to={"/login"}>
+          <Button
+            text={"Go to login"}
+            className={`${
+              theme === "dark"
+                ? "bg-mainColor text-black"
+                : "bg-mainColorLight text-white"
+            } p-2 rounded-xl font-bold mt-6`}
+          />
+        </Link>
+      </div>
     </div>
   );
 }
 
 LoginPrompt.propTypes = {
   theme: PropTypes.string.isRequired,
+  page: PropTypes.string.isRequired,
 };
