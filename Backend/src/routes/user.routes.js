@@ -20,3 +20,5 @@ userRouter.get("/email/:email", getAccountByEmailController);
 userRouter.put("/:id", uploadToCloudinary("", "any"), updateAccountController);
 
 userRouter.delete("/:id", deleteAccountController);
+
+export default userRouter;

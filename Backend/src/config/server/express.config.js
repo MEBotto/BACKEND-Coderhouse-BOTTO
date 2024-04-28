@@ -7,6 +7,7 @@ import messageRouter from "../../routes/message.routes.js";
 import productRouter from "../../routes/products.routes.js";
 import authRouter from "../../routes/auth.routes.js";
 import mockRouter from "../../routes/mock.routes.js";
+import userRouter from "../../routes/user.routes.js";
 
 import __dirname from "../../utils.js";
 
@@ -63,6 +64,7 @@ expressApp.use("/api/carts", cartRouter);
 expressApp.use("/api/auth", authRouter);
 expressApp.use("/api/products", productRouter);
 expressApp.use("/api/messages", messageRouter);
+expressApp.use("/api/users", userRouter);
 
 expressApp.use(
   "/apidocs",
