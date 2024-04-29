@@ -1,10 +1,12 @@
 import { authService } from "../services/factory.js";
+import UserDto from "../services/dto/user.dto.js";
 import logger from "../utils/logger.js";
 
 const getAllUsersController = async (req, res) => {
   try {
     const users = await authService.getAll();
-    res.status(200).json({ success: true, users: users });
+    const usersDTOs = users.map((user) => new UserDto(user));
+    res.status(200).json({ success: true, users: usersDTOs });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
