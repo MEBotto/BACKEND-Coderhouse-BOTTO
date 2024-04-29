@@ -3,13 +3,13 @@ export default class UserRepository {
     this.dao = dao;
   }
 
-  getAll = async () => {
-    return await this.dao.getAll();
-  }
+  getAll = async (limit, page, query) => {
+    return await this.dao.getAll(limit, page, query);
+  };
 
   getAccountById = async (id) => {
     return await this.dao.getAccountById(id);
-  }
+  };
 
   getAccountByEmail = async (email) => {
     return await this.dao.getAccountByEmail(email);
