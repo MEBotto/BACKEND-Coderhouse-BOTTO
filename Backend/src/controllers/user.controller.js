@@ -1,10 +1,10 @@
-import { authService } from "../services/factory.js";
+import { userService } from "../services/factory.js";
 import UserDto from "../services/dto/user.dto.js";
 import logger from "../utils/logger.js";
 
 const getAllUsersController = async (req, res) => {
   try {
-    const users = await authService.getAll();
+    const users = await userService.getAll();
     const usersDTOs = users.map((user) => new UserDto(user));
     res.status(200).json({ success: true, users: usersDTOs });
   } catch (error) {
@@ -15,7 +15,7 @@ const getAllUsersController = async (req, res) => {
 const getUserByIdController = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await authService.getAccountById(id);
+    const user = await userService.getAccountById(id);
     if (!user) {
       res.status(404).json({ success: false, message: "User not found" });
     }
@@ -29,7 +29,7 @@ const getUserByIdController = async (req, res) => {
 const getAccountByEmailController = async (req, res) => {
   try {
     const { email } = req.params;
-    const account = await authService.getAccountByEmail(email);
+    const account = await userService.getAccountByEmail(email);
     if (!account) {
       res.status(401).json({ success: false, message: "Invalid Credentials" });
     }
@@ -48,7 +48,7 @@ const updateAccountController = async (req, res) => {
       const url = req.cloudinaryUploads[0].url;
       newValues.photo = url;
     }
-    const accountUpdated = await authService.updateAccount(id, newValues);
+    const accountUpdated = await userService.updateAccount(id, newValues);
     if (accountUpdated.modifiedCount === 0) {
       res.status(404).json({ success: false, message: "No changes were made, as the received values are the same as those stored" });
     }
@@ -61,7 +61,7 @@ const updateAccountController = async (req, res) => {
 const deleteAccountController = async (req, res) => {
   try {
     const { id } = req.params;
-    const accountDeleted = await authService.deleteAccount(id);
+    const accountDeleted = await userService.deleteAccount(id);
     if (accountDeleted.deletedCount === 0) {
       res.status(404).json({ success: false, message: "No account was deleted" });
     }
