@@ -115,7 +115,7 @@ const loginController = async (req, res) => {
 
     const access_token = generateJWToken(tokenUser);
 
-    authService.updateAccount(account._id, { last_connection: new Date() });
+    userService.updateAccount(account._id, { last_connection: new Date() });
 
     return res.status(200).json({
       success: true,
