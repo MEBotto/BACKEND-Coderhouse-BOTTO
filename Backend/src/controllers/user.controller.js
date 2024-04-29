@@ -16,7 +16,11 @@ const getUserByIdController = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await authService.getAccountById(id);
-    res.status(200).json({ success: true, user: user });
+    if (!user) {
+      res.status(404).json({ success: false, message: "User not found" });
+    }
+    const userDTO = new UserDto(user);
+    res.status(200).json({ success: true, user: userDTO });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
