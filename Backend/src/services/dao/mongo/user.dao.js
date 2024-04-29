@@ -16,17 +16,17 @@ export default class UserDAO {
     );
 
     let responseObject = {
-      status: productPaginate.totalDocs > 0 ? "success" : "error",
-      payload: productPaginate.docs,
-      limit: productPaginate.limit,
-      totalDocs: productPaginate.totalDocs,
-      docsPerPage: productPaginate.docs.length,
-      totalPages: productPaginate.totalPages,
-      prevPage: productPaginate.prevPage,
-      nextPage: productPaginate.nextPage,
-      page: productPaginate.page,
-      hasPrevPage: productPaginate.hasPrevPage,
-      hasNextPage: productPaginate.hasNextPage,
+      status: userPaginate.totalDocs > 0 ? "success" : "error",
+      payload: userPaginate.docs,
+      limit: userPaginate.limit,
+      totalDocs: userPaginate.totalDocs,
+      docsPerPage: userPaginate.docs.length,
+      totalPages: userPaginate.totalPages,
+      prevPage: userPaginate.prevPage,
+      nextPage: userPaginate.nextPage,
+      page: userPaginate.page,
+      hasPrevPage: userPaginate.hasPrevPage,
+      hasNextPage: userPaginate.hasNextPage,
     };
 
     return responseObject;
