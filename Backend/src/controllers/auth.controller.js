@@ -1,5 +1,5 @@
 import { config } from "../config/env.config.js";
-import { authService, emailService } from "../services/factory.js";
+import { authService, emailService, userService } from "../services/factory.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import { generateJWToken } from "../utils/jwt.js";
 import { v4 as uuidv4 } from "uuid";
@@ -88,7 +88,7 @@ const loginController = async (req, res) => {
       });
     }
 
-    const account = await authService.getAccountByEmail(email);
+    const account = await userService.getAccountByEmail(email);
     if (!account) {
       return res
         .status(401)
@@ -129,7 +129,7 @@ const loginController = async (req, res) => {
 const logoutController = async (req, res) => {
   const { uid } = req.body;
   try {
-    const userUpdated = await authService.updateAccount(uid, {
+    const userUpdated = await userService.updateAccount(uid, {
       last_connection: new Date(),
     });
     res.clearCookie("access_token");
@@ -157,7 +157,7 @@ const recoverPasswordController = async (req, res) => {
         .json({ success: false, message: "Email not provided" });
     }
 
-    const findUser = await authService.getAccountByEmail(email);
+    const findUser = await userService.getAccountByEmail(email);
 
     if (!findUser) {
       return res.status(400).json({
@@ -215,7 +215,7 @@ const newPasswordController = async (req, res) => {
 
   const findEmail = await emailService.getEmail(token);
 
-  const findUser = await authService.getAccountByEmail(findEmail.email);
+  const findUser = await userService.getAccountByEmail(findEmail.email);
 
   const isEqual = await isValidPassword(findUser.password, password);
 
@@ -251,7 +251,7 @@ const newPasswordController = async (req, res) => {
 const userPremiumController = async (req, res) => {
   const { uid } = req.params;
   try {
-    const user = await authService.getAccountById(uid);
+    const user = await userService.getAccountById(uid);
     if (!user) {
       return res
         .status(404)
@@ -303,7 +303,7 @@ const documentsController = async (req, res) => {
   const { uid } = req.params;
   const files = req.cloudinaryUploads;
   try {
-    const user = await authService.getAccountById(uid);
+    const user = await userService.getAccountById(uid);
 
     if (!user) {
       return res
@@ -323,7 +323,7 @@ const documentsController = async (req, res) => {
       reference: file.url,
     }));
 
-    await authService.updateAccount(uid, { documents: documents });
+    await userService.updateAccount(uid, { documents: documents });
     return res.status(200).json({ success: true, documents });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
