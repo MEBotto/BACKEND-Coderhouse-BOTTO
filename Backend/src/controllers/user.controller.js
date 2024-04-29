@@ -33,7 +33,8 @@ const getAccountByEmailController = async (req, res) => {
     if (!account) {
       res.status(401).json({ success: false, message: "Invalid Credentials" });
     }
-    res.status(200).json({ success: true, data: account });
+    const userDTO = new UserDto(account);
+    res.status(200).json({ success: true, data: userDTO });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
