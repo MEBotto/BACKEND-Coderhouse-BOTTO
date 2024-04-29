@@ -257,10 +257,38 @@ const userPremiumController = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found" });
     }
+
+    const requiredDocuments = ["id", "residenceProof", "bankStatementProof"];
+    if (user.documents) {
+      let { documents } = user;
+      documents = Array.isArray(documents) ? documents : [documents];
+      const userDocuments = documents.map((doc) => doc.file);
+      const missingDocuments = requiredDocuments.filter(
+        (requiredDoc) => !userDocuments[0].includes(requiredDoc)
+      );
+      console.log(missingDocuments);
+      if (missingDocuments.length > 0) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: `Missing documents: ${missingDocuments}`,
+          });
+      }
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing all documents" });
+    }
+
     if (user.role === "premium") {
       return res
         .status(400)
         .json({ success: false, message: "User is already premium" });
+    } else if (user.role === "admin") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Admin cannot be premium" });
     }
     const userUpdated = await authService.updateAccount(uid, {
       role: "premium",
@@ -278,17 +306,21 @@ const documentsController = async (req, res) => {
     const user = await authService.getAccountById(uid);
 
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
-    if(!files) {
-      return res.status(400).json({ success: false, message: "No files provided" });
+    if (!files) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No files provided" });
     }
-    
-    const documents = files.map(file => ({
+
+    const documents = files.map((file) => ({
       file: file.file,
-      name: file.name, 
-      reference: file.url
+      name: file.name,
+      reference: file.url,
     }));
 
     await authService.updateAccount(uid, { documents: documents });
