@@ -3,20 +3,8 @@ export default class AuthRepository {
     this.dao = dao;
   }
 
-  getAll = async () => {
-    return await this.dao.getAll();
-  }
-
   createAccount = async (account) => {
     return await this.dao.createAccount(account);
-  };
-
-  getAccountById = async (id) => {
-    return await this.dao.getAccountById(id);
-  }
-
-  getAccountByEmail = async (email) => {
-    return await this.dao.getAccountByEmail(email);
   };
 
   getAccountByGitHubId = async (github_id) => {
@@ -25,14 +13,6 @@ export default class AuthRepository {
 
   getAccountByGoogleId = async (google_id) => {
     return await this.dao.getAccountByGoogleId(google_id);
-  };
-
-  updateAccount = async (id, account) => {
-    return await this.dao.updateAccount(id, account);
-  };
-
-  deleteAccount = async (id) => {
-    return await this.dao.deleteAccount(id);
   };
 
   updatePassword = async (email, password) => {
