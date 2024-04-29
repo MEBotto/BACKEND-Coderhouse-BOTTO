@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const userSchema = new Schema({
   first_name: { type: String, required: true },
@@ -46,6 +47,8 @@ userSchema.index(
     partialFilterExpression: { google_id: { $exists: true, $type: "string" } },
   }
 );
+
+userSchema.plugin(mongoosePaginate);
 
 const userModel = model("users", userSchema);
 
