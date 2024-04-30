@@ -72,7 +72,7 @@ export async function fetchCardData(token) {
     },
   })
     .then((res) => res.json())
-    .then(({ users }) => users.length)
+    .then(({ totalDocs }) => totalDocs)
     .catch((error) => console.error("Error fetching data:", error));
 
   return {
