@@ -20,8 +20,6 @@ export default class UserDAO {
       }
     );
 
-    console.log(userPaginate);
-
     let responseObject = {
       status: userPaginate.totalDocs > 0 ? "success" : "error",
       payload: userPaginate.docs,

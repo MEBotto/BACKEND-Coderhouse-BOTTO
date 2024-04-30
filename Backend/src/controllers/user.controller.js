@@ -6,7 +6,6 @@ const getAllUsersController = async (req, res) => {
   const { limit, page, query } = req.query;
   try {
     const users = await userService.getAll(limit, page, query);
-    console.log(users);
     const usersDTOs = users.payload.map((user) => new UserDto(user));
     res.status(200).json({
       success: true,
