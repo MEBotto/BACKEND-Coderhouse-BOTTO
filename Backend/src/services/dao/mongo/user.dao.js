@@ -8,12 +8,19 @@ export default class UserDAO {
     let queryFilter = query || "";
 
     let userPaginate = await userModel.paginate(
-      { name: { $regex: new RegExp(queryFilter, "i") } },
+      {
+        $or: [
+          { first_name: { $regex: new RegExp(queryFilter, "i") } },
+          { last_name: { $regex: new RegExp(queryFilter, "i") } },
+        ],
+      },
       {
         limit: limitFilter,
         page: pageFilter,
       }
     );
+
+    console.log(userPaginate);
 
     let responseObject = {
       status: userPaginate.totalDocs > 0 ? "success" : "error",
