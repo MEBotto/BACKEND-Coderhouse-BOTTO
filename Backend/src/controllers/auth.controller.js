@@ -56,10 +56,6 @@ const registerController = async (req, res) => {
   } else {
     newUser.role = "user";
   }
-  if (req.cloudinaryUploads) {
-    const url = req.cloudinaryUploads[0].url;
-    newUser.photo = url;
-  }
   try {
     const account = await authService.createAccount(newUser);
     return res.status(200).json({ success: true, data: account });

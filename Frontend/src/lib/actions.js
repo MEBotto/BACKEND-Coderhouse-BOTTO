@@ -85,20 +85,13 @@ export function useLogout() {
 }
 
 export async function registerUser(data) {
-  const formData = new FormData();
-  if (data && typeof data === "object") {
-    for (const key in data) {
-      if (key === "confirm_password") {
-        continue;
-      }
-      formData.append(key, data[key]);
-    }
-  }
-
   try {
     const response = await fetch(`${url}/auth/register`, {
       method: "POST",
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
     });
 
     if (!response.ok) {
@@ -193,7 +186,6 @@ export async function deleteUser(uid, token, theme, setUpdate, update) {
     console.error(error);
     showToast("error", `${error}`, theme);
   }
-
 }
 
 export async function createProduct(data, file, token) {
