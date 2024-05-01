@@ -174,6 +174,28 @@ export async function updateUser(data, file, uid, theme) {
   }
 }
 
+export async function deleteUser(uid, token, theme, setUpdate, update) {
+  try {
+    const response = await fetch(`${url}/users/${uid}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete user");
+    }
+
+    setUpdate(!update);
+    showToast("success", "The user was successfully deleted!", theme);
+  } catch (error) {
+    console.error(error);
+    showToast("error", `${error}`, theme);
+  }
+
+}
+
 export async function createProduct(data, file, token) {
   const formData = new FormData();
   if (data && typeof data === "object") {

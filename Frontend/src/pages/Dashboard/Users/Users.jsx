@@ -4,6 +4,7 @@ import { UsersTable } from "../../../components/Tables";
 import Pagination from "../../../components/Pagination";
 import { useSearchParams } from "react-router-dom";
 import { fetchUserData } from "../../../lib/data";
+import { ToastContainer, Bounce } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
 import useTheme from "../../../hooks/useTheme";
 
@@ -16,7 +17,7 @@ export default function Users() {
 
   const page = Number(searchParams.get("page")) || 1;
   const query = searchParams.get("query") || "";
-
+  
   useEffect(() => {
     fetchUserData(limit, page, query, token)
       .then((data) => {
@@ -52,6 +53,19 @@ export default function Users() {
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} theme={theme} />
       </div>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </div>
   );
 }

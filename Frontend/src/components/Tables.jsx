@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { fetchProductData, fetchUserData } from "../lib/data.js";
-import { deleteProduct } from "../lib/actions.js";
+import { deleteProduct, deleteUser } from "../lib/actions.js";
 import { formatDateAndTime } from "../lib/utils.js";
 import useAuth from "../hooks/useAuth.js";
 import { Link } from "react-router-dom";
@@ -209,22 +209,24 @@ export function ProductsTable({ query, currentPage, theme, limit, owner }) {
 
 export function UsersTable({ query, currentPage, theme, limit }) {
   const [users, setUsers] = useState(null);
+  const [update, setUpdate] = useState(false);
   const { token } = useAuth();
 
   useEffect(() => {
     fetchUserData(limit, currentPage, query, token)
       .then((data) => {
         if (data && data.users) {
+          console.log("cambio")
           setUsers(data.users);
         } else {
           console.error("Failed to fetch user data");
         }
       })
       .catch((error) => console.error("An error occurred:", error));
-  }, [query, currentPage, limit, token]);
+  }, [query, currentPage, limit, token, update]);
 
   const handleDelete = async (uid) => {
-    console.log(uid);
+    await deleteUser(uid, token, theme, setUpdate, update)
   };
 
   return (
