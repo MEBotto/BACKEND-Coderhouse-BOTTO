@@ -66,7 +66,7 @@ authRouter.get(
 //   googleCallbackController
 // );
 
-authRouter.post("/register", uploadToCloudinary("", "any"), registerController);
+authRouter.post("/register", registerController);
 
 authRouter.post("/login", loginController);
 
