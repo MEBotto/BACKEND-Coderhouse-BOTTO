@@ -101,11 +101,33 @@ export function isColorTooDarkOrLight(color, theme) {
 
 export function formatDateAndTime(timestamp) {
   const date = new Date(timestamp);
-  const dateString = date.toLocaleDateString("es-AR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  const today = new Date();
+  const yesterday = new Date(today);
+
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const isToday =
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear();
+  const isYesterday =
+    date.getDate() === yesterday.getDate() &&
+    date.getMonth() === yesterday.getMonth() &&
+    date.getFullYear() === yesterday.getFullYear();
+
+  let dateString;
+  if (isToday) {
+    dateString = "Hoy";
+  } else if (isYesterday) {
+    dateString = "Ayer";
+  } else {
+    dateString = date.toLocaleDateString("es-AR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  }
+
   const timeString = date.toLocaleTimeString("es-AR", {
     hour: "2-digit",
     minute: "2-digit",

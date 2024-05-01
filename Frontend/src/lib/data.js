@@ -38,6 +38,40 @@ export async function fetchProductData(
   }
 }
 
+export async function fetchUserData(limit, page, query, token) {
+  const queryString = new URLSearchParams(limit, page, query).toString();
+  const urlFetch = `${url}/users?${queryString}`;
+  try {
+    const response = await fetch(urlFetch, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error al obtener los datos");
+    }
+    const {
+      users,
+      totalPages,
+      hasPrevPage,
+      hasNextPage,
+      docsPerPage,
+      totalDocs,
+    } = await response.json();
+    return {
+      users: users,
+      totalPages: totalPages,
+      hasPrevPage: hasPrevPage,
+      hasNextPage: hasNextPage,
+      docsPerPage: docsPerPage,
+      totalDocs: totalDocs,
+    };
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+}
+
 export async function fetchUserCart(uid) {
   const response = await fetch(`${url}/carts/user/${uid}`);
   if (!response.ok) {

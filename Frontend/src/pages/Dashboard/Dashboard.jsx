@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar.jsx";
 import useTheme from "../../hooks/useTheme.js";
 import Home from "./Home/Home.jsx";
 import Products from "./Products/Products.jsx";
-// import Users from "./Users/Users.jsx";
+import Users from "./Users/Users.jsx";
 // import Invoices from "./Invoices/Invoices.jsx";
 
 export default function Dashboard() {
@@ -25,8 +25,8 @@ export default function Dashboard() {
         <Routes>
           <Route path="/" element={<Home theme={theme} />} />
           <Route path="/products/*" element={<Products theme={theme} />} />
-          {/* <Route path="/users" element={<Users />} />
-        <Route path="/invoices" element={<Invoices />} /> */}
+          <Route path="/users" element={<Users />} />
+        {/* <Route path="/invoices" element={<Invoices />} /> */}
         </Routes>
       </div>
     </div>
