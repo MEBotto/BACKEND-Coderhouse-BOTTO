@@ -216,7 +216,6 @@ export function UsersTable({ query, currentPage, theme, limit }) {
     fetchUserData(limit, currentPage, query, token)
       .then((data) => {
         if (data && data.users) {
-          console.log("cambio")
           setUsers(data.users);
         } else {
           console.error("Failed to fetch user data");
