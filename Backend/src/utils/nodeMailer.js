@@ -25,7 +25,7 @@ transporter.verify(function (error, success) {
 });
 
 const sendMail = async (ticket) => {
-  const user = userModel.findById(ticket.purchaser);
+  const user = await userModel.findById(ticket.purchaser);
 
   let productsTable = '';
   ticket.productsBought.forEach(product => {
@@ -41,7 +41,7 @@ const sendMail = async (ticket) => {
 
   let result = await transporter.sendMail({
     from: "Compras FriKommerce - <marianobotto92@gmail.com>",
-    to: "marianobotto92@gmail.com",
+    to: user.email,
     subject: "Ticket de Compra",
     html: `
     <div style="font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px;">
