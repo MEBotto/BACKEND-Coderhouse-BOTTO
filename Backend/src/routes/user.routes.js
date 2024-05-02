@@ -4,6 +4,7 @@ import {
   getAllUsersController,
   getUserByIdController,
   updateAccountController,
+  deleteInactivesController,
 } from "../controllers/user.controller.js";
 import { Router } from "express";
 import { uploadToCloudinary } from "../middlewares/multerMiddleware.js";
@@ -19,6 +20,8 @@ userRouter.get("/email/:email", getAccountByEmailController);
 
 userRouter.put("/:id", uploadToCloudinary("", "any"), updateAccountController);
 
-userRouter.delete("/:id", deleteAccountController);
+userRouter.delete("/", checkUserRole(["ADMIN"]), deleteInactivesController);
+
+userRouter.delete("/:id", checkUserRole(["ADMIN"]), deleteAccountController);
 
 export default userRouter;

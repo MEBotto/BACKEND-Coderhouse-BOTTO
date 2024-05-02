@@ -63,13 +63,11 @@ const updateAccountController = async (req, res) => {
     }
     const accountUpdated = await userService.updateAccount(id, newValues);
     if (accountUpdated.modifiedCount === 0) {
-      res
-        .status(404)
-        .json({
-          success: false,
-          message:
-            "No changes were made, as the received values are the same as those stored",
-        });
+      res.status(404).json({
+        success: false,
+        message:
+          "No changes were made, as the received values are the same as those stored",
+      });
     }
     res.status(200).json({ success: true, data: accountUpdated });
   } catch (error) {
@@ -92,10 +90,25 @@ const deleteAccountController = async (req, res) => {
   }
 };
 
+const deleteInactivesController = async (req, res) => {
+  try {
+    const deletedInactives = await userService.deleteInactives();
+    if (deletedInactives.deletedCount === 0) {
+      res
+        .status(404)
+        .json({ success: false, message: "No accounts were deleted" });
+    }
+    res.status(200).json({ success: true, data: deletedInactives });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error });
+  }
+}
+
 export {
   getAllUsersController,
   getUserByIdController,
   getAccountByEmailController,
   updateAccountController,
   deleteAccountController,
+  deleteInactivesController,
 };
