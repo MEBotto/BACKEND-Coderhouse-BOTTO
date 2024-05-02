@@ -7,6 +7,7 @@ import { fetchUserData } from "../../../lib/data";
 import { ToastContainer, Bounce } from "react-toastify";
 import useAuth from "../../../hooks/useAuth";
 import useTheme from "../../../hooks/useTheme";
+import { deleteInactivesUsers } from "../../../lib/actions";
 
 export default function Users() {
   const [totalPages, setTotalPages] = useState(0);
@@ -30,6 +31,10 @@ export default function Users() {
       .catch((error) => console.error("An error occurred:", error));
   }, [query, page, limit, token]);
 
+  const deleteInactives = async () => {
+    await deleteInactivesUsers(theme, token);
+  }
+
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
@@ -42,7 +47,18 @@ export default function Users() {
         </h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="Search invoices..." />
+        <Search placeholder="Search users..." />
+        <button
+          className={`flex h-10 items-center rounded-lg ${
+            theme === "dark"
+              ? "bg-mainColor text-black hover:bg-green-400"
+              : "bg-mainColorLight text-white hover:bg-green-400"
+          } px-4 text-sm font-medium  transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}
+          onClick={deleteInactives}
+        >
+          <span className="hidden md:block">Delete Inactives</span>
+          <i className="ri-subtract-line md:ml-4 text-2xl" />
+        </button>
       </div>
       <UsersTable
         query={query}

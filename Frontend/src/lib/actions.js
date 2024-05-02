@@ -188,6 +188,29 @@ export async function deleteUser(uid, token, theme, setUpdate, update) {
   }
 }
 
+export async function deleteInactivesUsers(theme, token) {
+  try {
+    const response = await fetch(`${url}/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      response.json().then((data) => {
+        console.log(data);
+      });
+      throw new Error("Failed to delete inactive users");
+    }
+
+    showToast("success", "The inactive users were successfully deleted!", theme);
+  } catch (error) {
+    console.error(error);
+    showToast("error", `${error}`, theme);
+  }
+}
+
 export async function createProduct(data, file, token) {
   const formData = new FormData();
   if (data && typeof data === "object") {
