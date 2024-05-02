@@ -1,4 +1,4 @@
-import { productService } from "../services/factory.js";
+import { productService, userService } from "../services/factory.js";
 import CustomError from "../services/errors/CustomError.js";
 import { generateProductErrorInfo } from "../services/errors/infoError.js";
 import { EErrors } from "../services/errors/enumsError.js";
@@ -6,6 +6,7 @@ import logger from "../utils/logger.js";
 import { v4 as uuidv4 } from "uuid";
 import jwt, { decode } from "jsonwebtoken";
 import { config } from "../config/env.config.js";
+import { transporter } from "../utils/nodeMailer.js";
 
 const getProductsController = async (req, res) => {
   const { limit, page, sort, query, category, owner, volume } = req.query;
@@ -145,6 +146,27 @@ const deleteProductController = async (req, res) => {
 
     if (role === "premium" && userId !== owner) {
       throw new Error("You can only delete products created by the same user");
+    }
+
+    if (owner !== "admin") {
+      const user = await userService.getAccountById(owner);
+      transporter.sendMail({
+        from: "FriKommerce - <marianobotto92@gmail.com>",
+        to: user.email,
+        subject: "Product Deleted",
+        html: `
+        <div style="font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px;">
+          <h1 style="color: #333;">Product Deleted</h1>
+          <div style="background-color: #fff; padding: 10px; border-radius: 5px;">
+            <p>The product ${product.title} #${product.volume} created by you, was deleted</p>
+          </div>
+        </div>`,
+      }, (error, info) => {
+        if (error) {
+          logger.error("[ERROR]: " + error);
+        }
+        logger.info("[INFO]: " + info);
+      })
     }
 
     await productService.deleteProduct(pid);
