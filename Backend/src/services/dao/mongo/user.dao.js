@@ -49,7 +49,7 @@ export default class UserDAO {
     return await userModel.findByIdAndDelete(id);
   };
   deleteInactives = async () => {
-    const thirtySecondsAgo = new Date(Date.now() - 30 * 1000);
-    return await userModel.deleteMany({ last_connection: { $lt: thirtySecondsAgo } });
+    const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
+    return await userModel.deleteMany({ last_connection: { $lt: twoDaysAgo } });
   };
 }
