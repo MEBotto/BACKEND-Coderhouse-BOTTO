@@ -25,7 +25,7 @@ export default function Dashboard() {
         <Routes>
           <Route path="/" element={<Home theme={theme} />} />
           <Route path="/products/*" element={<Products theme={theme} />} />
-          <Route path="/users" element={<Users />} />
+          <Route path="/users/*" element={<Users theme={theme}/>} />
         {/* <Route path="/invoices" element={<Invoices />} /> */}
         </Routes>
       </div>

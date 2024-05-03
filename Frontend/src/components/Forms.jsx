@@ -901,6 +901,222 @@ export function FormUser({ t, user }) {
   );
 }
 
+export function UpdateFormUser({ t, user }) {
+  const displayedImage = user.photo;
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+    setValue,
+  } = useForm();
+  const inputClassName = `py-[12px] px-[20px] w-full rounded-lg ${
+    t === "dark"
+      ? "bg-color placeholder-white"
+      : "border border-black placeholder-black bg-colorLight"
+  } text-gray-500`;
+
+  useEffect(() => {
+    setValue("first_name", user.first_name);
+    setValue("last_name", user.last_name);
+    setValue("email", user.email);
+    setValue("age", user.age);
+    setValue("role", user.role);
+  }, [user, setValue]);
+
+  const onSubmit = async (data) => {
+    const { role } = data;
+    console.log(role);
+  };
+
+  return (
+    <div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className={`grid sm:max-md:grid-rows-auto-1fr md:grid-cols-auto-1fr ${
+          t === "dark" ? "bg-zinc-900" : "bg-zinc-300"
+        } rounded-xl p-2`}
+      >
+        <div className="flex flex-col items-center justify-between md:px-8">
+          <img
+            src={displayedImage}
+            alt="Click to upload"
+            className={`h-auto w-40 md:w-80 rounded-full md:mt-2`}
+          />
+          <div className="hidden md:flex items-center justify-center md:mb-2">
+            <div className="flex items-center gap-2">
+              <button
+                type="submit"
+                className={`${
+                  t === "dark"
+                    ? "bg-mainColor text-black"
+                    : "bg-mainColorLight text-white"
+                } py-2 px-4 rounded-lg`}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className={`flex flex-col justify-center gap-2 ${
+            t === "dark" ? "bg-zinc-900" : "bg-zinc-300"
+          } rounded-xl p-2`}
+        >
+          <div className="flex flex-col justify-center items-start">
+            <label className={`${t === "dark" ? "text-white" : "text-black"}`}>
+              First Name
+            </label>
+            <input
+              {...register("first_name", {
+                required: "First name is required",
+              })}
+              type="text"
+              disabled={true}
+              placeholder="First Name"
+              className={inputClassName}
+            />
+            {errors.first_name && (
+              <span className="text-red-500 text-xs italic">
+                This field is required
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col justify-center items-start">
+            <label className={`${t === "dark" ? "text-white" : "text-black"}`}>
+              Last Name
+            </label>
+            <input
+              {...register("last_name")}
+              type="text"
+              disabled={true}
+              placeholder="Last Name"
+              className={inputClassName}
+            />
+            {errors.last_name && (
+              <span className="text-red-500 text-xs italic">
+                This field is required
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col justify-center items-start">
+            <label className={`${t === "dark" ? "text-white" : "text-black"}`}>
+              Email
+            </label>
+            <input
+              {...register("email", { required: "Email is required" })}
+              type="text"
+              disabled={true}
+              placeholder="Email"
+              className={inputClassName}
+            />
+            {errors.email && (
+              <span className="text-red-500 text-xs italic">
+                This field is required
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col justify-center items-start">
+            <label className={`${t === "dark" ? "text-white" : "text-black"}`}>
+              Age
+            </label>
+            <Controller
+              control={control}
+              name="age"
+              rules={{
+                required: "Age is required",
+                min: { value: 13, message: "Age must be at least 13" },
+                pattern: {
+                  value: /^[0-9]*$/,
+                  message: "Please enter a valid age",
+                },
+              }}
+              defaultValue=""
+              render={({ field }) => (
+                <input
+                  type="number"
+                  disabled={true}
+                  placeholder="Age"
+                  {...field}
+                  min="13"
+                  onInput={(e) => {
+                    e.target.value = Math.max(13, parseInt(e.target.value))
+                      .toString()
+                      .slice(0, e.target.value.length);
+                  }}
+                  className={inputClassName}
+                />
+              )}
+            />
+            {errors.age && (
+              <span className="text-red-500 text-xs italic">
+                {errors.age.message
+                  ? errors.age.message
+                  : "This field is required"}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-col justify-center items-start">
+            <label className={`${t === "dark" ? "text-white" : "text-black"}`}>
+              Role
+            </label>
+            <select
+              {...register("role", { required: "Role is required" })}
+              className={`py-[12px] px-[20px] w-full rounded-lg ${
+                t === "dark"
+                  ? "bg-color placeholder-white text-white"
+                  : "border border-black placeholder-black bg-colorLight text-black"
+              }`}
+            >
+              <option value="admin">admin</option>
+              <option value="user">user</option>
+              <option value="premium">premium</option>
+            </select>
+            {errors.role && (
+              <span className="text-red-500 text-xs italic">
+                This field is required
+              </span>
+            )}
+          </div>
+          <div className="flex md:hidden items-center justify-center mt-4">
+            <div className="flex items-center gap-2">
+              <button
+                type="submit"
+                className={`${
+                  t === "dark"
+                    ? "bg-mainColor text-black"
+                    : "bg-mainColorLight text-white"
+                } py-2 px-4 rounded-lg`}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
+    </div>
+  );
+}
+
+UpdateFormUser.propTypes = {
+  t: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+};
+
 FormUser.propTypes = {
   t: PropTypes.string.isRequired,
   user: PropTypes.object.isRequired,
