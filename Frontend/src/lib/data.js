@@ -39,7 +39,12 @@ export async function fetchProductData(
 }
 
 export async function fetchUserData(limit, page, query, token) {
-  const queryString = new URLSearchParams(limit, page, query).toString();
+  const params = {
+    limit,
+    page,
+    ...(query && { query }),
+  };
+  const queryString = new URLSearchParams(params).toString();
   const urlFetch = `${url}/users?${queryString}`;
   try {
     const response = await fetch(urlFetch, {
