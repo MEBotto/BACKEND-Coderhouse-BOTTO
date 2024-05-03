@@ -89,7 +89,7 @@ export async function registerUser(data) {
     const response = await fetch(`${url}/auth/register`, {
       method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
@@ -219,13 +219,20 @@ export async function deleteInactivesUsers(theme, token) {
     });
 
     if (!response.ok) {
-      response.json().then((data) => {
-        console.log(data);
-      });
-      throw new Error("Failed to delete inactive users");
+      let errorMessage = "Failed to delete inactive users";
+      const { message } = await response.json()
+      if (message) {
+        errorMessage = message;
+      }
+      console.log(errorMessage);
+      throw new Error(errorMessage);
     }
 
-    showToast("success", "The inactive users were successfully deleted!", theme);
+    showToast(
+      "success",
+      "The inactive users were successfully deleted!",
+      theme
+    );
   } catch (error) {
     console.error(error);
     showToast("error", `${error}`, theme);
