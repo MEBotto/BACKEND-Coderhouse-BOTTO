@@ -63,7 +63,7 @@ const updateAccountController = async (req, res) => {
     }
     const accountUpdated = await userService.updateAccount(id, newValues);
     if (accountUpdated.modifiedCount === 0) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message:
           "No changes were made, as the received values are the same as those stored",
@@ -79,8 +79,9 @@ const deleteAccountController = async (req, res) => {
   try {
     const { id } = req.params;
     const accountDeleted = await userService.deleteAccount(id);
+    console.log(accountDeleted);
     if (accountDeleted.deletedCount === 0) {
-      res
+      return res
         .status(404)
         .json({ success: false, message: "No account was deleted" });
     }
@@ -94,7 +95,7 @@ const deleteInactivesController = async (req, res) => {
   try {
     const deletedInactives = await userService.deleteInactives();
     if (deletedInactives.deletedCount === 0) {
-      res
+      return res
         .status(404)
         .json({ success: false, message: "No accounts were deleted" });
     }
