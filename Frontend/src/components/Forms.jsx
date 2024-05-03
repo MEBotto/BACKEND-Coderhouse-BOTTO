@@ -7,6 +7,7 @@ import {
   createProduct,
   updateUser,
   useLogout,
+  updateUserRole,
 } from "../lib/actions";
 import useAuth from "../hooks/useAuth";
 import { ToastContainer, Bounce } from "react-toastify";
@@ -926,7 +927,7 @@ export function UpdateFormUser({ t, user }) {
 
   const onSubmit = async (data) => {
     const { role } = data;
-    console.log(role);
+    await updateUserRole(user._id, role, t);
   };
 
   return (

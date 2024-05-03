@@ -167,6 +167,27 @@ export async function updateUser(data, file, uid, theme) {
   }
 }
 
+export async function updateUserRole(uid, role, theme) {
+  try {
+    const response = await fetch(`${url}/users/${uid}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ role }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update user role");
+    }
+
+    showToast("success", "The user role was successfully updated!", theme);
+  } catch (error) {
+    console.error(error);
+    showToast("error", `${error}`, theme);
+  }
+}
+
 export async function deleteUser(uid, token, theme, setUpdate, update) {
   try {
     const response = await fetch(`${url}/users/${uid}`, {
